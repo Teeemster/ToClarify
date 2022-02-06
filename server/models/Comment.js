@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { formatDatetime } = require("../utils/helpers");
+import { Schema, model } from "mongoose";
+import { formatDatetime } from "../utils/helpers";
 
 const commentSchema = new Schema(
   {
@@ -27,4 +27,4 @@ const commentSchema = new Schema(
 
 const Comment = model("Comment", commentSchema);
 
-module.exports = Comment;
+export default Comment;
