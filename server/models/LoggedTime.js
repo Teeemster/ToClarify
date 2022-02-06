@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const { formatDate, formatHours } = require("../utils/helpers");
 
 const loggedTimeSchema = new Schema(
@@ -26,4 +26,6 @@ const loggedTimeSchema = new Schema(
   }
 );
 
-module.exports = loggedTimeSchema;
+const LoggedTime = model("LoggedTime", loggedTimeSchema);
+
+module.exports = LoggedTime;
