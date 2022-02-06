@@ -5,7 +5,7 @@ const loggedTimeSchema = new Schema(
   {
     description: {
       type: String,
-      required: true,
+      required: [true, "Description is required."],
     },
     date: {
       type: Date,
@@ -15,7 +15,7 @@ const loggedTimeSchema = new Schema(
     },
     hours: {
       type: Number,
-      required: true,
+      required: [true, "Number of hours is required."],
       get: (hoursVal) => formatHours(hoursVal),
     },
   },

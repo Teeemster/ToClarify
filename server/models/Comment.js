@@ -5,7 +5,7 @@ const commentSchema = new Schema(
   {
     commentBody: {
       type: String,
-      required: true,
+      required: [true, "Comment body is required."],
     },
     createdAt: {
       type: Date,
@@ -15,7 +15,7 @@ const commentSchema = new Schema(
     },
     userId: {
       type: Number,
-      required: true,
+      required: [true, "User ID is required."],
     },
   },
   {
