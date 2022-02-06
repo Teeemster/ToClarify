@@ -1,0 +1,1 @@
+//LoggedTime Model
