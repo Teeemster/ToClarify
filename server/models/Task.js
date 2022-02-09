@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { formatHours } from "../utils/helpers";
 
-const TaskSchema = new Schema(
+const taskSchema = new Schema(
   {
     title: {
       type: String,
