@@ -5,7 +5,7 @@ const projectSchema = new Schema(
     {
         title: {
             type: String,
-            required: 'Project must have a title!',
+            required: [true, 'Project must have a title!'],
             minlength: 1,
             maxlength: 80
         },
