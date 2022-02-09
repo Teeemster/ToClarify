@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { formatHours } from "../utils/helpers";
 
 const TaskSchema = new Schema(
   {
@@ -19,6 +20,7 @@ const TaskSchema = new Schema(
     estimatedHours: {
       type: Number,
       required: [true, "Estimated hours is required."],
+      get: (estHoursVal) => formatHours(estHoursVal),
     },
     timeLog: [{ type: Schema.Types.ObjectId, ref: "LoggedTime" }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
