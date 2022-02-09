@@ -1,28 +1,27 @@
 //Project Model
 const { Schema, model } = require('mongoose');
 
-
 const projectSchema = new Schema(
     {
-        Title: {
+        title: {
             type: String,
             required: 'Project must have a title!',
             minlength: 1,
             maxlength: 80
         },
-        Owner: {
-            type: String,
-            enum: ['User', 'Admin'],
-            default: 'User',
-            required: 'Owner is required!'
-        },
-        Tasks: [
+        owner: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ],
+        tasks: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Task'
             }
         ],
-        Clients: [
+        clients: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
@@ -31,6 +30,6 @@ const projectSchema = new Schema(
     },
 );
 
-const Project = model('Project', ProjectSchema);
+const Project = model('Project', projectSchema);
 
 export default Project;
