@@ -16,11 +16,25 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // get single project by id
-    project: async (_, { _id }) => {
-      return await Project.findById(_id).populate("tasks").populate("clients");
+    project: async (_, { _id }, context) => {
+      // confirm a user is logged
+      if (context.user) {
+        // get current user data
+        const currentUserData = await User.findById(context.user._id).select(
+          "projects"
+        );
+        // check if current user has access to queried project
+        if (currentUserData.projects.includes(_id)) {
+          return await Project.findById(_id)
+            .populate("tasks")
+            .populate("clients");
+        }
+        throw new AuthenticationError("Project not found for current user.");
+      }
+      throw new AuthenticationError("Not logged in.");
     },
     // get single task by id
-    task: async (_, { _id }) => {
+    task: async (_, { _id }, context) => {
       return await Task.findById(_id).populate("comments").populate("timeLog");
     },
   },
