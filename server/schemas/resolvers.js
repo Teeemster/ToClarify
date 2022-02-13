@@ -34,8 +34,29 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // get single task by id
-    task: async (_, { _id }, context) => {
-      return await Task.findById(_id).populate("comments").populate("timeLog");
+    task: async (_, { projectId, _id }, context) => {
+      // confirm a user is logged
+      if (context.user) {
+        // get current user data
+        const currentUserData = await User.findById(context.user._id).select(
+          "projects"
+        );
+        // get current project data
+        const currentProjectData = await Project.findById(projectId).select(
+          "tasks"
+        );
+        // check if current user has access to queried project, and project has access to queried task
+        if (
+          currentUserData.projects.includes(projectId) &&
+          currentProjectData.tasks.includes(_id)
+        ) {
+          return await Task.findById(_id)
+            .populate("comments")
+            .populate("timeLog");
+        }
+        throw new AuthenticationError("Task not found for current user or project.");
+      }
+      throw new AuthenticationError("Not logged in.");
     },
   },
   Mutation: {
