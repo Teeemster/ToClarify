@@ -1,39 +1,40 @@
 //User Model
-
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
+import { Schema, model } from 'mongoose';
+import { hash, compare } from 'bcrypt';
 
 const userSchema = new Schema(
     {
-        username: {
+        type: {
             type: String,
-            required: true,
-            unique: true,
+            enum: ["Admin", "Client"],
+            required: [true, "Plase select a type!"],
+            trim: true
+        },
+        firstname: {
+            type: String,
+            required: [true, "Please key in a first name!"],
+            trim: true
+        },
+        lastname: {
+            type: String,
+            required: [true, "Please key in a last name!"],
             trim: true
         },
         email: {
             type: String,
-            required: true,
-            unique: true,
-            match: [/.+@.+\..+/, 'Must match an email address!']
+            required: [true, "Please key in an email!"],
+            unique: true
         },
         password: {
             type: String,
-            required: true,
-            minlength: 5
+            required: [true, "Please key in a password!"],
+            minlength: 5,
+            maxlength: 50
         },
-        thoughts: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Thought'
-            }
-        ],
-        friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            }
-        ]
+        project: {
+            type: Schema.Types.ObjectId,
+            ref: 'Project'
+        }
     },
     {
         toJSON: {
@@ -42,25 +43,24 @@ const userSchema = new Schema(
     }
 );
 
-// set up pre-save middleware to create password
+//Middleware for password
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
         const saltRounds = 10;
-        this.password = await bcrypt.hash(this.password, saltRounds);
+        this.password = await hash(this.password, saltRounds);
     }
-
     next();
 });
 
-// compare the incoming password with the hashed password
+//Compares the incoming password to the hashed password
 userSchema.methods.isCorrectPassword = async function (password) {
-    return bcrypt.compare(password, this.password);
+    return compare(password, this.password);
 };
 
-userSchema.virtual('friendCount').get(function () {
-    return this.friends.length;
-});
+//Virtual that retrieves number of user's projects
+userSchema.virtual('projectCount').get(function () {
+    return this.project.length
+})
 
 const User = model('User', userSchema);
-
-module.exports = User;
+export default User;
