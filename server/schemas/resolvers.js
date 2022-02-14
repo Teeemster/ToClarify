@@ -9,10 +9,8 @@ const resolvers = {
         const currentUserData = await User.findById(context.user._id)
           .select("-__v, -password")
           .populate("projects");
-
         return currentUserData;
       }
-
       throw new AuthenticationError("Not logged in.");
     },
     // get single project by id
@@ -41,14 +39,15 @@ const resolvers = {
         const currentUserData = await User.findById(context.user._id).select(
           "projects"
         );
-        // get current project data
-        const currentProjectData = await Project.findById(projectId).select(
+        // get queried project data
+        const queriedProjectData = await Project.findById(projectId).select(
           "tasks"
         );
-        // check if current user has access to queried project, and project has access to queried task
+        // check if current user has access to queried project
+        // AND check if queried task belongs to queried project 
         if (
           currentUserData.projects.includes(projectId) &&
-          currentProjectData.tasks.includes(_id)
+          queriedProjectData.tasks.includes(_id)
         ) {
           return await Task.findById(_id)
             .populate("comments")
