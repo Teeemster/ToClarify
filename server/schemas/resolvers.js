@@ -1,4 +1,5 @@
 import { User, Project, Task, Comment, LoggedTime } from "../models";
+// TO-DO: Import Auth functions for login mutation
 import { AuthenticationError } from "apollo-server-express";
 
 const resolvers = {
@@ -44,7 +45,7 @@ const resolvers = {
           "tasks"
         );
         // check if current user has access to queried project
-        // AND check if queried task belongs to queried project 
+        // AND check if queried task belongs to queried project
         if (
           currentUserData.projects.includes(projectId) &&
           queriedProjectData.tasks.includes(_id)
@@ -53,15 +54,52 @@ const resolvers = {
             .populate("comments")
             .populate("timeLog");
         }
-        throw new AuthenticationError("Task not found for current user or project.");
+        throw new AuthenticationError(
+          "Task not found for current user or project."
+        );
       }
       throw new AuthenticationError("Not logged in.");
     },
   },
   Mutation: {
     // add user
-    // update user
-    // delete user
+    addUser: async (_, args) => {
+      const user = await User.create(args);
+      const token = signToken(user);
+      return { token, user };
+    },
+    // login user
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email: email });
+      if (!user) throw new AuthenticationError("Incorrect login credentials.");
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw)
+        throw new AuthenticationError("Incorrect login credentials.");
+      const token = signToken(user);
+      return { token, user };
+    },
+    // update current user
+    updateUser: async (_, args, context) => {
+      if (context.user) {
+        return await User.findByIdAndUpdate(context.user._id, args, {
+          new: true,
+          runValidators: true,
+        });
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
+    // delete current user (password required)
+    deleteUser: async (_, { password }, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        const correctPw = await user.isCorrectPassword(password);
+        if (correctPw) {
+          return await User.findByIdAndDelete(user._id);
+        }
+        throw new AuthenticationError("Incorrect password.");
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
     // add project
     // update project
     // delete project
