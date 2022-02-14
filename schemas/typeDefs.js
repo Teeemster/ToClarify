@@ -46,14 +46,14 @@ const typeDefs = gql`
         body: String!
         user: User
     },
-    type InputProject {
+    input InputProject {
         projectId: String!
         title: String!
         owner: User
         tasks: [Task]
         clients: [String]
     },
-    type InputTask {
+    input InputTask {
         taskId: String!
         title: String!
         description: String
@@ -71,7 +71,7 @@ const typeDefs = gql`
         me: User
         user(username: String!): User
         project(_id: ID!): Project 
-        task(_id: ID!): Task 
+        task(_id: ID!, projectId: String!): Task 
     },
     type Mutation {
         addUser(username: String!, email: $String, password: String!): Auth 
