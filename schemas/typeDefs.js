@@ -78,16 +78,16 @@ const typeDefs = gql`
         login(email: String!, password: String!): Auth
         updateUser(username: String!, email: String!, password: String!): User
         deleteUser(userId: ID!, password: String!): User
-        addProject:
-        updateProject:
-        deleteProject:
-        addTask:
-        updateTask:
-        deleteTask:
-        addComment:
-        deleteComment:
-        addLoggedTime:
-        deleteLoggedTime:
+        addProject(newProject: InputProject!): Project
+        updateProject(updateProject: InputProject!): Project
+        deleteProject(projectId: ID!): Project
+        addTask(newTask: InputTask!): Task
+        updateTask(updateTask: InputTask!): Task
+        deleteTask(taskId: ID!): Task
+        addComment(body: String!): Comment
+        deleteComment(commentId: ID!): Comment
+        addLoggedTime(description: String!, date: String!, hours: Int!): LoggedTime
+        deleteLoggedTime(loggedTimeId: ID!): LoggedTime
     }
 `;
 
