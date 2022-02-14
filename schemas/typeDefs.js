@@ -69,7 +69,7 @@ const typeDefs = gql`
     },
     type Query {
         me: User
-        user(username: String!): User
+        user(_id: ID!): User
         project(_id: ID!): Project 
         task(_id: ID!, projectId: String!): Task 
     },
