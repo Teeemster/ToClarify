@@ -14,6 +14,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // get single project by id
     project: async (_, { projectId }, context) => {
       // check if a user is logged in
@@ -35,6 +36,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // get single task by id
     task: async (_, { taskId }, context) => {
       // check if a user is logged in
@@ -57,6 +59,7 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
   },
+
   Mutation: {
     // add user
     addUser: async (_, args) => {
@@ -64,6 +67,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+
     // login user
     login: async (_, { email, password }) => {
       const user = await User.findOne({ email: email });
@@ -74,6 +78,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+
     // update current user
     updateUser: async (_, args, context) => {
       if (context.user) {
@@ -84,6 +89,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // delete current user (password required)
     deleteUser: async (_, { password }, context) => {
       if (context.user) {
@@ -96,6 +102,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // add project
     addProject: async (_, args, context) => {
       if (context.user) {
@@ -113,6 +120,7 @@ const resolvers = {
       }
       throw new AuthenticationError("You must be logged in to add a project.");
     },
+
     // update project title
     updateProjectTitle: async (_, { projectId, title }, context) => {
       // confirm a user is logged in
@@ -135,7 +143,8 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
-    // TO-DO: add client to project
+
+    // add client to project
     addClientToProject: async (_, { projectId, ...clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
@@ -173,30 +182,24 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
-    // delete project (password required)
-    deleteProject: async (_, { projectId, password }, context) => {
+
+    // delete project
+    // TO-DO: require password to delete project
+    deleteProject: async (_, { projectId }, context) => {
       // confirm a user is logged in
       if (context.user) {
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
-        );
-        // check if current user is owner of queried project
-        if (
-          currentUserData.projects.includes(projectId) &&
-          currentUserData.type === "Admin"
-        ) {
-          // check if correct password was provided
-          const correctPw = await currentUserData.isCorrectPassword(password);
-          if (correctPw) {
-            return await Project.findByIdAndDelete(projectId);
-          }
-          throw new AuthenticationError("Incorrect password.");
+        // get project data
+        const projectData = await Project.findById(projectId).select("owners");
+        // check if current user an owner on queried project
+        if (projectData.owners.includes(context.user._id)) {
+          // TO-DO: Delete all associated tasks/comments/timelogs
+          return await Project.findByIdAndDelete(projectId);
         }
         throw new AuthenticationError("Not authorized.");
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // add task
     addTask: async (_, args, context) => {
       // confirm a user is logged in
