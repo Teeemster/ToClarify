@@ -101,6 +101,24 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // add project
+    addProject: async (_, args, context) => {
+      if (context.user) {
+        // create project
+        const newProject = await Project.create({
+          ...args,
+          owner: context.user._id,
+        });
+        // add to user's projects
+        await User.findByIdAndUpdate(
+          context.user._id,
+          { $addToSet: { projects: newProject._id } },
+          { new: true }
+        );
+        // return new project
+        return newProject;
+      }
+      throw new AuthenticationError("You must be logged in to add a project.");
+    },
     // update project
     // delete project
     // add task
