@@ -3,6 +3,7 @@ const { gql } = require("apollo-server-express");
 // TO DO:
 // verify required fields
 // should enum options be capitalized?
+// should formatted time be int or string?
 // verify mutation end points
 
 const typeDefs = gql`
@@ -79,7 +80,7 @@ const typeDefs = gql`
         task(_id: ID!, projectId: String!): Task 
     },
     type Mutation {
-        addUser(username: String!, email: $String, password: String!): Auth 
+        addUser(username: String!, email: String!, password: String!): Auth 
         login(email: String!, password: String!): Auth
         updateUser(username: String!, email: String!, password: String!): User
         deleteUser(userId: ID!, password: String!): User
