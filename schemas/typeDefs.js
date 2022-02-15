@@ -1,5 +1,10 @@
 const { gql } = require("apollo-server-express");
 
+// TO DO:
+// verify required fields
+// should enum options be capitalized?
+// verify mutation end points
+
 const typeDefs = gql`
     type User {
         _id: ID!
