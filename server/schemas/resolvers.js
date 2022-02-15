@@ -37,32 +37,21 @@ const resolvers = {
     },
     // get single task by id
     task: async (_, { taskId }, context) => {
-      // confirm a user is logged in
+      // check if a user is logged in
       if (context.user) {
         // get task data
         const taskData = await Task.findById(taskId);
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.project).select(
-          "owners clients"
+          "owners",
+          "clients"
         );
-
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects"
-        );
-        // get queried project data
-        const queriedProjectData = await Project.findById(projectId).select(
-          "tasks"
-        );
-        // check if current user has access to queried project
-        // AND check if queried task belongs to queried project
+        // check if current user has access to queried task's parent project
         if (
-          currentUserData.projects.includes(projectId) &&
-          queriedProjectData.tasks.includes(taskId)
+          projectUsers.owners.includes(context.user._id) ||
+          projectUsers.clients.includes(context.user._id)
         ) {
-          return await Task.findById(taskId)
-            .populate("comments")
-            .populate("timeLog");
+          return await taskData.populate("comments").populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
