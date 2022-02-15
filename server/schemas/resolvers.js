@@ -269,39 +269,37 @@ const resolvers = {
     },
 
     // add comment
-    addComment: async (_, { projectId, taskId, commentBody }, context) => {
-      // confirm a user is logged in
+    addComment: async (_, { taskId, commentBody }, context) => {
+      // check if a user is logged in
       if (context.user) {
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects"
+        // get task data
+        const taskData = await Task.findById(taskId).select("project");
+        // get parent project's owners and clients
+        const projectUsers = await Project.findById(taskData.project).select(
+          "owners clients"
         );
-        // get queried project data
-        const queriedProjectData = await Project.findById(projectId).select(
-          "tasks"
-        );
-        // check if current user has access to queried project
-        // AND check if queried task belongs to queried project
+        // check if current user has access to queried task's parent project
         if (
-          currentUserData.projects.includes(projectId) &&
-          queriedProjectData.tasks.includes(taskId)
+          projectUsers.owners.includes(context.user._id) ||
+          projectUsers.clients.includes(context.user._id)
         ) {
           // create comment
-          const newComment = Comment.create({
+          const comment = Comment.create({
             commentBody: commentBody,
             userId: context.user._id,
+            taskId: taskId,
           });
           // add comment to task
-          await Task.findByIdAndUpdate(
-            taskId,
-            { $push: { comments: newComment } },
-            { new: true, runValidators: true }
-          );
+          await Task.findByIdAndUpdate(taskId, {
+            $push: { comments: comment._id },
+          });
+          return comment;
         }
         throw new AuthenticationError("Not authorized.");
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // delete comment
     deleteComment: async (_, { commentId }, context) => {
       // confirm a user is logged in
@@ -315,41 +313,37 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // add logged time
-    addLoggedTime: async (_, args, context) => {
-      // confirm a user is logged in
+    addLoggedTime: async (_, { taskId, ...loggedTimeInputs }, context) => {
+      // check if a user is logged in
       if (context.user) {
-        // destructure args
-        const { projectId, taskId, ...loggedTimeInput } = args;
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
+        // get task data
+        const taskData = await Task.findById(taskId).select("project");
+        // get parent project's owners and clients
+        const projectUsers = await Project.findById(taskData.project).select(
+          "owners"
         );
-        // get queried project data
-        const queriedProjectData = await Project.findById(projectId).select(
-          "tasks"
-        );
-        // check if current user is owner of queried project
-        // AND check if queried task belongs to queried project
-        if (
-          currentUserData.projects.includes(projectId) &&
-          currentUserData.type === "Admin" &&
-          queriedProjectData.tasks.includes(taskId)
-        ) {
-          // create logged time entry
-          const newLoggedTime = LoggedTime.create(loggedTimeInput);
+        // check if current user is an owner on task's parent project
+        if (projectUsers.owners.includes(context.user._id)) {
+          // create logged time
+          const loggedTime = loggedTime.create({
+            ...loggedTimeInputs,
+            userId: context.user._id,
+            taskId: taskId,
+          });
           // add logged time to task
-          await Task.findByIdAndUpdate(
-            taskId,
-            { $push: { timeLog: newLoggedTime } },
-            { new: true, runValidators: true }
-          );
+          await Task.findByIdAndUpdate(taskId, {
+            $push: { timeLog: loggedTime._id },
+          });
+          return loggedTime;
         }
         throw new AuthenticationError("Not authorized.");
       }
       throw new AuthenticationError("Not logged in.");
     },
-    // delete logged time
+
+    // TO-DO: delete logged time
   },
 };
 
