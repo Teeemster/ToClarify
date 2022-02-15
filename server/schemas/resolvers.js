@@ -227,26 +227,17 @@ const resolvers = {
     },
 
     // update task
-    updateTask: async (_, args, context) => {
-      // confirm a user is logged in
+    updateTask: async (_, { taskId, ...taskInputs }, context) => {
+      // check if a user is logged in
       if (context.user) {
-        // destructure args
-        const { projectId, taskId, ...taskInputs } = args;
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
+        // get task data
+        const taskData = await Task.findById(taskId);
+        // get parent project's owners and clients
+        const projectUsers = await Project.findById(taskData.project).select(
+          "owners"
         );
-        // get queried project data
-        const queriedProjectData = await Project.findById(projectId).select(
-          "tasks"
-        );
-        // check if current user is owner of queried project
-        // AND check if queried task belongs to queried project
-        if (
-          currentUserData.projects.includes(projectId) &&
-          currentUserData.type === "Admin" &&
-          queriedProjectData.tasks.includes(taskId)
-        ) {
+        // check if current user is owner on queried task's parent project
+        if (projectUsers.owners.includes(context.user._id)) {
           return Task.findByIdAndUpdate(taskId, taskInputs, {
             new: true,
             runValidators: true,
@@ -256,33 +247,27 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // delete task
-    deleteTask: async (_, args, context) => {
-      // confirm a user is logged in
+    deleteTask: async (_, { taskId }, context) => {
+      // check if a user is logged in
       if (context.user) {
-        // destructure args
-        const { projectId, taskId, ...taskInputs } = args;
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
+        // get task data
+        const taskData = await Task.findById(taskId);
+        // get parent project's owners and clients
+        const projectUsers = await Project.findById(taskData.project).select(
+          "owners"
         );
-        // get queried project data
-        const queriedProjectData = await Project.findById(projectId).select(
-          "tasks"
-        );
-        // check if current user is owner of queried project
-        // AND check if queried task belongs to queried project
-        if (
-          currentUserData.projects.includes(projectId) &&
-          currentUserData.type === "Admin" &&
-          queriedProjectData.tasks.includes(taskId)
-        ) {
+        // check if current user is owner on queried task's parent project
+        if (projectUsers.owners.includes(context.user._id)) {
+          // TO-DO: Delete all associated comments and timelogs
           return Task.findByIdAndDelete(taskId);
         }
         throw new AuthenticationError("Not authorized.");
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // add comment
     addComment: async (_, { projectId, taskId, commentBody }, context) => {
       // confirm a user is logged in
