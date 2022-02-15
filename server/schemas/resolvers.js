@@ -16,15 +16,18 @@ const resolvers = {
     },
     // get single project by id
     project: async (_, { projectId }, context) => {
-      // confirm a user is logged in
+      // check if a user is logged in
       if (context.user) {
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects"
-        );
+        // get project data
+        const projectData = await Project.findById(projectId);
         // check if current user has access to queried project
-        if (currentUserData.projects.includes(projectId)) {
-          return await Project.findById(projectId)
+        if (
+          projectData.owner.includes(context.user._id) ||
+          projectData.clients.includes(context.user._id)
+        ) {
+          // return fully populated project data
+          return await projectData
+            .populate("owners")
             .populate("tasks")
             .populate("clients");
         }
@@ -33,9 +36,16 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // get single task by id
-    task: async (_, { projectId, taskId }, context) => {
+    task: async (_, { taskId }, context) => {
       // confirm a user is logged in
       if (context.user) {
+        // get task data
+        const taskData = await Task.findById(taskId);
+        // get parent project's owners and clients
+        const projectUsers = await Project.findById(taskData.project).select(
+          "owners clients"
+        );
+
         // get current user data
         const currentUserData = await User.findById(context.user._id).select(
           "projects"
@@ -291,6 +301,39 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // add logged time
+    addLoggedTime: async (_, args, context) => {
+      // confirm a user is logged in
+      if (context.user) {
+        // destructure args
+        const { projectId, taskId, ...loggedTimeInput } = args;
+        // get current user data
+        const currentUserData = await User.findById(context.user._id).select(
+          "projects type"
+        );
+        // get queried project data
+        const queriedProjectData = await Project.findById(projectId).select(
+          "tasks"
+        );
+        // check if current user is owner of queried project
+        // AND check if queried task belongs to queried project
+        if (
+          currentUserData.projects.includes(projectId) &&
+          currentUserData.type === "Admin" &&
+          queriedProjectData.tasks.includes(taskId)
+        ) {
+          // create logged time entry
+          const newLoggedTime = LoggedTime.create(loggedTimeInput);
+          // add logged time to task
+          await Task.findByIdAndUpdate(
+            taskId,
+            { $push: { timeLog: newLoggedTime } },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError("Not authorized.");
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
     // delete logged time
   },
 };

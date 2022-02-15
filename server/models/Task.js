@@ -3,6 +3,10 @@ import { formatHours } from "../utils/helpers";
 
 const taskSchema = new Schema(
   {
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    },
     title: {
       type: String,
       required: [true, "Title is required."],
