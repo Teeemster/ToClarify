@@ -244,9 +244,54 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // add comment
+    addComment: async (_, { projectId, taskId, commentBody }, context) => {
+      // confirm a user is logged in
+      if (context.user) {
+        // get current user data
+        const currentUserData = await User.findById(context.user._id).select(
+          "projects"
+        );
+        // get queried project data
+        const queriedProjectData = await Project.findById(projectId).select(
+          "tasks"
+        );
+        // check if current user has access to queried project
+        // AND check if queried task belongs to queried project
+        if (
+          currentUserData.projects.includes(projectId) &&
+          queriedProjectData.tasks.includes(taskId)
+        ) {
+          // create comment
+          const newComment = Comment.create({
+            commentBody: commentBody,
+            userId: context.user._id,
+          });
+          // add comment to task
+          await Task.findByIdAndUpdate(
+            taskId,
+            { $push: { comments: newComment } },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError("Not authorized.");
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
     // delete comment
+    deleteComment: async (_, { commentId }, context) => {
+      // confirm a user is logged in
+      if (context.user) {
+        // find comment and confirm it was created by current user
+        const comment = Comment.findById(commentId).select("userId");
+        if (comment.userId === context.user._id) {
+          return Comment.findByIdAndDelete(commentId);
+        }
+        throw new AuthenticationError("Not authorized.");
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
     // add logged time
-    // delete logged tim
+    // delete logged time
   },
 };
 
