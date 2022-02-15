@@ -43,8 +43,7 @@ const resolvers = {
         const taskData = await Task.findById(taskId);
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.project).select(
-          "owners",
-          "clients"
+          "owners clients"
         );
         // check if current user has access to queried task's parent project
         if (
@@ -100,17 +99,15 @@ const resolvers = {
     // add project
     addProject: async (_, args, context) => {
       if (context.user) {
-        // create project
+        // create project and set current user as an owner
         const newProject = await Project.create({
           ...args,
-          owner: context.user._id,
+          owners: [context.user._id],
         });
-        // add to user's projects
-        await User.findByIdAndUpdate(
-          context.user._id,
-          { $addToSet: { projects: newProject._id } },
-          { new: true }
-        );
+        // add new project to user's projects
+        await User.findByIdAndUpdate(context.user._id, {
+          $addToSet: { projects: newProject._id },
+        });
         // return new project
         return newProject;
       }
@@ -120,14 +117,14 @@ const resolvers = {
     updateProjectTitle: async (_, { projectId, title }, context) => {
       // confirm a user is logged in
       if (context.user) {
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
+        // get project data
+        const projectData = await Project.findById(projectId).select(
+          "owners clients"
         );
-        // check if current user is owner of queried project
+        // check if current user has access to queried project
         if (
-          currentUserData.projects.includes(projectId) &&
-          currentUserData.type === "Admin"
+          projectData.owners.includes(context.user._id) ||
+          projectData.clients.includes(context.user._id)
         ) {
           return await Project.findByIdAndUpdate(projectId, title, {
             new: true,
@@ -139,6 +136,43 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
     // TO-DO: add client to project
+    addClientToProject: async (_, { projectId, ...clientInputs }, context) => {
+      // confirm a user is logged in
+      if (context.user) {
+        // get project data
+        const projectData = await Project.findById(projectId).select("owners");
+        // check if current user is an owner on queried project
+        if (projectData.owners.includes(context.user._id)) {
+          // check if client already exists as user
+          const userAlreadyExists = await User.exists({
+            email: clientInputs.email,
+          });
+          if (userAlreadyExists) {
+            // add project to existing user
+            const client = await User.findOneAndUpdate(
+              { email: clientInputs.email },
+              { $addToSet: { projects: projectId } },
+              { new: true, runValidators: true }
+            );
+          } else {
+            // create new user and add project
+            const client = await User.create({
+              ...clientInputs,
+              type: "Client",
+              projects: [projectId],
+            });
+          }
+          // add client to project
+          return Project.findByIdAndUpdate(
+            projectId,
+            { $addToSet: { clients: client._id } },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError("Not authorized.");
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
     // delete project (password required)
     deleteProject: async (_, { projectId, password }, context) => {
       // confirm a user is logged in
