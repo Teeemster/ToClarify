@@ -201,17 +201,20 @@ const resolvers = {
     },
 
     // add task
-    addTask: async (_, args, context) => {
-      // confirm a user is logged in
+    addTask: async (_, { projectId, ...taskInputs }, context) => {
+      // check if a user is logged in
       if (context.user) {
-        const { projectId, ...taskInputs } = args;
-        // get current user data
-        const currentUserData = await User.findById(context.user._id).select(
-          "projects type"
+        // get project's owners and clients
+        const projectUsers = await Project.findById(projectId).select(
+          "owners clients"
         );
-        // check if current user has access to queried project
-        if (currentUserData.projects.includes(projectId)) {
+        // check if current user has access to queried task's parent project
+        if (
+          projectUsers.owners.includes(context.user._id) ||
+          projectUsers.clients.includes(context.user._id)
+        ) {
           // create task, add it to project, then return it
+          // TO-DO: If user is client on project, only allow them to add "requested" tasks
           const newTask = await Task.create(taskInputs);
           await Project.findByIdAndUpdate(projectId, {
             $push: { tasks: newTask._id },
@@ -222,6 +225,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in.");
     },
+
     // update task
     updateTask: async (_, args, context) => {
       // confirm a user is logged in
