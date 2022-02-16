@@ -14,8 +14,12 @@ const commentSchema = new Schema(
       get: (dateVal) => formatDatetime(dateVal),
     },
     userId: {
-      type: Number,
-      required: [true, "User ID is required."],
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    taskId: {
+      type: Schema.Types.ObjectId,
+      ref: "Task",
     },
   },
   {

@@ -3,6 +3,10 @@ import { formatHours } from "../utils/helpers";
 
 const taskSchema = new Schema(
   {
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    },
     title: {
       type: String,
       required: [true, "Title is required."],
@@ -22,8 +26,8 @@ const taskSchema = new Schema(
       required: [true, "Estimated hours is required."],
       get: (estHoursVal) => formatHours(estHoursVal),
     },
-    timeLog: [{ type: Schema.Types.ObjectId, ref: "LoggedTime" }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    timeLog: [{ type: Schema.Types.ObjectId, ref: "LoggedTime" }],
   },
   {
     toJSON: {
@@ -34,10 +38,10 @@ const taskSchema = new Schema(
 );
 
 // virtual for logging totalTime
-TaskSchema.virtual("totalTime").get(function () {
+taskSchema.virtual("totalTime").get(function () {
   return this.timeLog.reduce((a, b) => a + b, 0);
 });
 
-const Task = model("Task", TaskSchema);
+const Task = model("Task", taskSchema);
 
 export default Task;
