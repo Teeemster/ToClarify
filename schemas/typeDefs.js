@@ -1,11 +1,5 @@
 const { gql } = require("apollo-server-express");
 
-// TO DO:
-// verify required fields
-// should enum options be capitalized?
-// should formatted time be int or string?
-// verify mutation end points
-
 const typeDefs = gql`
     type User {
         _id: ID!
@@ -69,6 +63,14 @@ const typeDefs = gql`
         totalTime: String
         comments: [Comment]
     },
+    input InputUser {
+        userId: String
+        firstName: String!
+        lastName: String!
+        type: UserType
+        email: String!
+        password: String!
+    },
     type Auth {
         token: ID!
         user: User
@@ -77,23 +79,23 @@ const typeDefs = gql`
         me: User
         user(_id: ID!): User
         project(_id: ID!): Project 
-        task(_id: ID!, projectId: String!): Task 
+        task(_id: ID!): Task 
     },
     type Mutation {
-        addUser(username: String!, email: String!, password: String!): Auth 
+        addUser(newUser: InputUser!): Auth 
         login(email: String!, password: String!): Auth
-        updateUser(username: String!, email: String!, password: String!): User
-        deleteUser(userId: ID!, password: String!): User
+        updateUser(updatedUser: InputUser!): User
+        deleteUser(password: String!): User
         addProject(newProject: InputProject!): Project
-        updateProject(updateProject: InputProject!): Project
+        updateProjectTitle(projectId: ID! title: String!): Project
+        addClient(projectId: ID!, clientInput: InputUser!): Project
         deleteProject(projectId: ID!): Project
-        addTask(newTask: InputTask!): Task
-        updateTask(updateTask: InputTask!): Task
+        addTask(newTask: InputTask!, projectId: String!): Task
+        updateTask(updatedTask: InputTask!): Task
         deleteTask(taskId: ID!): Task
-        addComment(body: String!): Comment
+        addComment(taskId: String!, body: String!): Comment
         deleteComment(commentId: ID!): Comment
-        addLoggedTime(description: String!, date: String!, hours: Int!): LoggedTime
-        deleteLoggedTime(loggedTimeId: ID!): LoggedTime
+        addLoggedTime(taskId: String!, description: String!, date: String!, hours: Int!): LoggedTime
     }
 `;
 
