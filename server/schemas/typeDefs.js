@@ -16,9 +16,9 @@ const typeDefs = gql`
     type Project {
         _id: ID!
         title: String!
-        owner: User
+        owners: [User]
         tasks: [Task]
-        clients: [String]
+        clients: [User]
     },
     type Task {
         _id: ID!
@@ -47,12 +47,10 @@ const typeDefs = gql`
         user: User
     },
     input InputProject {
-        projectId: String!
         title: String!
-        owner: ID!
     },
     input InputTask {
-        taskId: String!
+        taskId: String
         title: String!
         description: String
         status: TaskStatus
@@ -82,11 +80,11 @@ const typeDefs = gql`
         login(email: String!, password: String!): Auth
         updateUser(updatedUser: InputUser!): User
         deleteUser(password: String!): User
-        addProject(newProject: InputProject!): Project
+        addProject(projectInputs: InputProject!): Project
         updateProjectTitle(projectId: ID! title: String!): Project
         addClient(projectId: ID!, clientInput: InputUser!): Project
         deleteProject(projectId: ID!): Project
-        addTask(newTask: InputTask!, projectId: String!): Task
+        addTask(taskInputs: InputTask!, projectId: String!): Task
         updateTask(updatedTask: InputTask!): Task
         deleteTask(taskId: ID!): Task
         addComment(taskId: String!, body: String!): Comment
