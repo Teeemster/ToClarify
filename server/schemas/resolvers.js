@@ -45,7 +45,6 @@ const resolvers = {
       if (context.user) {
         // get task data to find projectId
         const taskData = await Task.findById(_id).select("projectId");
-        console.log(taskData)
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
@@ -55,7 +54,9 @@ const resolvers = {
           projectUsers.owners.includes(context.user._id) ||
           projectUsers.clients.includes(context.user._id)
         ) {
-          return await Task.findById(_id).populate("comments").populate("timeLog");
+          return await Task.findById(_id)
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -278,27 +279,31 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("project");
+        const taskData = await Task.findById(taskId).select("projectId");
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
+
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
           projectUsers.clients.includes(context.user._id)
         ) {
           // create comment
-          const comment = Comment.create({
-            commentBody: body,
-            userId: context.user._id,
+          const comment = await Comment.create({
+            body: body,
+            user: context.user,
             taskId: taskId,
           });
           // add comment to task
-          await Task.findByIdAndUpdate(taskId, {
-            $push: { comments: comment._id },
-          });
-          return comment;
+          return await Task.findByIdAndUpdate(
+            taskId,
+            { $push: { comments: comment._id } },
+            { new: true, runValidators: true }
+          )
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }

@@ -45,7 +45,9 @@ const typeDefs = gql`
     type Comment {
         _id: ID!
         body: String!
-        user: User
+        user: User!
+        taskId: String!
+        createdAt: String!
     },
     input InputProject {
         title: String!
@@ -89,7 +91,7 @@ const typeDefs = gql`
         addTask(taskInputs: InputTask!): Task
         updateTask(updatedTask: InputTask!): Task
         deleteTask(taskId: ID!): Task
-        addComment(taskId: String!, body: String!): Comment
+        addComment(taskId: String!, body: String!): Task
         deleteComment(commentId: ID!): Comment
         addLoggedTime(taskId: String!, description: String!, date: String!, hours: Int!): LoggedTime
     }
