@@ -1,6 +1,6 @@
 //User Model
-import { Schema, model } from "mongoose";
-import { hash, compare } from "bcrypt";
+const { Schema, model } = require ("mongoose");
+const { hash, compare } = require ("bcrypt");
 
 const userSchema = new Schema(
   {
@@ -65,4 +65,5 @@ userSchema.virtual("projectCount").get(function () {
 });
 
 const User = model("User", userSchema);
-export default User;
+
+module.exports = User;

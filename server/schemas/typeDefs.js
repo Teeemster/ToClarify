@@ -32,7 +32,7 @@ const typeDefs = gql`
     },
     enum TaskStatus {
         REQUESTED
-        IN-PROGRESS
+        INPROGRESS
         COMPLETE
     },
     type LoggedTime {
@@ -49,9 +49,7 @@ const typeDefs = gql`
     input InputProject {
         projectId: String!
         title: String!
-        owner: User
-        tasks: [Task]
-        clients: [String]
+        owner: ID!
     },
     input InputTask {
         taskId: String!
@@ -59,9 +57,7 @@ const typeDefs = gql`
         description: String
         status: TaskStatus
         estimatedHours: String
-        timeLog: [LoggedTime]
         totalTime: String
-        comments: [Comment]
     },
     input InputUser {
         userId: String

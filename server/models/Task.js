@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import { formatHours } from "../utils/helpers";
+const { Schema, model } = require ("mongoose");
+const { formatHours } = require ("../utils/helpers");
 
 const taskSchema = new Schema(
   {
@@ -44,4 +44,4 @@ taskSchema.virtual("totalTime").get(function () {
 
 const Task = model("Task", taskSchema);
 
-export default Task;
+module.exports = Task;
