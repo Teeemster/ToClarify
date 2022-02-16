@@ -1,11 +1,11 @@
 //index model
 //Group Models
-const User = require('./User');
-const Project = require('./Project');
-const Task = require('./Task');
-const LoggedTime = require('./LoggedTime');
-const Comment = require('./Comment');
+import User from './User';
+import Project from './Project';
+import Task from './Task';
+import LoggedTime from './LoggedTime';
+import Comment from './Comment';
 
 
 //Destructure And Export Models
-module.exports = { User, Project, Task, LoggedTime, Comment };
+export default { User, Project, Task, LoggedTime, Comment };
