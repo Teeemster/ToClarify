@@ -43,10 +43,11 @@ const resolvers = {
     task: async (_, { _id }, context) => {
       // check if a user is logged in
       if (context.user) {
-        // get task data
-        const taskData = await Task.findById(_id);
+        // get task data to find projectId
+        const taskData = await Task.findById(_id).select("projectId");
+        console.log(taskData)
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -54,7 +55,7 @@ const resolvers = {
           projectUsers.owners.includes(context.user._id) ||
           projectUsers.clients.includes(context.user._id)
         ) {
-          return await taskData.populate("comments").populate("timeLog");
+          return await Task.findById(_id).populate("comments").populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -205,13 +206,13 @@ const resolvers = {
     },
 
     // add task
-    addTask: async (_, { projectId, taskInputs }, context) => {
+    addTask: async (_, { taskInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get project's owners and clients
-        const projectUsers = await Project.findById(projectId).select(
-          "owners clients"
-        );
+        const projectUsers = await Project.findById(
+          taskInputs.projectId
+        ).select("owners clients");
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
@@ -220,7 +221,7 @@ const resolvers = {
           // create task, add it to project, then return it
           // TODO: If user is client on project, only allow them to add "requested" tasks
           const newTask = await Task.create(taskInputs);
-          await Project.findByIdAndUpdate(projectId, {
+          await Project.findByIdAndUpdate(taskInputs.projectId, {
             $push: { tasks: newTask._id },
           });
           return newTask;

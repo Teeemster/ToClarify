@@ -1,11 +1,11 @@
-const { Schema, model } = require ("mongoose");
-const { formatHours } = require ("../utils/helpers");
+const { Schema, model } = require("mongoose");
+const { formatHours } = require("../utils/helpers");
 
 const taskSchema = new Schema(
   {
-    project: {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
+    projectId: {
+      type: String,
+      required: [true, "Project ID is required."],
     },
     title: {
       type: String,

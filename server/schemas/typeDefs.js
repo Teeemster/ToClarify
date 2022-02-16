@@ -22,6 +22,7 @@ const typeDefs = gql`
     },
     type Task {
         _id: ID!
+        projectId: String
         title: String!
         description: String
         status: TaskStatus
@@ -51,6 +52,7 @@ const typeDefs = gql`
     },
     input InputTask {
         taskId: String
+        projectId: String!
         title: String!
         description: String
         status: TaskStatus
@@ -84,7 +86,7 @@ const typeDefs = gql`
         updateProjectTitle(projectId: ID! title: String!): Project
         addClient(projectId: ID!, clientInput: InputUser!): Project
         deleteProject(projectId: ID!): Project
-        addTask(taskInputs: InputTask!, projectId: String!): Task
+        addTask(taskInputs: InputTask!): Task
         updateTask(updatedTask: InputTask!): Task
         deleteTask(taskId: ID!): Task
         addComment(taskId: String!, body: String!): Comment
