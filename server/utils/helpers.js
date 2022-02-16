@@ -1,5 +1,5 @@
 // format just the date (E.g., Feb 6, 2022)
-export function formatDate(date) {
+function formatDate(date) {
     return new Date(date).toLocaleString("en-us", {
         month: "short",
         day: "numeric",
@@ -8,7 +8,7 @@ export function formatDate(date) {
 }
 
 // format datetime (E.g., 4:37 pm on Feb 6, 2022)
-export function formatDatetime(datetime) {
+function formatDatetime(datetime) {
     const date = new Date(datetime).toLocaleString("en-us", {
         month: "short",
         day: "numeric",
@@ -21,6 +21,8 @@ export function formatDatetime(datetime) {
 }
 
 // format hour count to 2 decimal places (E.g., 1 => 1.00)
-export function formatHours(hours) {
+function formatHours(hours) {
     return parseFloat(hours).toFixed(2);
 }
+
+module.exports = {formatDate, formatDatetime, formatHours}
