@@ -1,6 +1,8 @@
 //convert require to ES syntax
 import { verify, sign } from 'jsonwebtoken';
 
+// TODO:
+// store secret somewhere other than in a JavaScript file—like an environment variable.
 const secret = 'mysecretsshhhhh';
 const expiration = '1h';
 
