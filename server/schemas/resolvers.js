@@ -315,8 +315,13 @@ const resolvers = {
       // confirm a user is logged in
       if (context.user) {
         // find comment and confirm it was created by current user
-        const comment = Comment.findById(commentId).select("userId");
-        if (comment.userId === context.user._id) {
+        const comment = await Comment.findById(commentId).select("user taskId");
+        if (comment.user._id.toString() === context.user._id) {
+          // remove comment from task
+          await Task.findByIdAndUpdate(comment.taskId, {
+            $pull: { comments: comment._id },
+          });
+          // delete comment
           return Comment.findByIdAndDelete(commentId);
         }
         throw new AuthenticationError("Not authorized.");
