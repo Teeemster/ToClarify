@@ -1,6 +1,6 @@
-const { User, Project, Task, Comment, LoggedTime } = require ("../models");
-const { signToken } = require ("../utils/auth");
-const { AuthenticationError } = require ("apollo-server-express");
+const { User, Project, Task, Comment, LoggedTime } = require("../models");
+const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
 
 const resolvers = {
   Query: {
@@ -20,14 +20,16 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get project data
-        const projectData = await Project.findById(_id);
+        const projectData = await Project.findById(_id).select(
+          "owners clients"
+        );
         // check if current user has access to queried project
         if (
-          projectData.owner.includes(context.user._id) ||
+          projectData.owners.includes(context.user._id) ||
           projectData.clients.includes(context.user._id)
         ) {
           // return fully populated project data
-          return await projectData
+          return await Project.findById(_id)
             .populate("owners")
             .populate("tasks")
             .populate("clients");
@@ -62,8 +64,8 @@ const resolvers = {
 
   Mutation: {
     // add user
-    addUser: async (_, args) => {
-      const user = await User.create(args);
+    addUser: async (_, { newUser }) => {
+      const user = await User.create(newUser);
       const token = signToken(user);
       return { token, user };
     },
@@ -104,18 +106,20 @@ const resolvers = {
     },
 
     // add project
-    addProject: async (_, args, context) => {
+    addProject: async (_, { projectInputs }, context) => {
       if (context.user) {
         // create project and set current user as an owner
-        const newProject = await Project.create({
-          ...args,
-          owners: [context.user._id],
-        });
+        const newProject = await Project.create(projectInputs);
+        // add current user as project owner
+        await newProject.update(
+          { $addToSet: { owners: context.user._id } },
+          { new: true }
+        );
         // add new project to user's projects
         await User.findByIdAndUpdate(context.user._id, {
           $addToSet: { projects: newProject._id },
         });
-        // return new project
+        // add current user to
         return newProject;
       }
       throw new AuthenticationError("You must be logged in to add a project.");
@@ -201,7 +205,7 @@ const resolvers = {
     },
 
     // add task
-    addTask: async (_, { projectId, ...taskInputs }, context) => {
+    addTask: async (_, { projectId, taskInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get project's owners and clients

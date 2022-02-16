@@ -13,17 +13,15 @@ const taskSchema = new Schema(
     },
     description: {
       type: String,
-      required: [true, "Description is required."],
     },
     status: {
       type: String,
-      enum: ["Requested", "In Progress", "Completed"],
-      default: "Requested",
+      enum: ["REQUESTED", "INPROGRESS", "COMPLETE"],
+      default: "REQUESTED",
       required: [true, "Status is required."],
     },
     estimatedHours: {
       type: Number,
-      required: [true, "Estimated hours is required."],
       get: (estHoursVal) => formatHours(estHoursVal),
     },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
