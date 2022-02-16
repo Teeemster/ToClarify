@@ -1,5 +1,5 @@
 import { User, Project, Task, Comment, LoggedTime } from "../models";
-// TO-DO: Import Auth functions for login mutation
+import { signToken } from "../utils/auth";
 import { AuthenticationError } from "apollo-server-express";
 
 const resolvers = {
@@ -16,11 +16,11 @@ const resolvers = {
     },
 
     // get single project by id
-    project: async (_, { projectId }, context) => {
+    project: async (_, { _id }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get project data
-        const projectData = await Project.findById(projectId);
+        const projectData = await Project.findById(_id);
         // check if current user has access to queried project
         if (
           projectData.owner.includes(context.user._id) ||
@@ -38,11 +38,11 @@ const resolvers = {
     },
 
     // get single task by id
-    task: async (_, { taskId }, context) => {
+    task: async (_, { _id }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId);
+        const taskData = await Task.findById(_id);
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
@@ -145,7 +145,7 @@ const resolvers = {
     },
 
     // add client to project
-    addClientToProject: async (_, { projectId, ...clientInputs }, context) => {
+    addClient: async (_, { projectId, ...clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
         // get project data
@@ -184,7 +184,7 @@ const resolvers = {
     },
 
     // delete project
-    // TO-DO: require password to delete project
+    // TODO: require password to delete project
     deleteProject: async (_, { projectId }, context) => {
       // confirm a user is logged in
       if (context.user) {
@@ -192,7 +192,7 @@ const resolvers = {
         const projectData = await Project.findById(projectId).select("owners");
         // check if current user an owner on queried project
         if (projectData.owners.includes(context.user._id)) {
-          // TO-DO: Delete all associated tasks/comments/timelogs
+          // TODO: Delete all associated tasks/comments/timelogs
           return await Project.findByIdAndDelete(projectId);
         }
         throw new AuthenticationError("Not authorized.");
@@ -214,7 +214,7 @@ const resolvers = {
           projectUsers.clients.includes(context.user._id)
         ) {
           // create task, add it to project, then return it
-          // TO-DO: If user is client on project, only allow them to add "requested" tasks
+          // TODO: If user is client on project, only allow them to add "requested" tasks
           const newTask = await Task.create(taskInputs);
           await Project.findByIdAndUpdate(projectId, {
             $push: { tasks: newTask._id },
@@ -260,7 +260,7 @@ const resolvers = {
         );
         // check if current user is owner on queried task's parent project
         if (projectUsers.owners.includes(context.user._id)) {
-          // TO-DO: Delete all associated comments and timelogs
+          // TODO: Delete all associated comments and timelogs
           return Task.findByIdAndDelete(taskId);
         }
         throw new AuthenticationError("Not authorized.");
@@ -269,7 +269,7 @@ const resolvers = {
     },
 
     // add comment
-    addComment: async (_, { taskId, commentBody }, context) => {
+    addComment: async (_, { taskId, body }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get task data
@@ -285,7 +285,7 @@ const resolvers = {
         ) {
           // create comment
           const comment = Comment.create({
-            commentBody: commentBody,
+            commentBody: body,
             userId: context.user._id,
             taskId: taskId,
           });
@@ -343,7 +343,7 @@ const resolvers = {
       throw new AuthenticationError("Not logged in.");
     },
 
-    // TO-DO: delete logged time
+    // TODO: delete logged time
   },
 };
 

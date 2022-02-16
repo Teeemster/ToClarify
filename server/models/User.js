@@ -10,12 +10,12 @@ const userSchema = new Schema(
       required: [true, "Plase select a type!"],
       trim: true,
     },
-    firstname: {
+    firstName: {
       type: String,
       required: [true, "Please key in a first name!"],
       trim: true,
     },
-    lastname: {
+    lastName: {
       type: String,
       required: [true, "Please key in a last name!"],
       trim: true,
