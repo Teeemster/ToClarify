@@ -84,9 +84,10 @@ const resolvers = {
     },
 
     // update current user
-    updateUser: async (_, args, context) => {
+    // TODO: Check on updating password
+    updateUser: async (_, { userInputs }, context) => {
       if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, {
+        return await User.findByIdAndUpdate(context.user._id, userInputs, {
           new: true,
           runValidators: true,
         });
@@ -140,10 +141,14 @@ const resolvers = {
           projectData.owners.includes(context.user._id) ||
           projectData.clients.includes(context.user._id)
         ) {
-          return await Project.findByIdAndUpdate(projectId, title, {
-            new: true,
-            runValidators: true,
-          });
+          return await Project.findByIdAndUpdate(
+            projectId,
+            { title: title },
+            { new: true, runValidators: true }
+          )
+            .populate("owners")
+            .populate("tasks")
+            .populate("clients");
         }
         throw new AuthenticationError("Not authorized.");
       }
