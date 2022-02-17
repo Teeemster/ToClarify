@@ -3,7 +3,9 @@ import "bootstrap";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
-import ProjectArea from "./components/ProjectArea";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Footer from "./components/Footer";
 
 function App() {
@@ -15,7 +17,9 @@ function App() {
         </header>
         <main>
           <Routes>
-            
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </main>
         <footer>
