@@ -84,9 +84,10 @@ const resolvers = {
     },
 
     // update current user
-    updateUser: async (_, args, context) => {
+    // TODO: Check on updating password
+    updateUser: async (_, { userInputs }, context) => {
       if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, {
+        return await User.findByIdAndUpdate(context.user._id, userInputs, {
           new: true,
           runValidators: true,
         });
@@ -140,10 +141,14 @@ const resolvers = {
           projectData.owners.includes(context.user._id) ||
           projectData.clients.includes(context.user._id)
         ) {
-          return await Project.findByIdAndUpdate(projectId, title, {
-            new: true,
-            runValidators: true,
-          });
+          return await Project.findByIdAndUpdate(
+            projectId,
+            { title: title },
+            { new: true, runValidators: true }
+          )
+            .populate("owners")
+            .populate("tasks")
+            .populate("clients");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -151,7 +156,7 @@ const resolvers = {
     },
 
     // add client to project
-    addClient: async (_, { projectId, ...clientInputs }, context) => {
+    addClient: async (_, { projectId, clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
         // get project data
@@ -162,27 +167,30 @@ const resolvers = {
           const userAlreadyExists = await User.exists({
             email: clientInputs.email,
           });
+          let client;
           if (userAlreadyExists) {
             // add project to existing user
-            const client = await User.findOneAndUpdate(
+            client = await User.findOneAndUpdate(
               { email: clientInputs.email },
               { $addToSet: { projects: projectId } },
               { new: true, runValidators: true }
             );
           } else {
             // create new user and add project
-            const client = await User.create({
+            client = await User.create({
               ...clientInputs,
-              type: "Client",
               projects: [projectId],
             });
           }
           // add client to project
-          return Project.findByIdAndUpdate(
+          return await Project.findByIdAndUpdate(
             projectId,
             { $addToSet: { clients: client._id } },
             { new: true, runValidators: true }
-          );
+          )
+            .populate("owners")
+            .populate("tasks")
+            .populate("clients");
         }
         throw new AuthenticationError("Not authorized.");
       }

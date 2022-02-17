@@ -37,7 +37,8 @@ const taskSchema = new Schema(
 
 // virtual for logging totalTime
 taskSchema.virtual("totalTime").get(function () {
-  return this.timeLog.reduce((a, b) => a + b, 0);
+  let sum = this.timeLog.reduce((total, obj) => total + parseFloat(obj.hours), 0);
+  return formatHours(sum);
 });
 
 const Task = model("Task", taskSchema);

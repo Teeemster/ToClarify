@@ -28,7 +28,7 @@ const typeDefs = gql`
         status: TaskStatus
         estimatedHours: Float
         timeLog: [LoggedTime]
-        totalTime: String
+        totalTime: Float
         comments: [Comment]
     },
     enum TaskStatus {
@@ -65,11 +65,11 @@ const typeDefs = gql`
     },
     input InputUser {
         userId: String
-        firstName: String!
-        lastName: String!
+        firstName: String
+        lastName: String
         type: UserType
-        email: String!
-        password: String!
+        email: String
+        password: String
     },
     input InputLoggedTime {
         description: String
@@ -90,11 +90,11 @@ const typeDefs = gql`
     type Mutation {
         addUser(newUser: InputUser!): Auth 
         login(email: String!, password: String!): Auth
-        updateUser(updatedUser: InputUser!): User
+        updateUser(userInputs: InputUser!): User
         deleteUser(password: String!): User
         addProject(projectInputs: InputProject!): Project
         updateProjectTitle(projectId: ID! title: String!): Project
-        addClient(projectId: ID!, clientInput: InputUser!): Project
+        addClient(projectId: ID!, clientInputs: InputUser!): Project
         deleteProject(projectId: ID!): Project
         addTask(taskInputs: InputTask!): Task
         updateTask(updatedTask: InputTask!): Task
