@@ -330,28 +330,32 @@ const resolvers = {
     },
 
     // add logged time
-    addLoggedTime: async (_, { taskId, ...loggedTimeInputs }, context) => {
+    addLoggedTime: async (_, { loggedTimeInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("project");
+        const taskData = await Task.findById(loggedTimeInputs.taskId).select(
+          "projectId"
+        );
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners"
         );
         // check if current user is an owner on task's parent project
         if (projectUsers.owners.includes(context.user._id)) {
           // create logged time
-          const loggedTime = loggedTime.create({
+          const loggedTime = await LoggedTime.create({
             ...loggedTimeInputs,
-            userId: context.user._id,
-            taskId: taskId,
+            user: context.user._id,
+            task: loggedTimeInputs.taskId,
           });
           // add logged time to task
-          await Task.findByIdAndUpdate(taskId, {
+          await Task.findByIdAndUpdate(loggedTimeInputs.taskId, {
             $push: { timeLog: loggedTime._id },
           });
-          return loggedTime;
+          return await LoggedTime.findById(loggedTime._id)
+            .populate("user")
+            .populate("task");
         }
         throw new AuthenticationError("Not authorized.");
       }

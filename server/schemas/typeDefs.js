@@ -26,7 +26,7 @@ const typeDefs = gql`
         title: String!
         description: String
         status: TaskStatus
-        estimatedHours: String
+        estimatedHours: Float
         timeLog: [LoggedTime]
         totalTime: String
         comments: [Comment]
@@ -40,7 +40,9 @@ const typeDefs = gql`
         _id: ID!
         description: String
         date: String!
-        hours: Int!
+        hours: Float!
+        user: User
+        task: Task
     },
     type Comment {
         _id: ID!
@@ -58,7 +60,7 @@ const typeDefs = gql`
         title: String!
         description: String
         status: TaskStatus
-        estimatedHours: String
+        estimatedHours: Float
         totalTime: String
     },
     input InputUser {
@@ -68,6 +70,12 @@ const typeDefs = gql`
         type: UserType
         email: String!
         password: String!
+    },
+    input InputLoggedTime {
+        description: String
+        date: String
+        hours: Float!
+        taskId: String!
     },
     type Auth {
         token: ID!
@@ -93,7 +101,7 @@ const typeDefs = gql`
         deleteTask(taskId: ID!): Task
         addComment(taskId: String!, body: String!): Task
         deleteComment(commentId: ID!): Comment
-        addLoggedTime(taskId: String!, description: String!, date: String!, hours: Int!): LoggedTime
+        addLoggedTime(loggedTimeInputs: InputLoggedTime!): LoggedTime
     }
 `;
 

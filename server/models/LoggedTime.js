@@ -18,11 +18,11 @@ const loggedTimeSchema = new Schema(
       required: [true, "Number of hours is required."],
       get: (hoursVal) => formatHours(hoursVal),
     },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    taskId: {
+    task: {
       type: Schema.Types.ObjectId,
       ref: "Task",
     },
