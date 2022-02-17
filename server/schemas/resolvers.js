@@ -23,7 +23,10 @@ const resolvers = {
         const projectData = await Project.findById(_id).select(
           "owners clients"
         );
-        // check if current user has access to queried project
+        if (!projectData) {
+          return;
+        }
+        // check if project exists and current user has access to queried project
         if (
           projectData.owners.includes(context.user._id) ||
           projectData.clients.includes(context.user._id)
@@ -45,6 +48,9 @@ const resolvers = {
       if (context.user) {
         // get task data to find projectId
         const taskData = await Task.findById(_id).select("projectId");
+        if (!taskData) {
+          return;
+        }
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
@@ -123,7 +129,10 @@ const resolvers = {
           $addToSet: { projects: newProject._id },
         });
         // add current user to
-        return newProject;
+        return await Project.findById(newProject._id)
+          .populate("owners")
+          .populate("tasks")
+          .populate("clients");
       }
       throw new AuthenticationError("You must be logged in to add a project.");
     },
@@ -241,18 +250,18 @@ const resolvers = {
     },
 
     // update task
-    updateTask: async (_, { taskId, ...taskInputs }, context) => {
+    updateTask: async (_, { taskInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId);
+        const taskData = await Task.findById(taskInputs.taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project
         if (projectUsers.owners.includes(context.user._id)) {
-          return Task.findByIdAndUpdate(taskId, taskInputs, {
+          return Task.findByIdAndUpdate(taskInputs.taskId, taskInputs, {
             new: true,
             runValidators: true,
           });
@@ -269,7 +278,7 @@ const resolvers = {
         // get task data
         const taskData = await Task.findById(taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project

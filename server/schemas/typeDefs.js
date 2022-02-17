@@ -56,8 +56,8 @@ const typeDefs = gql`
     },
     input InputTask {
         taskId: String
-        projectId: String!
-        title: String!
+        projectId: String
+        title: String
         description: String
         status: TaskStatus
         estimatedHours: Float
@@ -97,7 +97,7 @@ const typeDefs = gql`
         addClient(projectId: ID!, clientInputs: InputUser!): Project
         deleteProject(projectId: ID!): Project
         addTask(taskInputs: InputTask!): Task
-        updateTask(updatedTask: InputTask!): Task
+        updateTask(taskInputs: InputTask!): Task
         deleteTask(taskId: ID!): Task
         addComment(taskId: String!, body: String!): Task
         deleteComment(commentId: ID!): Comment
