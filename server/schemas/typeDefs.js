@@ -28,7 +28,7 @@ const typeDefs = gql`
         status: TaskStatus
         estimatedHours: Float
         timeLog: [LoggedTime]
-        totalTime: Float
+        totalHours: Float
         comments: [Comment]
     },
     enum TaskStatus {
@@ -61,7 +61,7 @@ const typeDefs = gql`
         description: String
         status: TaskStatus
         estimatedHours: Float
-        totalTime: String
+        totalHours: String
     },
     input InputUser {
         userId: String
