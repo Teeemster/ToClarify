@@ -156,7 +156,7 @@ const resolvers = {
     },
 
     // add client to project
-    addClient: async (_, { projectId, ...clientInputs }, context) => {
+    addClient: async (_, { projectId, clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
         // get project data
@@ -167,27 +167,30 @@ const resolvers = {
           const userAlreadyExists = await User.exists({
             email: clientInputs.email,
           });
+          let client;
           if (userAlreadyExists) {
             // add project to existing user
-            const client = await User.findOneAndUpdate(
+            client = await User.findOneAndUpdate(
               { email: clientInputs.email },
               { $addToSet: { projects: projectId } },
               { new: true, runValidators: true }
             );
           } else {
             // create new user and add project
-            const client = await User.create({
+            client = await User.create({
               ...clientInputs,
-              type: "Client",
               projects: [projectId],
             });
           }
           // add client to project
-          return Project.findByIdAndUpdate(
+          return await Project.findByIdAndUpdate(
             projectId,
             { $addToSet: { clients: client._id } },
             { new: true, runValidators: true }
-          );
+          )
+            .populate("owners")
+            .populate("tasks")
+            .populate("clients");
         }
         throw new AuthenticationError("Not authorized.");
       }
