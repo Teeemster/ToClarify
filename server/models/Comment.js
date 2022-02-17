@@ -3,7 +3,7 @@ const { formatDatetime } = require ("../utils/helpers");
 
 const commentSchema = new Schema(
   {
-    commentBody: {
+    body: {
       type: String,
       required: [true, "Comment body is required."],
     },
@@ -13,13 +13,13 @@ const commentSchema = new Schema(
       default: Date.now,
       get: (dateVal) => formatDatetime(dateVal),
     },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
     taskId: {
-      type: Schema.Types.ObjectId,
-      ref: "Task",
+      type: String,
+      required: [true, "Task ID is required."],
     },
   },
   {

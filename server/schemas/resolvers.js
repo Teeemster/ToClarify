@@ -43,10 +43,10 @@ const resolvers = {
     task: async (_, { _id }, context) => {
       // check if a user is logged in
       if (context.user) {
-        // get task data
-        const taskData = await Task.findById(_id);
+        // get task data to find projectId
+        const taskData = await Task.findById(_id).select("projectId");
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -54,7 +54,9 @@ const resolvers = {
           projectUsers.owners.includes(context.user._id) ||
           projectUsers.clients.includes(context.user._id)
         ) {
-          return await taskData.populate("comments").populate("timeLog");
+          return await Task.findById(_id)
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -205,13 +207,13 @@ const resolvers = {
     },
 
     // add task
-    addTask: async (_, { projectId, taskInputs }, context) => {
+    addTask: async (_, { taskInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get project's owners and clients
-        const projectUsers = await Project.findById(projectId).select(
-          "owners clients"
-        );
+        const projectUsers = await Project.findById(
+          taskInputs.projectId
+        ).select("owners clients");
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
@@ -220,7 +222,7 @@ const resolvers = {
           // create task, add it to project, then return it
           // TODO: If user is client on project, only allow them to add "requested" tasks
           const newTask = await Task.create(taskInputs);
-          await Project.findByIdAndUpdate(projectId, {
+          await Project.findByIdAndUpdate(taskInputs.projectId, {
             $push: { tasks: newTask._id },
           });
           return newTask;
@@ -277,27 +279,31 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("project");
+        const taskData = await Task.findById(taskId).select("projectId");
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
+
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
           projectUsers.clients.includes(context.user._id)
         ) {
           // create comment
-          const comment = Comment.create({
-            commentBody: body,
-            userId: context.user._id,
+          const comment = await Comment.create({
+            body: body,
+            user: context.user,
             taskId: taskId,
           });
           // add comment to task
-          await Task.findByIdAndUpdate(taskId, {
-            $push: { comments: comment._id },
-          });
-          return comment;
+          return await Task.findByIdAndUpdate(
+            taskId,
+            { $push: { comments: comment._id } },
+            { new: true, runValidators: true }
+          )
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -309,8 +315,13 @@ const resolvers = {
       // confirm a user is logged in
       if (context.user) {
         // find comment and confirm it was created by current user
-        const comment = Comment.findById(commentId).select("userId");
-        if (comment.userId === context.user._id) {
+        const comment = await Comment.findById(commentId).select("user taskId");
+        if (comment.user._id.toString() === context.user._id) {
+          // remove comment from task
+          await Task.findByIdAndUpdate(comment.taskId, {
+            $pull: { comments: comment._id },
+          });
+          // delete comment
           return Comment.findByIdAndDelete(commentId);
         }
         throw new AuthenticationError("Not authorized.");
@@ -319,28 +330,32 @@ const resolvers = {
     },
 
     // add logged time
-    addLoggedTime: async (_, { taskId, ...loggedTimeInputs }, context) => {
+    addLoggedTime: async (_, { loggedTimeInputs }, context) => {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("project");
+        const taskData = await Task.findById(loggedTimeInputs.taskId).select(
+          "projectId"
+        );
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners"
         );
         // check if current user is an owner on task's parent project
         if (projectUsers.owners.includes(context.user._id)) {
           // create logged time
-          const loggedTime = loggedTime.create({
+          const loggedTime = await LoggedTime.create({
             ...loggedTimeInputs,
-            userId: context.user._id,
-            taskId: taskId,
+            user: context.user._id,
+            task: loggedTimeInputs.taskId,
           });
           // add logged time to task
-          await Task.findByIdAndUpdate(taskId, {
+          await Task.findByIdAndUpdate(loggedTimeInputs.taskId, {
             $push: { timeLog: loggedTime._id },
           });
-          return loggedTime;
+          return await LoggedTime.findById(loggedTime._id)
+            .populate("user")
+            .populate("task");
         }
         throw new AuthenticationError("Not authorized.");
       }
