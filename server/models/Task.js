@@ -35,8 +35,8 @@ const taskSchema = new Schema(
   }
 );
 
-// virtual for logging totalTime
-taskSchema.virtual("totalTime").get(function () {
+// virtual for logging totalHours
+taskSchema.virtual("totalHours").get(function () {
   let sum = this.timeLog.reduce((total, obj) => total + parseFloat(obj.hours), 0);
   return formatHours(sum);
 });
