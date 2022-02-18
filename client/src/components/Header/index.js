@@ -31,7 +31,7 @@ const Header = () => {
         </Link>
         <Link to="/" className="">
           <span>
-            <Icon path={mdiHomeVariantOutline} />
+            <Icon path={mdiHomeVariantOutline} size={2} />
           </span>
         </Link>
       </nav>
