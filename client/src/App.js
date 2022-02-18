@@ -19,6 +19,8 @@ import SignupForm from "./components/SignupForm";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Project from "./pages/Project";
+import Task from "./pages/Task";
 
 // connect to GraphQL and ApolloClient
 const httpLink = createHttpLink({
@@ -42,8 +44,6 @@ const client = new ApolloClient({
 });
 
 function App() {
-  const [loginUnselected, loginSelected] = useState(false);
-
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -56,6 +56,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/:projectId" element={<Project />} />
+              <Route path="/:projectId/:taskId" element={<Task />} />
             </Routes>
           </main>
           <footer>

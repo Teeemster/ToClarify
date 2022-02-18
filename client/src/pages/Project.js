@@ -1,18 +1,18 @@
-//Home Page
+// Project Page
 import React from "react";
 import { Navigate } from "react-router-dom";
 import Auth from "../utils/auth";
 
-const Home = () => {
+const Project = () => {
   if (!Auth.loggedIn()) {
     return <Navigate to={"/login"} />;
   }
 
   return (
     <main>
-      <p>Home Page</p>
+      <p>Project Page</p>
     </main>
   );
 };
 
-export default Home;
+export default Project;

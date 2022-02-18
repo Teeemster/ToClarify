@@ -1,77 +1,90 @@
 //Login Component
-import React, { useState } from 'react';
-
-import { validateEmail } from '../../utils/helpers';
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../../utils/mutations";
+import Auth from "../../utils/auth";
+import { validateEmail } from "../../utils/helpers";
 
 const LoginForm = () => {
-    const [formState, setFormState] = useState({ email: '', password: '' });
+  const [formState, setFormState] = useState({ email: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [login, { error }] = useMutation(LOGIN_USER);
+  const { email, password } = formState;
 
-    const [errorMessage, setErrorMessage] = useState('');
-    const { email, password } = formState;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // pass form inputs to login mutation to retrieve token
+      const { data } = await login({
+        variables: { ...formState },
+      });
+      // save token to localStorage
+      Auth.login(data.login.token);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!errorMessage) {
-            console.log('Submit Form', formState);
-        }
-    };
+    } catch (e) {
+      setErrorMessage("Login failed.");
+    }
+  };
 
-    const handleChange = (e) => {
-        if (e.target.name === 'email') {
-            const isValid = validateEmail(e.target.value);
-            if (!isValid) {
-                setErrorMessage('This is not a valid email.');
-            } else {
-                setErrorMessage('');
-            }
-        } else {
-            if (!e.target.value.length) {
-                setErrorMessage(`${e.target.name} is required.`);
-            } else {
-                setErrorMessage('');
-            }
-        }
-        if (!errorMessage) {
-            setFormState({ ...formState, [e.target.name]: e.target.value });
-            console.log('Handle Form', formState);
-        }
-    };
+  const handleChange = (e) => {
+    if (e.target.name === "email") {
+      const isValid = validateEmail(e.target.value);
+      if (!isValid) {
+        setErrorMessage("This is not a valid email.");
+      } else {
+        setErrorMessage("");
+      }
+    } else {
+      if (!e.target.value.length) {
+        setErrorMessage(`${e.target.name} is required.`);
+      } else {
+        setErrorMessage("");
+      }
+    }
+    if (!errorMessage) {
+      setFormState({ ...formState, [e.target.name]: e.target.value });
+      console.log("Handle Form", formState);
+    }
+  };
 
+  return (
+    <section>
+      <h1>Sign-In!</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Your email"
+          name="Email"
+          type="email"
+          id="email"
+          defaultValue={email}
+          onBlur={handleChange}
+        ></input>
 
-    return (
-        <section>
-            <h1>Sign-In!</h1>
-            <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Password"
+          name="Password"
+          type="password"
+          id="password"
+          defaultValue={password}
+          onBlur={handleChange}
+        ></input>
 
-                <input
-                    placeholder="Your email"
-                    name="email"
-                    type="email"
-                    id="email"
-                    defaultValue={email}
-                    onBlur={handleChange}
-                ></input>
+        {errorMessage && (
+          <div>
+            <p className="error-text">{errorMessage}</p>
+          </div>
+        )}
 
-                <input
-                    placeholder="Password"
-                    name="Password"
-                    type="password"
-                    id="password"
-                    defaultValue={password}
-                    onBlur={handleChange}
-                >
-                </input>
+        {/* {error && (
+          <div>
+            <p className="error-text">{error}</p>
+          </div>
+        )} */}
 
-                {errorMessage && (
-                    <div>
-                        <p className="error-text">{errorMessage}</p>
-                    </div>
-                )}
-
-                <button>Login</button>
-            </form>
-        </section>
-    );
+        <button onClick={handleSubmit}>Login</button>
+      </form>
+    </section>
+  );
 };
 
 export default LoginForm;
