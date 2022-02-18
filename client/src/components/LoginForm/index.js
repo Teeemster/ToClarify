@@ -8,7 +8,7 @@ import { validateEmail } from "../../utils/helpers";
 const LoginForm = () => {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-  const [login] = useMutation(LOGIN_USER);
+  const [login, { error }] = useMutation(LOGIN_USER);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +21,6 @@ const LoginForm = () => {
       Auth.login(data.login.token);
     } catch (e) {
       setErrorMessage("Login failed.");
-      console.log(e);
     }
   };
 
@@ -70,12 +69,6 @@ const LoginForm = () => {
             <p className="error-text">{errorMessage}</p>
           </div>
         )}
-
-        {/* {error && (
-          <div>
-            <p className="error-text">{error}</p>
-          </div>
-        )} */}
 
         <button>Login</button>
       </form>

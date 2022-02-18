@@ -27,7 +27,6 @@ const SignupForm = () => {
       Auth.login(data.addUser.token);
     } catch (e) {
       setErrorMessage("Signup failed.");
-      console.log(e);
     }
   };
 
