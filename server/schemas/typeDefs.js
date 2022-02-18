@@ -99,7 +99,7 @@ const typeDefs = gql`
         addTask(taskInputs: InputTask!): Task
         updateTask(taskInputs: InputTask!): Task
         deleteTask(taskId: ID!): Task
-        addComment(taskId: String!, body: String!): Task
+        addComment(taskId: String!, body: String!): Comment
         deleteComment(commentId: ID!): Comment
         addLoggedTime(loggedTimeInputs: InputLoggedTime!): LoggedTime
     }

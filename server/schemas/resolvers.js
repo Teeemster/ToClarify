@@ -310,7 +310,6 @@ const resolvers = {
         const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
-
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
@@ -323,13 +322,13 @@ const resolvers = {
             taskId: taskId,
           });
           // add comment to task
-          return await Task.findByIdAndUpdate(
+          await Task.findByIdAndUpdate(
             taskId,
             { $push: { comments: comment._id } },
             { new: true, runValidators: true }
-          )
-            .populate({ path: "comments", populate: { path: "user" } })
-            .populate("timeLog");
+          );
+          // return comment
+          return await Comment.findById(comment._id).populate("user");
         }
         throw new AuthenticationError("Not authorized.");
       }

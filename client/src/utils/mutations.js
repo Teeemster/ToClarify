@@ -145,6 +145,11 @@ export const ADD_TASK = gql`
         description
         hours
         date
+        user {
+          _id
+          firstName
+          lastName
+        }
       }
       comments {
         _id
@@ -173,11 +178,17 @@ export const UPDATE_TASK = gql`
         description
         hours
         date
+        user {
+          _id
+          firstName
+          lastName
+        }
       }
       comments {
         _id
         body
         user {
+          _id
           firstName
           lastName
         }
@@ -192,6 +203,46 @@ export const DELETE_TASK = gql`
     deleteTask(taskId: $taskId) {
       _id
       title
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation AddComment($taskId: String!, $body: String!) {
+    addComment(taskId: $taskId, body: $body) {
+      _id
+      body
+      user {
+        _id
+        firstName
+        lastName
+      }
+      createdAt
+    }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($commentId: ID!) {
+    deleteComment(commentId: $commentId) {
+      _id
+      body
+    }
+  }
+`;
+
+export const ADD_LOGGED_TIME = gql`
+  mutation AddLoggedTime($loggedTimeInputs: InputLoggedTime!) {
+    addLoggedTime(loggedTimeInputs: $loggedTimeInputs) {
+      _id
+      description
+      hours
+      date
+      user {
+        _id
+        firstName
+        lastName
+      }
     }
   }
 `;
