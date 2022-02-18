@@ -24,7 +24,7 @@ const resolvers = {
           "owners clients"
         );
         if (!projectData) {
-          return;
+          throw new Error("Project not found.");
         }
         // check if project exists and current user has access to queried project
         if (
@@ -49,7 +49,7 @@ const resolvers = {
         // get task data to find projectId
         const taskData = await Task.findById(_id).select("projectId");
         if (!taskData) {
-          return;
+          throw new Error("Task not found.");
         }
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.projectId).select(
@@ -145,6 +145,9 @@ const resolvers = {
         const projectData = await Project.findById(projectId).select(
           "owners clients"
         );
+        if (!projectData) {
+          throw new Error("Project not found.");
+        }
         // check if current user has access to queried project
         if (
           projectData.owners.includes(context.user._id) ||
@@ -165,11 +168,14 @@ const resolvers = {
     },
 
     // add client to project
-    addClient: async (_, { projectId, clientInputs }, context) => {
+    addClientToProject: async (_, { projectId, clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
         // get project data
         const projectData = await Project.findById(projectId).select("owners");
+        if (!projectData) {
+          throw new Error("Project not found.");
+        }
         // check if current user is an owner on queried project
         if (projectData.owners.includes(context.user._id)) {
           // check if client already exists as user
@@ -213,6 +219,9 @@ const resolvers = {
       if (context.user) {
         // get project data
         const projectData = await Project.findById(projectId).select("owners");
+        if (!projectData) {
+          throw new Error("Project not found.");
+        }
         // check if current user an owner on queried project
         if (projectData.owners.includes(context.user._id)) {
           // TODO: Delete all associated tasks/comments/timelogs

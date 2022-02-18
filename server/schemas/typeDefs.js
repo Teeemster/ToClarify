@@ -94,7 +94,7 @@ const typeDefs = gql`
         deleteUser(password: String!): User
         addProject(projectInputs: InputProject!): Project
         updateProjectTitle(projectId: ID! title: String!): Project
-        addClient(projectId: ID!, clientInputs: InputUser!): Project
+        addClientToProject(projectId: ID!, clientInputs: InputUser!): Project
         deleteProject(projectId: ID!): Project
         addTask(taskInputs: InputTask!): Task
         updateTask(taskInputs: InputTask!): Task
