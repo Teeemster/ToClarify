@@ -61,6 +61,13 @@ const LoginForm = () => {
                     onBlur={handleChange}
                 >
                 </input>
+
+                {errorMessage && (
+                    <div>
+                        <p className="error-text">{errorMessage}</p>
+                    </div>
+                )}
+
                 <button>Login</button>
             </form>
         </section>

@@ -9,10 +9,14 @@ import {
 } from "@apollo/client";
 
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import LoginForm from "./components/LoginForm";
+import ProjectArea from "./components/ProjectArea";
+import SignupForm from "./components/SignupForm";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Footer from "./components/Footer";
 
 // connect to GraphQL and ApolloClient
 const httpLink = createHttpLink({

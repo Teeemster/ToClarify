@@ -78,6 +78,13 @@ const SignupForm = () => {
                     onBlur={handleChange}
                 >
                 </input>
+
+                {errorMessage && (
+                    <div>
+                        <p className="error-text">{errorMessage}</p>
+                    </div>
+                )}
+
                 <button>Submit</button>
             </form>
         </section>
