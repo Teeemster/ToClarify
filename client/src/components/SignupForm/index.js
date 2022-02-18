@@ -14,11 +14,10 @@ const SignupForm = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [addUser, { error }] = useMutation(ADD_USER);
+  const [addUser] = useMutation(ADD_USER);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formState);
     try {
       // pass form inputs to signup mutation and retrieve token
       const { data } = await addUser({
@@ -29,7 +28,6 @@ const SignupForm = () => {
     } catch (e) {
       setErrorMessage("Signup failed.");
       console.log(e);
-      console.log(error);
     }
   };
 
@@ -44,7 +42,7 @@ const SignupForm = () => {
       }
     }
     if (!e.target.value.length) {
-      setErrorMessage(`${e.target.name} is required.`);
+      setErrorMessage(`${e.target.placeholder} is required.`);
     } else {
       setFormState({ ...formState, [e.target.name]: e.target.value });
       setErrorMessage("");
@@ -56,7 +54,7 @@ const SignupForm = () => {
       <h1>Sign-Up!</h1>
       <form onSubmit={handleSubmit}>
         <input
-          placeholder="Your First Name"
+          placeholder="Your first name"
           name="firstName"
           type="text"
           id="firstName"
@@ -64,7 +62,7 @@ const SignupForm = () => {
         ></input>
 
         <input
-          placeholder="Your Last Name"
+          placeholder="Your last name"
           name="lastName"
           type="text"
           id="lastName"

@@ -8,8 +8,7 @@ import { validateEmail } from "../../utils/helpers";
 const LoginForm = () => {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-  const { email, password } = formState;
-  const [login, { error }] = useMutation(LOGIN_USER);
+  const [login] = useMutation(LOGIN_USER);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +21,7 @@ const LoginForm = () => {
       Auth.login(data.login.token);
     } catch (e) {
       setErrorMessage("Login failed.");
+      console.log(e);
     }
   };
 
@@ -31,18 +31,15 @@ const LoginForm = () => {
       if (!isValid) {
         setErrorMessage("This is not a valid email.");
       } else {
-        setErrorMessage("");
-      }
-    } else {
-      if (!e.target.value.length) {
-        setErrorMessage(`${e.target.name} is required.`);
-      } else {
+        setFormState({ ...formState, email: e.target.value });
         setErrorMessage("");
       }
     }
-    if (!errorMessage) {
+    if (!e.target.value.length) {
+      setErrorMessage(`${e.target.placeholder} is required.`);
+    } else {
       setFormState({ ...formState, [e.target.name]: e.target.value });
-      console.log("Handle Form", formState);
+      setErrorMessage("");
     }
   };
 
@@ -52,19 +49,19 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit}>
         <input
           placeholder="Your email"
-          name="Email"
+          name="email"
           type="email"
           id="email"
-          defaultValue={email}
+          defaultValue={formState.email}
           onBlur={handleChange}
         ></input>
 
         <input
           placeholder="Password"
-          name="Password"
+          name="password"
           type="password"
           id="password"
-          defaultValue={password}
+          defaultValue={formState.password}
           onBlur={handleChange}
         ></input>
 
