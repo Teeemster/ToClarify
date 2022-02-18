@@ -9,6 +9,8 @@ import TimeLog from "../components/TimeLog";
 
 // TODO Research how to safely do two queries below so we can query project as well
 // TODO add project title and button
+// TODO create page or modal for edit task
+// TODO have span style change for task.status
 
 const TaskDetail = () => {
   const { id: taskId } = useParams();
@@ -29,7 +31,7 @@ const TaskDetail = () => {
         <div>
           <h2>{task.title}</h2>
           <p>
-            <b>Status:</b> {task.status}
+            <b>Status:</b> <span>{task.status}</span>
           </p>
           <p>
             <b>Hours:</b> {task.totalHours} / {task.estimatedHours}
