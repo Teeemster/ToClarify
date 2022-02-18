@@ -44,7 +44,7 @@ const SignupForm = () => {
             <form onSubmit={handleSubmit}>
                 <input
                     placeholder="Your First Name"
-                    name="firstname"
+                    name="First name"
                     type="firstname"
                     id="firstname"
                     defaultValue={firstname}
@@ -53,7 +53,7 @@ const SignupForm = () => {
 
                 <input
                     placeholder="Your Last Name"
-                    name="lastname"
+                    name="Last name"
                     type="lastname"
                     id="lastname"
                     defaultValue={lastname}
@@ -71,7 +71,7 @@ const SignupForm = () => {
 
                 <input
                     placeholder="Password"
-                    name="password"
+                    name="Password"
                     type="password"
                     id="password"
                     defaultValue={password}
