@@ -130,3 +130,68 @@ export const DELETE_PROJECT = gql`
     }
   }
 `;
+
+export const ADD_TASK = gql`
+  query Task($id: ID!) {
+    task(_id: $id) {
+      _id
+      title
+      status
+      description
+      estimatedHours
+      totalHours
+      timeLog {
+        _id
+        description
+        hours
+        date
+      }
+      comments {
+        _id
+        body
+        user {
+          firstName
+          lastName
+        }
+        createdAt
+      }
+    }
+  }
+`;
+
+export const UPDATE_TASK = gql`
+  mutation UpdateTask($taskInputs: InputTask!) {
+    updateTask(taskInputs: $taskInputs) {
+      _id
+      title
+      status
+      description
+      estimatedHours
+      totalHours
+      timeLog {
+        _id
+        description
+        hours
+        date
+      }
+      comments {
+        _id
+        body
+        user {
+          firstName
+          lastName
+        }
+        createdAt
+      }
+    }
+  }
+`;
+
+export const DELETE_TASK = gql`
+  mutation DeleteTask($taskId: ID!) {
+    deleteTask(taskId: $taskId) {
+      _id
+      title
+    }
+  }
+`;
