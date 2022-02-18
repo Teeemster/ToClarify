@@ -1,4 +1,4 @@
-//Login Component
+// Login Component
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
@@ -8,19 +8,18 @@ import { validateEmail } from "../../utils/helpers";
 const LoginForm = () => {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-  const [login, { error }] = useMutation(LOGIN_USER);
   const { email, password } = formState;
+  const [login, { error }] = useMutation(LOGIN_USER);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // pass form inputs to login mutation to retrieve token
+      // pass form inputs to login mutation and retrieve token
       const { data } = await login({
         variables: { ...formState },
       });
       // save token to localStorage
       Auth.login(data.login.token);
-
     } catch (e) {
       setErrorMessage("Login failed.");
     }
@@ -81,7 +80,7 @@ const LoginForm = () => {
           </div>
         )} */}
 
-        <button onClick={handleSubmit}>Login</button>
+        <button>Login</button>
       </form>
     </section>
   );
