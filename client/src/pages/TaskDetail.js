@@ -3,10 +3,12 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
-import Auth from "../utils/auth";
-import { QUERY_TASK, QUERY_PROJECT } from "../utils/queries";
+import { QUERY_TASK } from "../utils/queries";
 import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
+
+// TODO Research how to safely do two queries below so we can query project as well
+// TODO add project title and button
 
 const TaskDetail = () => {
   const { id: taskId } = useParams();
