@@ -30,7 +30,7 @@ const client = new ApolloClient({
 
 function App() {
 
-  const [loginUnselected, loginSelected] = useState(false);
+  const [notLoggedIn, LoggedIn] = useState(false);
 
   return (
     <ApolloProvider client={client}>
