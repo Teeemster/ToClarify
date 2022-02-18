@@ -1,12 +1,18 @@
 //Home Page
-import React from 'react';
+import React from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import Auth from "../utils/auth";
 
 const Home = () => {
+  if (!Auth.loggedIn()) {
+    return <Navigate to={"/login"} />;
+  }
 
-    return (
-        <div></div>
-    );
+  return (
+    <main>
+      <p>You are logged in.</p>
+    </main>
+  );
 };
 
 export default Home;
