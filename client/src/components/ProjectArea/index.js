@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams, Link } from "react-router-dom";
 
-import TaskList from './TaskList';
+import TaskList from '../TaskList';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT } from '../../utils/queries';
 

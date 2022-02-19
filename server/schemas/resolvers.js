@@ -47,12 +47,13 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data to find projectId
-        const taskData = await Task.findById(_id).select("projectId");
+        const taskData = await Task.findById(_id);
         if (!taskData) {
           throw new Error("Task not found.");
         }
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        console.log(taskData)
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -61,6 +62,7 @@ const resolvers = {
           projectUsers.clients.includes(context.user._id)
         ) {
           return await Task.findById(_id)
+            .populate("project")
             .populate({ path: "comments", populate: { path: "user" } })
             .populate("timeLog");
         }
@@ -247,7 +249,7 @@ const resolvers = {
         ) {
           // create task, add it to project, then return it
           // TODO: If user is client on project, only allow them to add "requested" tasks
-          const newTask = await Task.create(taskInputs);
+          const newTask = await Task.create({...taskInputs, project: taskInputs.projectId});
           await Project.findByIdAndUpdate(taskInputs.projectId, {
             $push: { tasks: newTask._id },
           });
