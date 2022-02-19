@@ -23,6 +23,7 @@ const SignupForm = () => {
       const { data } = await addUser({
         variables: { newUser: { ...formState } },
       });
+      console.log(data);
       // save token to local storage
       Auth.login(data.addUser.token);
     } catch (e) {

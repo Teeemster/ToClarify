@@ -44,6 +44,10 @@ export const QUERY_TASK = gql`
     task(_id: $id) {
       _id
       title
+      project {
+        _id
+        title
+      }
       status
       description
       estimatedHours

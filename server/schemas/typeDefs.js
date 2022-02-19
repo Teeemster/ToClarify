@@ -22,7 +22,7 @@ const typeDefs = gql`
     },
     type Task {
         _id: ID!
-        projectId: String
+        project: Project
         title: String!
         description: String
         status: TaskStatus
