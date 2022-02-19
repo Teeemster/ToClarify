@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
 import Auth from "../../utils/auth";
-import { validateEmail } from "../../utils/helpers";
 
 const LoginForm = () => {
   const [inputValues, setInputValues] = useState({
@@ -15,7 +14,7 @@ const LoginForm = () => {
     password: false,
   });
   const [submitError, setSubmitError] = useState("");
-  const [login, { error }] = useMutation(LOGIN_USER);
+  const [login] = useMutation(LOGIN_USER);
 
   const handleInputChange = (e) => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
