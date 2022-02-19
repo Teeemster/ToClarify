@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import Auth from "../utils/auth";
 
 import ProjectArea from "../components/ProjectArea";
-import ProjectList from "../components/ProjectArea";
+import ProjectList from "../components/ProjectList";
 
 const Project = () => {
   if (!Auth.loggedIn()) {

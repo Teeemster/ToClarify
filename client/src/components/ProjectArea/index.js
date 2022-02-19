@@ -3,14 +3,14 @@ import React from 'react';
 import { useParams, Link } from "react-router-dom";
 
 import TaskList from './TaskList';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT } from '../../utils/queries';
 
 // TODO : "View/Add Client" button *may need to be own page/component
 // TODO : Work on JSX
 
 const ProjectArea = () => {
-    //const [addClient] = useMutation(ADD_CLIENT_TO_PROJECT);
+
     const {id: projectId} = useParams();
 
     const { loading, data } = useQuery(QUERY_PROJECT, {
