@@ -6,39 +6,60 @@ import Auth from "../../utils/auth";
 import { validateEmail } from "../../utils/helpers";
 
 const LoginForm = () => {
-  const [formState, setFormState] = useState({ email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [inputValues, setInputValues] = useState({
+    email: "",
+    password: "",
+  });
+  const [inputErrors, setInputErrors] = useState({
+    email: false,
+    password: false,
+  });
+  const [submitError, setSubmitError] = useState("");
   const [login, { error }] = useMutation(LOGIN_USER);
+
+  const handleInputChange = (e) => {
+    setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+  };
+
+  const validateInput = (e) => {
+    e.target.value.length
+      ? setInputErrors({ ...inputErrors, [e.target.name]: false })
+      : setInputErrors({ ...inputErrors, [e.target.name]: true });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // pass form inputs to login mutation and retrieve token
-      const { data } = await login({
-        variables: { ...formState },
-      });
-      // save token to localStorage
-      Auth.login(data.login.token);
-    } catch (e) {
-      setErrorMessage("Login failed.");
-    }
-  };
 
-  const handleChange = (e) => {
-    if (e.target.name === "email") {
-      const isValid = validateEmail(e.target.value);
-      if (!isValid) {
-        setErrorMessage("This is not a valid email.");
+    // create object to hold error values for all inputs
+    const updatedInputErrors = {};
+    // create variable to indicate if there are input errors
+    let inputErrorsExists;
+
+    // loop through each input and validate
+    for (let input in inputValues) {
+      if (!inputValues[input].length) {
+        updatedInputErrors[input] = true;
+        inputErrorsExists = true;
       } else {
-        setFormState({ ...formState, email: e.target.value });
-        setErrorMessage("");
+        updatedInputErrors[input] = false;
       }
     }
-    if (!e.target.value.length) {
-      setErrorMessage(`${e.target.placeholder} is required.`);
-    } else {
-      setFormState({ ...formState, [e.target.name]: e.target.value });
-      setErrorMessage("");
+
+    // after running validation on inputs, update inputErrors state in one function call
+    setInputErrors({ ...inputErrors, ...updatedInputErrors });
+
+    // check if there are input errors before continuing
+    if (!inputErrorsExists) {
+      try {
+        // pass inputs to login mutation, retrieving token
+        const { data } = await login({
+          variables: { ...inputValues },
+        });
+        // save token to localStorage
+        Auth.login(data.login.token);
+      } catch (e) {
+        setSubmitError(e.message);
+      }
     }
   };
 
@@ -46,27 +67,39 @@ const LoginForm = () => {
     <section>
       <h1>Sign-In!</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Your email"
-          name="email"
-          type="email"
-          id="email"
-          defaultValue={formState.email}
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Your email"
+            name="email"
+            type="email"
+            id="email"
+            defaultValue={inputValues.email}
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.email && (
+            <p className="form-error-msg">Please enter your email address.</p>
+          )}
+        </div>
 
-        <input
-          placeholder="Password"
-          name="password"
-          type="password"
-          id="password"
-          defaultValue={formState.password}
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Password"
+            name="password"
+            type="password"
+            id="password"
+            defaultValue={inputValues.password}
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.password && (
+            <p className="form-error-msg">Please enter your password.</p>
+          )}
+        </div>
 
-        {errorMessage && (
+        {submitError && (
           <div>
-            <p className="error-text">{errorMessage}</p>
+            <p className="error-text">{submitError}</p>
           </div>
         )}
 
