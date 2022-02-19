@@ -6,88 +6,136 @@ import Auth from "../../utils/auth";
 import { validateEmail } from "../../utils/helpers";
 
 const SignupForm = () => {
-  const [formState, setFormState] = useState({
+  const [inputValues, setInputValues] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    passwordCheck: "",
   });
-
-  const [errorMessage, setErrorMessage] = useState("");
+  const [inputErrors, setInputErrors] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    password: false,
+    passwordCheck: false,
+  });
+  const [submitError, setSubmitError] = useState("");
   const [addUser] = useMutation(ADD_USER);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // pass form inputs to signup mutation and retrieve token
-      const { data } = await addUser({
-        variables: { newUser: { ...formState } },
-      });
-      console.log(data);
-      // save token to local storage
-      Auth.login(data.addUser.token);
-    } catch (e) {
-      setErrorMessage("Signup failed.");
+  const handleInputChange = (e) => {
+    setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+  };
+
+  const validateInput = (e) => {
+    if (e.target.name === "email") {
+      const validEmail = validateEmail(e.target.value);
+      validEmail
+        ? setInputErrors({ ...inputErrors, email: false })
+        : setInputErrors({ ...inputErrors, email: true });
+    } else if (e.target.name === "passwordCheck") {
+      e.target.name === inputValues.password
+        ? setInputErrors({ ...inputErrors, passwordCheck: false })
+        : setInputErrors({ ...inputErrors, passwordCheck: true });
+    } else {
+      e.target.value.length
+        ? setInputErrors({ ...inputErrors, [e.target.name]: false })
+        : setInputErrors({ ...inputErrors, [e.target.name]: true });
     }
   };
 
-  const handleChange = (e) => {
-    if (e.target.name === "email") {
-      const isValid = validateEmail(e.target.value);
-      if (!isValid) {
-        setErrorMessage("This is not a valid email.");
-      } else {
-        setFormState({ ...formState, email: e.target.value });
-        setErrorMessage("");
-      }
-    }
-    if (!e.target.value.length) {
-      setErrorMessage(`${e.target.placeholder} is required.`);
-    } else {
-      setFormState({ ...formState, [e.target.name]: e.target.value });
-      setErrorMessage("");
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // try {
+    //   // pass form inputs to signup mutation and retrieve token
+    //   const { data } = await addUser({
+    //     variables: { newUser: { ...formState } },
+    //   });
+    //   console.log(data);
+    //   // save token to local storage
+    //   Auth.login(data.addUser.token);
+    // } catch (e) {
+    //   setErrorMessage("Signup failed.");
+    // }
   };
 
   return (
     <section>
       <h1>Sign-Up!</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Your first name"
-          name="firstName"
-          type="text"
-          id="firstName"
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Your first name"
+            name="firstName"
+            type="text"
+            id="firstName"
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.firstName && (
+            <p className="form-error-msg">Please enter your first name.</p>
+          )}
+        </div>
 
-        <input
-          placeholder="Your last name"
-          name="lastName"
-          type="text"
-          id="lastName"
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Your last name"
+            name="lastName"
+            type="text"
+            id="lastName"
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.lastName && (
+            <p className="form-error-msg">Please enter your last name.</p>
+          )}
+        </div>
 
-        <input
-          placeholder="Your email"
-          name="email"
-          type="email"
-          id="email"
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Your email"
+            name="email"
+            type="email"
+            id="email"
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.email && (
+            <p className="form-error-msg">Please enter a valid email address.</p>
+          )}
+        </div>
 
-        <input
-          placeholder="Password"
-          name="password"
-          type="password"
-          id="password"
-          onBlur={handleChange}
-        ></input>
+        <div>
+          <input
+            placeholder="Password"
+            name="password"
+            type="password"
+            id="password"
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.password && (
+            <p className="form-error-msg">Please enter a password between 5 and 50 charaters.</p>
+          )}
+        </div>
 
-        {errorMessage && (
+        <div>
+          <input
+            placeholder="Reenter Password"
+            name="passwordCheck"
+            type="password"
+            id="passwordCheck"
+            onChange={handleInputChange}
+            onBlur={validateInput}
+          ></input>
+          {inputErrors.passwordCheck && (
+            <p className="form-error-msg">Sorry, your passwords don't match.</p>
+          )}
+        </div>
+
+        {submitError && (
           <div>
-            <p className="error-text">{errorMessage}</p>
+            <p className="error-text">{submitError}</p>
           </div>
         )}
 

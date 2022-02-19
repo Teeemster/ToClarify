@@ -20,8 +20,17 @@ const LoginForm = () => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
   };
 
-  const validateInput = (e) => {
-    e.target.value.length
+  const validateInput = (inputValue) => {
+    if (inputValue.length) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const updateInputError = (e) => {
+    const validInput = validateInput(e.target.value);
+    validInput
       ? setInputErrors({ ...inputErrors, [e.target.name]: false })
       : setInputErrors({ ...inputErrors, [e.target.name]: true });
   };
@@ -36,11 +45,12 @@ const LoginForm = () => {
 
     // loop through each input and validate
     for (let input in inputValues) {
-      if (!inputValues[input].length) {
+      const validInput = validateInput(inputValues[input]);
+      if (validInput) {
+        updatedInputErrors[input] = false;
+      } else {
         updatedInputErrors[input] = true;
         inputErrorsExists = true;
-      } else {
-        updatedInputErrors[input] = false;
       }
     }
 
@@ -74,7 +84,7 @@ const LoginForm = () => {
             id="email"
             defaultValue={inputValues.email}
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.email && (
             <p className="form-error-msg">Please enter your email address.</p>
@@ -89,7 +99,7 @@ const LoginForm = () => {
             id="password"
             defaultValue={inputValues.password}
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.password && (
             <p className="form-error-msg">Please enter your password.</p>
