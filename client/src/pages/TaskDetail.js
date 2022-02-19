@@ -7,9 +7,9 @@ import { QUERY_TASK } from "../utils/queries";
 import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
 
-// TODO Research how to safely do two queries below so we can query project as well
 // TODO add project title and button
-// TODO create page or modal for edit task
+// TODO create dropdown for changing task status
+// TODO create textarea to edit task description
 // TODO have span style change for task.status
 
 const TaskDetail = () => {

@@ -6,29 +6,29 @@ import { QUERY_PROJECT } from '../../utils/queries';
 import { useMutation } from '@apollo/client';
 import { ADD_TASK } from '../../utils/mutations';
 
-const TaskList = () => {
-    const [taskText, setTaskText] = useState('');
+ const TaskList = () => {
+//     const [taskText, setTaskText] = useState('');
 
-    //Update Task Cache Array
-    const [addTask, { error }] = useMutation(ADD_TASK, {
-        update(cache, { data: { addTask } }) {
-            try {
-                const { task } = cache.readQuery({ query: QUERY_PROJECT });
-                cache.writeQuery({
-                    query: QUERY_PROJECT,
-                    data: { task: [addTask, ...task] },
-                });
-            } catch (e) {
-                console.error(e);
-            }
-            //Update Project Object Cache
-            const { project } = cache.readQuery({ query: QUERY_PROJECT });
-            cache.writeQuery({
-                query: QUERY_PROJECT,
-                data: { project: { ...project, task: [...project.task, addTask] } },
-            });
-        },
-    });
+//     //Update Task Cache Array
+//     const [addTask, { error }] = useMutation(ADD_TASK, {
+//         update(cache, { data: { addTask } }) {
+//             try {
+//                 const { task } = cache.readQuery({ query: QUERY_PROJECT });
+//                 cache.writeQuery({
+//                     query: QUERY_PROJECT,
+//                     data: { task: [addTask, ...task] },
+//                 });
+//             } catch (e) {
+//                 console.error(e);
+//             }
+//             //Update Project Object Cache
+//             const { project } = cache.readQuery({ query: QUERY_PROJECT });
+//             cache.writeQuery({
+//                 query: QUERY_PROJECT,
+//                 data: { project: { ...project, task: [...project.task, addTask] } },
+//             });
+//         },
+//     });
             
 
 

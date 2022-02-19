@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <div>
       <div>
-        <h1>Welcome To Clarity, {me.firstName}.</h1>
+        <h1>Welcome To Clarity {me.firstName}</h1>
       </div>
       <nav>
         <Link to="/signup" className="">

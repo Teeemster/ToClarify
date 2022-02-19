@@ -25,7 +25,7 @@ const SignupForm = () => {
       });
       // save token to local storage
       Auth.login(data.addUser.token);
-    } catch (e) {
+    } catch (error) {
       setErrorMessage("Signup failed.");
     }
   };
