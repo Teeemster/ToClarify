@@ -1,43 +1,22 @@
-//List of all the projects for an individual
-//Project List Component
-import React, { useState } from 'react';
+import React from 'react';
 
-import { QUERY_ME } from '../../utils/queries';
-import { useMutation } from '@apollo/client';
-import { ADD_PROJECT } from '../../utils/mutations';
-
-const ProjectList = () => {
-    const [projectText, setProjectText] = useState('');
-    
-    //Update Project Cache Array
-    const [addProject, { error }] = useMutation(ADD_PROJECT, {
-        update(cache, { data: { addProject } }) {
-            try {
-                const { project } = cache.readQuery({ query: QUERY_ME });
-                cache.writeQuery({
-                    query: QUERY_ME,
-                    data: { project: [addProject, ...project] },
-                });
-            } catch (e) {
-                console.error(e);
-            }
-            //Update Me Object Cache
-            const { me } = cache.readQuery({ query: QUERY_ME });
-            cache.writeQuery({
-                query: QUERY_ME,
-                data: { me: { ...me, project: [...me.task, addProject] } },
-            });
-        },
-    });
-
+const ProjectList = ({ project, title }) => {
+    if (!project.length) {
+        return <h3>No Projects Yet</h3>;
+    }
 
     return (
-        <section>
-            <div>
-
-            </div>
-            <button>📍 Add New Project</button>
-        </section>
+        <div>
+            <h3>{title}</h3>
+            {project &&
+                project.map(project => (
+                    <div key={project._id} className="card mb-3">
+                        <p className="card-header">
+                                {project.title}
+                        </p>
+                    </div>
+                ))}
+        </div>
     );
 };
 
