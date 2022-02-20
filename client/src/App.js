@@ -47,20 +47,23 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="d-flex flex-column min-vh-100 bg-dark-grey text-white">
-          <header className="container-fluid bg-purple">
+        <div className="d-flex flex-column min-vh-100 text-white">
+          <header className="bg-purple">
             <Header />
           </header>
-          <main className="container-fluid">
+          <main className="d-flex flex-grow-1 bg-dark-grey">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/project/:projectId" element={<Project />} />
-              <Route path="/project/:projectId/task/:taskId" element={<Task />} />
+              <Route
+                path="/project/:projectId/task/:taskId"
+                element={<Task />}
+              />
             </Routes>
           </main>
-          <footer className="container-fluid mt-auto bg-purple">
+          <footer className="bg-purple">
             <Footer />
           </footer>
         </div>
