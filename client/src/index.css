@@ -18,16 +18,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#page-wrapper {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
 .bg-purple {
   background-color: var(--purple);
 }
+.bg-bright-purple {
+  background-color: var(--bright-purple);
+}
 .bg-dark-grey {
   background-color: var(--dark-grey);
+}
+
+form input, form textarea {
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+form label {
+  padding: 3px;
+}
+
+.form-error-msg {
+  padding: 4px 0;
+  font-size: .7em;
+  color: var(--orange)
 }

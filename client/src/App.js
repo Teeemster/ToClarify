@@ -47,8 +47,8 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div id="page-wrapper">
-          <header className="container-fluid">
+        <div className="d-flex flex-column min-vh-100 bg-dark-grey text-white">
+          <header className="container-fluid bg-purple">
             <Header />
           </header>
           <main className="container-fluid">
