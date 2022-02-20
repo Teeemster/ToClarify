@@ -28,9 +28,10 @@ const TaskDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const handleDescriptionSubmit = (e) => {
+  const handleDescriptionChange = (e) => {
     setToggle(true);
     e.preventDefault();
+    setDescription({ ...description, description: e.target.value })
   };
 
   return (
@@ -58,16 +59,18 @@ const TaskDetail = () => {
               {task.description}
             </p>
           ) : (
+            <form onBlur={handleDescriptionSubmit}>
             <textarea
               id="description"
               name="description"
               rows="5"
               cols="33"
               value={description}
-              onBlur={handleDescriptionSubmit}
+              onChange={handleDescriptionChange}
             >
               {task.description}
             </textarea>
+            </form>
           )}
         </div>
         <CommentList />

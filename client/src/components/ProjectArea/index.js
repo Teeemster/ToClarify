@@ -2,9 +2,9 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 
-import TaskList from "../TaskList";
-import { useQuery } from "@apollo/client";
-import { QUERY_PROJECT } from "../../utils/queries";
+import TaskList from '../TaskList';
+import { useQuery } from '@apollo/client';
+import { QUERY_PROJECT } from '../../utils/queries';
 
 // TODO : "View/Add Client" button *may need to be own page/component
 // TODO : Work on JSX
