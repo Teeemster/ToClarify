@@ -18,10 +18,17 @@ const TaskDetail = () => {
   const { id: taskId } = useParams();
 
   // set up toggle for description elements
-  const [toggle, setToggle] = useState(true);
+  const [descriptionToggle, setDescriptionToggle] = useState(true);
   // set up state for description
   const [descriptionValue, setDescriptionValue] = useState({
     description: "",
+  });
+
+  // set up toggle for status elements
+  const [statusToggle, setStatusToggle] = useState(true);
+  // set up state for status
+  const [statusValue, setStatusValue] = useState({
+    status: "",
   });
 
   // import updateTask mutation
@@ -47,13 +54,13 @@ const TaskDetail = () => {
   // when textarea is clicked out of set toggle back to original state and update task
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
-    setToggle(true);
+    setDescriptionToggle(true);
 
     try {
       // eslint-disable-next-line
       const { data } = await updateTask({
         variables: {
-          InputTask: { descriptionValue },
+          taskInputs: { descriptionValue },
         },
       });
     } catch (err) {
@@ -79,10 +86,10 @@ const TaskDetail = () => {
           <p>
             <b>Description</b>
           </p>
-          {toggle ? (
+          {descriptionToggle ? (
             <p
               onClick={() => {
-                setToggle(false);
+                setDescriptionToggle(false);
               }}
             >
               {task.description}
