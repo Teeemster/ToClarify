@@ -7,15 +7,10 @@ export const QUERY_ME = gql`
       firstName
       lastName
       email
-    }
-  }
-`;
-
-export const QUERY_MY_PROJECTS = gql`
-  query MyProjects {
-    myProjects {
-      _id
-      title
+      projects {
+        _id
+        title
+      }
     }
   }
 `;
@@ -49,10 +44,6 @@ export const QUERY_TASK = gql`
     task(_id: $id) {
       _id
       title
-      project {
-        _id
-        title
-      }
       status
       description
       estimatedHours

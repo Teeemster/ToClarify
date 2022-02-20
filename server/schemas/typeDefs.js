@@ -22,7 +22,7 @@ const typeDefs = gql`
     },
     type Task {
         _id: ID!
-        project: Project
+        projectId: String
         title: String!
         description: String
         status: TaskStatus
@@ -83,7 +83,7 @@ const typeDefs = gql`
     },
     type Query {
         me: User
-        myProjects: [Project]
+        user(_id: ID!): User
         project(_id: ID!): Project 
         task(_id: ID!): Task 
     },
@@ -94,12 +94,12 @@ const typeDefs = gql`
         deleteUser(password: String!): User
         addProject(projectInputs: InputProject!): Project
         updateProjectTitle(projectId: ID! title: String!): Project
-        addClientToProject(projectId: ID!, clientInputs: InputUser!): Project
+        addClient(projectId: ID!, clientInputs: InputUser!): Project
         deleteProject(projectId: ID!): Project
         addTask(taskInputs: InputTask!): Task
         updateTask(taskInputs: InputTask!): Task
         deleteTask(taskId: ID!): Task
-        addComment(taskId: String!, body: String!): Comment
+        addComment(taskId: String!, body: String!): Task
         deleteComment(commentId: ID!): Comment
         addLoggedTime(loggedTimeInputs: InputLoggedTime!): LoggedTime
     }

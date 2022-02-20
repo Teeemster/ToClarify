@@ -1,15 +1,10 @@
 //Login Page
-import React from "react";
-import LoginForm from "../components/LoginForm";
+import React from 'react';
 
 const Login = () => {
-  return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
-        <LoginForm></LoginForm>
-      </div>
-    </div>
-  );
+    return (
+        <div></div>
+    );
 };
 
 export default Login;

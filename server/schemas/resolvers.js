@@ -7,21 +7,10 @@ const resolvers = {
     // get current user
     me: async (_, __, context) => {
       if (context.user) {
-        const currentUserData = await User.findById(context.user._id).select(
-          "-__v, -password"
-        );
-        return currentUserData;
-      }
-      throw new AuthenticationError("Not logged in.");
-    },
-
-    // get all current user's projects
-    myProjects: async (_, __, context) => {
-      if (context.user) {
-        const { projects } = await User.findById(context.user._id)
-          .select("projects")
+        const currentUserData = await User.findById(context.user._id)
+          .select("-__v, -password")
           .populate("projects");
-        return projects;
+        return currentUserData;
       }
       throw new AuthenticationError("Not logged in.");
     },
@@ -35,7 +24,7 @@ const resolvers = {
           "owners clients"
         );
         if (!projectData) {
-          throw new Error("Project not found.");
+          return;
         }
         // check if project exists and current user has access to queried project
         if (
@@ -58,13 +47,12 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data to find projectId
-        const taskData = await Task.findById(_id);
+        const taskData = await Task.findById(_id).select("projectId");
         if (!taskData) {
-          throw new Error("Task not found.");
+          return;
         }
         // get parent project's owners and clients
-        console.log(taskData);
-        const projectUsers = await Project.findById(taskData.project).select(
+        const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -73,7 +61,6 @@ const resolvers = {
           projectUsers.clients.includes(context.user._id)
         ) {
           return await Task.findById(_id)
-            .populate("project")
             .populate({ path: "comments", populate: { path: "user" } })
             .populate("timeLog");
         }
@@ -158,9 +145,6 @@ const resolvers = {
         const projectData = await Project.findById(projectId).select(
           "owners clients"
         );
-        if (!projectData) {
-          throw new Error("Project not found.");
-        }
         // check if current user has access to queried project
         if (
           projectData.owners.includes(context.user._id) ||
@@ -181,14 +165,11 @@ const resolvers = {
     },
 
     // add client to project
-    addClientToProject: async (_, { projectId, clientInputs }, context) => {
+    addClient: async (_, { projectId, clientInputs }, context) => {
       // confirm a user is logged in
       if (context.user) {
         // get project data
         const projectData = await Project.findById(projectId).select("owners");
-        if (!projectData) {
-          throw new Error("Project not found.");
-        }
         // check if current user is an owner on queried project
         if (projectData.owners.includes(context.user._id)) {
           // check if client already exists as user
@@ -232,9 +213,6 @@ const resolvers = {
       if (context.user) {
         // get project data
         const projectData = await Project.findById(projectId).select("owners");
-        if (!projectData) {
-          throw new Error("Project not found.");
-        }
         // check if current user an owner on queried project
         if (projectData.owners.includes(context.user._id)) {
           // TODO: Delete all associated tasks/comments/timelogs
@@ -260,10 +238,7 @@ const resolvers = {
         ) {
           // create task, add it to project, then return it
           // TODO: If user is client on project, only allow them to add "requested" tasks
-          const newTask = await Task.create({
-            ...taskInputs,
-            project: taskInputs.projectId,
-          });
+          const newTask = await Task.create(taskInputs);
           await Project.findByIdAndUpdate(taskInputs.projectId, {
             $push: { tasks: newTask._id },
           });
@@ -326,6 +301,7 @@ const resolvers = {
         const projectUsers = await Project.findById(taskData.projectId).select(
           "owners clients"
         );
+
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
@@ -338,13 +314,13 @@ const resolvers = {
             taskId: taskId,
           });
           // add comment to task
-          await Task.findByIdAndUpdate(
+          return await Task.findByIdAndUpdate(
             taskId,
             { $push: { comments: comment._id } },
             { new: true, runValidators: true }
-          );
-          // return comment
-          return await Comment.findById(comment._id).populate("user");
+          )
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
