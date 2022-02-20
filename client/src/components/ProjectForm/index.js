@@ -63,7 +63,7 @@ const ProjectForm = () => {
       <p
         className={`m-0 ${characterCount === 280 || error ? "text-error" : ""}`}
       >
-        Character Count: {characterCount}/280
+        {/* Character Count: {characterCount}/280 */}
         {error && <span className="ml-2">Something went wrong...</span>}
       </p>
       <form
@@ -71,14 +71,14 @@ const ProjectForm = () => {
         onSubmit={handleFormSubmit}
       >
         <input
-          placeholder="Please add a project."
+          placeholder="Project Title"
           type="text"
           value={projectText}
           className="form-input col-12 col-md-9"
           onChange={handleChange}
         />
-        <button className="btn col-12 col-md-3" type="submit">
-          Submit
+        <button className="" type="submit">
+          + Add a project
         </button>
       </form>
     </div>

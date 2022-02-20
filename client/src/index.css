@@ -65,6 +65,7 @@ form label {
   color: var(--orange);
 }
 
+.btn-link-white,
 header a,
 footer a {
   text-decoration: none;
@@ -72,10 +73,12 @@ footer a {
   opacity: 0.7;
 }
 
+.btn-link-white:hover,
 header a:hover,
 header a.active,
 footer a:hover,
 footer a.active {
+  cursor: pointer;
   color: var(--white);
   opacity: 1;
 }
