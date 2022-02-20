@@ -1,40 +1,29 @@
-//List of all the projects for an individual
-//Project List Component
-import React, { useState } from "react";
-
-import { QUERY_ME } from "../../utils/queries";
-import { useMutation } from "@apollo/client";
-import { ADD_PROJECT } from "../../utils/mutations";
+import React from "react";
+import { Link } from "react-router-dom";
+import { QUERY_MY_PROJECTS } from "../../utils/queries";
+import { useQuery } from "@apollo/client";
 
 const ProjectList = () => {
-  // const [projectText, setProjectText] = useState('');
+  const { loading, data } = useQuery(QUERY_MY_PROJECTS);
+  const projects = data?.myProjects || {};
 
-  // //Update Project Cache Array
-  // const [addProject, { error }] = useMutation(ADD_PROJECT, {
-  //     update(cache, { data: { addProject } }) {
-  //         try {
-  //             const { project } = cache.readQuery({ query: QUERY_ME });
-  //             cache.writeQuery({
-  //                 query: QUERY_ME,
-  //                 data: { project: [addProject, ...project] },
-  //             });
-  //         } catch (e) {
-  //             console.error(e);
-  //         }
-  //         //Update Me Object Cache
-  //         const { me } = cache.readQuery({ query: QUERY_ME });
-  //         cache.writeQuery({
-  //             query: QUERY_ME,
-  //             data: { me: { ...me, project: [...me.task, addProject] } },
-  //         });
-  //     },
-  // });
+  if (loading) {
+      return <p>Loading...</p>
+  }
+
+  if (!projects.length) {
+    return <h3>No Projects Yet</h3>;
+  }
 
   return (
-    <section>
-      <div></div>
-      <button>📍 Add New Project</button>
-    </section>
+    <ul className="list-group list-group-flush">
+      {projects &&
+        projects.map((project) => (
+          <li key={project._id} className="list-group-item bg-grey">
+            <Link to={`/project/${project._id}`}>{project.title}</Link>
+          </li>
+        ))}
+    </ul>
   );
 };
 

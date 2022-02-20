@@ -25,15 +25,18 @@ body {
 .bg-bright-purple {
   background-color: var(--bright-purple);
 }
+.bg-grey {
+  background-color: var(--grey);
+}
 .bg-dark-grey {
   background-color: var(--dark-grey);
 }
 
-main a {
+.link-white {
   color: var(--white);
 }
 
-main a:hover {
+.link-white:hover {
   color: var(--bright-purple);
 }
 
@@ -45,7 +48,8 @@ main a:hover {
   background-color: var(--purple);
 }
 
-form input, form textarea {
+form input,
+form textarea {
   border: none;
   padding: 2px 8px;
   border-radius: 4px;
@@ -57,6 +61,21 @@ form label {
 
 .form-error-msg {
   padding: 4px 0;
-  font-size: .7em;
-  color: var(--orange)
+  font-size: 0.7em;
+  color: var(--orange);
+}
+
+header a,
+footer a {
+  text-decoration: none;
+  color: var(--white);
+  opacity: 0.7;
+}
+
+header a:hover,
+header a.active,
+footer a:hover,
+footer a.active {
+  color: var(--white);
+  opacity: 1;
 }

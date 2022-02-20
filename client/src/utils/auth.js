@@ -10,7 +10,7 @@ class AuthService {
   // clear token from localStorage and reload homepage
   logout() {
     localStorage.removeItem("id_token");
-    window.location.assign("/");
+    window.location.assign("/login");
   }
 
   // retrieve token from localStorage
