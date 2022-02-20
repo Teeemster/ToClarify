@@ -98,7 +98,15 @@ const TaskDetail = () => {
               {task.status}
             </span>
           ) : (
-            <form></form>
+            <form onBlur={handleStatusSubmit}>
+              <input list="task-status" onChange={handleStatusChange}>
+                <datalist id="task-status">
+                  <option value="REQUESTED">REQUESTED</option>
+                  <option value="INPROGRESS">IN PROGRESS</option>
+                  <option value="COMPLETED">COMPLETED</option>
+                </datalist>
+              </input>
+            </form>
           )}
           <p>
             <b>Hours:</b> {task.totalHours} / {task.estimatedHours}
