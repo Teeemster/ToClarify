@@ -14,7 +14,7 @@ const Project = () => {
   return (
     <main>
       <p>Project Page</p>
-      <section className="project-list">
+      <section className="project-list bg-grey">
           <ProjectList></ProjectList>
       </section>
       <section className="project-area">

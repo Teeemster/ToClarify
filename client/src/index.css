@@ -25,15 +25,18 @@ body {
 .bg-bright-purple {
   background-color: var(--bright-purple);
 }
+.bg-grey {
+  background-color: var(--grey);
+}
 .bg-dark-grey {
   background-color: var(--dark-grey);
 }
 
-main a {
+p a {
   color: var(--white);
 }
 
-main a:hover {
+p a:hover {
   color: var(--bright-purple);
 }
 

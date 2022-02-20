@@ -7,10 +7,15 @@ export const QUERY_ME = gql`
       firstName
       lastName
       email
-      projects {
-        _id
-        title
-      }
+    }
+  }
+`;
+
+export const QUERY_MY_PROJECTS = gql`
+  query MyProjects {
+    myProjects {
+      _id
+      title
     }
   }
 `;

@@ -7,10 +7,21 @@ const resolvers = {
     // get current user
     me: async (_, __, context) => {
       if (context.user) {
-        const currentUserData = await User.findById(context.user._id)
-          .select("-__v, -password")
-          .populate("projects");
+        const currentUserData = await User.findById(context.user._id).select(
+          "-__v, -password"
+        );
         return currentUserData;
+      }
+      throw new AuthenticationError("Not logged in.");
+    },
+
+    // get all current user's projects
+    myProjects: async (_, __, context) => {
+      if (context.user) {
+        const { projects } = await User.findById(context.user._id)
+          .select("projects")
+          .populate("projects");
+        return projects;
       }
       throw new AuthenticationError("Not logged in.");
     },
@@ -52,7 +63,7 @@ const resolvers = {
           throw new Error("Task not found.");
         }
         // get parent project's owners and clients
-        console.log(taskData)
+        console.log(taskData);
         const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
@@ -249,7 +260,10 @@ const resolvers = {
         ) {
           // create task, add it to project, then return it
           // TODO: If user is client on project, only allow them to add "requested" tasks
-          const newTask = await Task.create({...taskInputs, project: taskInputs.projectId});
+          const newTask = await Task.create({
+            ...taskInputs,
+            project: taskInputs.projectId,
+          });
           await Project.findByIdAndUpdate(taskInputs.projectId, {
             $push: { tasks: newTask._id },
           });
