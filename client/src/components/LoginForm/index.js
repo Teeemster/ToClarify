@@ -1,5 +1,6 @@
 // Login Component
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
 import Auth from "../../utils/auth";
@@ -73,12 +74,16 @@ const LoginForm = () => {
   };
 
   return (
-    <section>
-      <h1>Sign-In!</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="col col-sm-8 col-md-6 col-xl-4">
+      <h1 className="text-center mb-4 fw-bold">Login</h1>
+      <form onSubmit={handleSubmit} className="fs-5">
+        <div className="my-3">
+          <label for="email" className="w-100 fw-bold">
+            Email:
+          </label>
           <input
-            placeholder="Your email"
+            className="w-100"
+            placeholder="example@example.com"
             name="email"
             type="email"
             id="email"
@@ -92,8 +97,12 @@ const LoginForm = () => {
         </div>
 
         <div>
+          <label for="password" className="w-100 fw-bold">
+            Password:
+          </label>
           <input
-            placeholder="Password"
+            className="w-100"
+            placeholder="password"
             name="password"
             type="password"
             id="password"
@@ -107,14 +116,22 @@ const LoginForm = () => {
         </div>
 
         {submitError && (
-          <div>
-            <p className="error-text">{submitError}</p>
+          <div className="my-4">
+            <p className="form-error-msg fs-6">{submitError}</p>
           </div>
         )}
 
-        <button>Login</button>
+        <div className="my-4">
+          <button className="btn btn-purple text-white fw-bold">
+            Login
+          </button>
+        </div>
       </form>
-    </section>
+
+      <div>
+        <p>Need an account? <Link to="/signup">Sign up here.</Link></p>
+      </div>
+    </div>
   );
 };
 
