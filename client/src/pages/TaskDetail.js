@@ -4,8 +4,8 @@ import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
 import { QUERY_TASK } from "../utils/queries";
+import CommentFeed from "../components/CommentFeed";
 import { UPDATE_TASK } from "../utils/mutations";
-import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
 
 // TODO double check InputTask variables requirements when updating task on both handle submit functions
@@ -146,7 +146,7 @@ const TaskDetail = () => {
             </form>
           )}
         </div>
-        <CommentList />
+        <CommentFeed />
       </div>
       <div>
         <Link to={`/${task.project.projectId}`}>
