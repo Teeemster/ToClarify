@@ -1,6 +1,6 @@
 //Task detail
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 import { QUERY_TASK } from "../utils/queries";
@@ -25,6 +25,9 @@ const TaskDetail = () => {
     return <div>Loading...</div>;
   }
 
+  const [toggle, setToggle] = useState(true);
+  const [description, setDescription] = useState("");
+
   return (
     <div>
       <div>
@@ -39,9 +42,28 @@ const TaskDetail = () => {
         </div>
         <div>
           <p>
-            <b>Description</b> <Link to={`/${taskId}/edit`}>edit</Link>
+            <b>Description</b>
           </p>
-          <p>{task.description}</p>
+          {toggle ? (
+            <p
+              onClick={() => {
+                setToggle(false);
+              }}
+            >
+              {task.description}
+            </p>
+          ) : (
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              cols="33"
+              value={description}
+              onBlur={handleSubmit}
+            >
+              {task.description}
+            </textarea>
+          )}
         </div>
         <CommentList />
       </div>
