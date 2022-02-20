@@ -4,9 +4,9 @@ import SignupForm from '../components/SignupForm';
 
 const Signup = () => {
     return (
-        <main>
+        <div>
             <SignupForm></SignupForm>
-        </main>
+        </div>
     );
 };
 

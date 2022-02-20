@@ -47,11 +47,11 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div>
-          <header>
+        <div id="page-wrapper">
+          <header className="container-fluid">
             <Header />
           </header>
-          <main>
+          <main className="container-fluid">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -60,7 +60,7 @@ function App() {
               <Route path="/project/:projectId/task/:taskId" element={<Task />} />
             </Routes>
           </main>
-          <footer>
+          <footer className="container-fluid mt-auto">
             <Footer />
           </footer>
         </div>
