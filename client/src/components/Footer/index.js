@@ -4,10 +4,10 @@ import React from "react";
 const Footer = () => {
   let currentYear = new Date().getFullYear();
   return (
-    <div>
-      <p>
-        &copy; {currentYear} By Hailey Thomas, Sophie Barrett, Angel Rios, and
-        Jonathan Beach
+    <div className="m-3 text-center">
+      <p className="fw-bold">
+        &copy; {currentYear} Hailey Thomas, Sophia Barrett, Angel Rios, and
+        Jonathan Beach{"  "}
         <span role="img" aria-label="thumbtack">
           📌
         </span>
