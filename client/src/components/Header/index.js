@@ -8,7 +8,6 @@ import Auth from "../../utils/auth";
 import Icon from "@mdi/react";
 import { mdiHomeVariantOutline } from "@mdi/js";
 
-// TODO have a placeholder for name?
 const Header = () => {
   const loggedIn = Auth.loggedIn();
   const { loading, data } = useQuery(QUERY_ME);
@@ -20,34 +19,44 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <div>
-        <h1>
-          Welcome To Clarify
-          {(loggedIn && !loading) ? `, ${me.firstName} ${me.lastName}!` : "!"}
+    <div className="row">
+      <div className="col">
+        <h1 className="fs-3 fw-bold m-3">
+          Welcome to Clarify
+          {loggedIn && !loading ? `, ${me.firstName} ${me.lastName}!` : "!"}
         </h1>
       </div>
-      <nav>
-        {loggedIn ? (
-          <a href="/" onClick={logout}>
-            Logout
-          </a>
-        ) : (
-          <>
-            <Link to="/signup" className="">
-              Sign Up
-            </Link>
-            <Link to="/login" className="">
-              Login
-            </Link>
-          </>
-        )}
-        <Link to="/" className="">
-          <span>
-            <Icon path={mdiHomeVariantOutline} size={2} />
-          </span>
-        </Link>
-      </nav>
+      <div className="col-5 d-flex justify-content-end align-items-center">
+        <nav className="nav fw-bold">
+          {loggedIn ? (
+            <>
+              <div className="nav-item d-flex align-items-center mx-2">
+                <a href="/" onClick={logout} className="">
+                  Logout
+                </a>
+              </div>
+              <div className="nav-item d-flex align-items-center mx-2">
+                <Link to="/" className="">
+                  <Icon path={mdiHomeVariantOutline} size={1.5} />
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="nav-item d-flex align-items-center mx-3">
+                <Link to="/login" className="">
+                  Login
+                </Link>
+              </div>
+              <div className="nav-item d-flex align-items-center mx-3">
+                <Link to="/signup" className="">
+                  Sign Up
+                </Link>
+              </div>
+            </>
+          )}
+        </nav>
+      </div>
     </div>
   );
 };

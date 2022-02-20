@@ -63,3 +63,12 @@ form label {
   font-size: .7em;
   color: var(--orange)
 }
+
+header nav a {
+  text-decoration: none;
+  color: var(--white);
+}
+
+header nav a:hover {
+  color: var(--orange)
+}
