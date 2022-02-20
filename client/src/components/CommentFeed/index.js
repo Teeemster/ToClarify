@@ -4,7 +4,7 @@ import React from "react";
 const CommentFeed = (comments) => {
   return (
     <div>
-      <h3>Comments:</h3>
+      <h3>Comments</h3>
       {comments.length ? (
         <ul>
           {comments.map((comment) => (
