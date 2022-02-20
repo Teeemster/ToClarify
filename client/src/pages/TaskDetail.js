@@ -46,12 +46,23 @@ const TaskDetail = () => {
     return <div>Loading...</div>;
   }
 
+  // when status dropdown is changed set the status value
+  const handleStatusChange = (e) => {
+    setStatusValue(e.target.value);
+  };
+
+  // when status dropdown is clicked out of set toggle back to original state and update task
+  const handleStatusSubmit = (e) => {
+    e.preventDefault();
+    setStatusToggle(true);
+  };
+
   // when description textarea is changed set the description value
   const handleDescriptionChange = (e) => {
     setDescriptionValue(e.target.value);
   };
 
-  // when textarea is clicked out of set toggle back to original state and update task
+  // when description textarea is clicked out of set toggle back to original state and update task
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
     setDescriptionToggle(true);
@@ -76,8 +87,19 @@ const TaskDetail = () => {
             {task.project.title} : {task.title}
           </h2>
           <p>
-            <b>Status:</b> <span>{task.status}</span>
+            <b>Status:</b>
           </p>
+          {statusToggle ? (
+            <span
+              onClick={() => {
+                setStatusToggle(false);
+              }}
+            >
+              {task.status}
+            </span>
+          ) : (
+            <form></form>
+          )}
           <p>
             <b>Hours:</b> {task.totalHours} / {task.estimatedHours}
           </p>
