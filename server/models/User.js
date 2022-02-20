@@ -7,7 +7,6 @@ const userSchema = new Schema(
     type: {
       type: String,
       enum: ["ADMIN", "CLIENT"],
-      required: [true, "Plase select a type!"],
       trim: true,
     },
     firstName: {

@@ -3,13 +3,13 @@ const { formatHours } = require("../utils/helpers");
 
 const taskSchema = new Schema(
   {
-    projectId: {
-      type: String,
-      required: [true, "Project ID is required."],
-    },
     title: {
       type: String,
       required: [true, "Title is required."],
+    },
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
     },
     description: {
       type: String,
