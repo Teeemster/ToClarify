@@ -1,6 +1,6 @@
 //Header Component
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "../../utils/queries";
 import Auth from "../../utils/auth";
@@ -12,6 +12,7 @@ const Header = () => {
   const loggedIn = Auth.loggedIn();
   const { loading, data } = useQuery(QUERY_ME);
   const me = data?.me || {};
+  const { pathname } = useLocation();
 
   const logout = (e) => {
     e.preventDefault();
@@ -31,12 +32,12 @@ const Header = () => {
           {loggedIn ? (
             <>
               <div className="nav-item d-flex align-items-center mx-2">
-                <a href="/" onClick={logout} className="my-1 text-right">
+                <a href="/" onClick={logout} className="my-1">
                   Logout
                 </a>
               </div>
               <div className="nav-item d-flex align-items-center mx-2">
-                <Link to="/" className="my-1">
+                <Link to="/" className={(pathname === "/") ? "my-1 active" : "my-1"}>
                   <Icon path={mdiHomeVariantOutline} size={1.5} />
                 </Link>
               </div>
@@ -44,12 +45,12 @@ const Header = () => {
           ) : (
             <>
               <div className="nav-item d-flex align-items-center mx-3">
-                <Link to="/login" className="my-1">
+                <Link to="/login" className={(pathname === "/login") ? "my-1 active" : "my-1"}>
                   Login
                 </Link>
               </div>
               <div className="nav-item d-flex align-items-center mx-3">
-                <Link to="/signup" className="my-1">
+                <Link to="/signup" className={(pathname === "/signup") ? "my-1 active" : "my-1"}>
                   Sign Up
                 </Link>
               </div>

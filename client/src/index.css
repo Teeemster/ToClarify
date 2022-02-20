@@ -48,7 +48,8 @@ body {
   background-color: var(--purple);
 }
 
-form input, form textarea {
+form input,
+form textarea {
   border: none;
   padding: 2px 8px;
   border-radius: 4px;
@@ -60,15 +61,18 @@ form label {
 
 .form-error-msg {
   padding: 4px 0;
-  font-size: .7em;
-  color: var(--orange)
+  font-size: 0.7em;
+  color: var(--orange);
 }
 
 header nav a {
   text-decoration: none;
   color: var(--white);
+  opacity: 0.7;
 }
 
-header nav a:hover {
-  color: var(--orange)
+header nav a:hover,
+header nav a.active {
+  color: var(--white);
+  opacity: 1;
 }
