@@ -63,7 +63,6 @@ const resolvers = {
           throw new Error("Task not found.");
         }
         // get parent project's owners and clients
-        console.log(taskData);
         const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
@@ -281,7 +280,7 @@ const resolvers = {
         // get task data
         const taskData = await Task.findById(taskInputs.taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project
@@ -303,7 +302,7 @@ const resolvers = {
         // get task data
         const taskData = await Task.findById(taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project
@@ -321,9 +320,12 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("projectId");
+        const taskData = await Task.findById(taskId).select("project");
+        if (!taskData) {
+          throw new Error("Task not found.");
+        }
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -376,10 +378,10 @@ const resolvers = {
       if (context.user) {
         // get task data
         const taskData = await Task.findById(loggedTimeInputs.taskId).select(
-          "projectId"
+          "project"
         );
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is an owner on task's parent project

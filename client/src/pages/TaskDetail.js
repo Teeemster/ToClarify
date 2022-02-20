@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 import { QUERY_TASK } from "../utils/queries";
-import CommentList from "../components/CommentList";
+import CommentFeed from "../components/CommentFeed";
 import TimeLog from "../components/TimeLog";
 
 // TODO Research how to safely do two queries below so we can query project as well
@@ -43,7 +43,7 @@ const TaskDetail = () => {
           </p>
           <p>{task.description}</p>
         </div>
-        <CommentList />
+        <CommentFeed />
       </div>
       <div>
         <button>Back To Project</button>
