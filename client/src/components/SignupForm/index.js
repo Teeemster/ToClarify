@@ -14,11 +14,11 @@ const SignupForm = () => {
     passwordCheck: "",
   });
   const [inputErrors, setInputErrors] = useState({
-    firstName: false,
-    lastName: false,
-    email: false,
-    password: false,
-    passwordCheck: false,
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    passwordCheck: "",
   });
   const [submitError, setSubmitError] = useState("");
   const [addUser] = useMutation(ADD_USER);
@@ -27,21 +27,35 @@ const SignupForm = () => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
   };
 
-  const validateInput = (e) => {
-    if (e.target.name === "email") {
-      const validEmail = validateEmail(e.target.value);
-      validEmail
-        ? setInputErrors({ ...inputErrors, email: false })
-        : setInputErrors({ ...inputErrors, email: true });
-    } else if (e.target.name === "passwordCheck") {
-      e.target.name === inputValues.password
-        ? setInputErrors({ ...inputErrors, passwordCheck: false })
-        : setInputErrors({ ...inputErrors, passwordCheck: true });
+  const validateInput = (inputName, inputValue) => {
+    if (inputName === "email") {
+      const validEmail = validateEmail(inputValue);
+      if (!validEmail) {
+        return "Please provide a valid email address.";
+      }
+    } else if (inputName === "password") {
+      if (inputValue.length < 5 || inputValue.length > 50) {
+        return "Please choose a password between 5 and 50 characters.";
+      }
+    } else if (inputName === "passwordCheck") {
+      if (!inputValue.length) {
+        return "Please reenter your password.";
+      } else if (inputValue !== inputValues.password) {
+        return "Sorry, your passwords don't match.";
+      }
     } else {
-      e.target.value.length
-        ? setInputErrors({ ...inputErrors, [e.target.name]: false })
-        : setInputErrors({ ...inputErrors, [e.target.name]: true });
+      if (!inputValue.length) {
+        return `Please provide your ${inputName
+          .split(/(?=[A-Z])/)
+          .join(" ")
+          .toLowerCase()}.`;
+      }
     }
+  };
+
+  const updateInputError = (e) => {
+    const validationMessage = validateInput(e.target.name, e.target.value);
+    setInputErrors({ ...inputErrors, [e.target.name]: validationMessage });
   };
 
   const handleSubmit = async (e) => {
@@ -70,10 +84,10 @@ const SignupForm = () => {
             type="text"
             id="firstName"
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.firstName && (
-            <p className="form-error-msg">Please enter your first name.</p>
+            <p className="form-error-msg">{inputErrors.firstName}</p>
           )}
         </div>
 
@@ -84,10 +98,10 @@ const SignupForm = () => {
             type="text"
             id="lastName"
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.lastName && (
-            <p className="form-error-msg">Please enter your last name.</p>
+            <p className="form-error-msg">{inputErrors.lastName}</p>
           )}
         </div>
 
@@ -98,10 +112,10 @@ const SignupForm = () => {
             type="email"
             id="email"
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.email && (
-            <p className="form-error-msg">Please enter a valid email address.</p>
+            <p className="form-error-msg">{inputErrors.email}</p>
           )}
         </div>
 
@@ -112,10 +126,10 @@ const SignupForm = () => {
             type="password"
             id="password"
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.password && (
-            <p className="form-error-msg">Please enter a password between 5 and 50 charaters.</p>
+            <p className="form-error-msg">{inputErrors.password}</p>
           )}
         </div>
 
@@ -126,10 +140,10 @@ const SignupForm = () => {
             type="password"
             id="passwordCheck"
             onChange={handleInputChange}
-            onBlur={validateInput}
+            onBlur={updateInputError}
           ></input>
           {inputErrors.passwordCheck && (
-            <p className="form-error-msg">Sorry, your passwords don't match.</p>
+            <p className="form-error-msg">{inputErrors.passwordCheck}</p>
           )}
         </div>
 
