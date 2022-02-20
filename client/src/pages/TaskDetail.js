@@ -8,8 +8,7 @@ import { UPDATE_TASK } from "../utils/mutations";
 import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
 
-// TODO double check InputTask variables requirements
-// TODO create javascript for status change
+// TODO double check InputTask variables requirements when updating task on both handle submit functions
 
 const TaskDetail = () => {
   // get task id
