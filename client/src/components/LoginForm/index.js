@@ -54,7 +54,7 @@ const LoginForm = () => {
       }
     }
 
-    // after running validation on inputs, update inputErrors state in one function call
+    // after running validation on all inputs, update inputErrors state in one function call
     setInputErrors({ ...inputErrors, ...updatedInputErrors });
 
     // check if there are input errors before continuing

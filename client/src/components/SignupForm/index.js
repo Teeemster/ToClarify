@@ -60,17 +60,49 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   // pass form inputs to signup mutation and retrieve token
-    //   const { data } = await addUser({
-    //     variables: { newUser: { ...formState } },
-    //   });
-    //   console.log(data);
-    //   // save token to local storage
-    //   Auth.login(data.addUser.token);
-    // } catch (e) {
-    //   setErrorMessage("Signup failed.");
-    // }
+
+    // create object to hold error messages for all inputs
+    const updatedInputErrors = {};
+    // create variable to indicate if there are input errors
+    let inputErrorsExists;
+
+    // loop through each input to validate and retrieve error msg
+    for (let input in inputValues) {
+      const errorMsg = validateInput(input, inputValues[input]);
+      if (errorMsg) {
+        updatedInputErrors[input] = errorMsg;
+        inputErrorsExists = true;
+      } else {
+        updatedInputErrors[input] = "";
+      }
+    }
+
+    // after running validation on all inputs, update inputErrors state in one function call
+    setInputErrors({ ...inputErrors, ...updatedInputErrors });
+
+    if (!inputErrorsExists) {
+      try {
+        // pass form inputs to signup mutation and retrieve token
+        const { data } = await addUser({
+          variables: {
+            newUser: {
+              firstName: inputValues.firstName,
+              lastName: inputValues.lastName,
+              email: inputValues.email,
+              password: inputValues.password,
+            },
+          },
+        });
+        // save token to local storage
+        Auth.login(data.addUser.token);
+      } catch (e) {
+        if (e.message.includes("11000")) {
+          setSubmitError("A user with that email address already exists.");
+        } else {
+          setSubmitError("Sorry, something went wrong.");
+        }
+      }
+    }
   };
 
   return (
