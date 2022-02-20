@@ -1,22 +1,27 @@
 //Task detail
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useParams, Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 
 import { QUERY_TASK } from "../utils/queries";
+import { UPDATE_TASK } from "../utils/mutations";
 import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
 
-// TODO add project title and button
 // TODO create dropdown for changing task status
-// TODO create textarea to edit task description
 // TODO have span style change for task.status
+// TODO create javascript for status change
+// TODO finish submit handler for description
 
 const TaskDetail = () => {
   const { id: taskId } = useParams();
 
   const [toggle, setToggle] = useState(true);
-  const [description, setDescription] = useState("");
+  const [descriptionValue, setDescriptionValue] = useState({
+    description: "",
+  });
+
+  const [updateTask] = useMutation(UPDATE_TASK);
 
   const { loading, data } = useQuery(QUERY_TASK, {
     variables: { id: taskId },
@@ -29,16 +34,24 @@ const TaskDetail = () => {
   }
 
   const handleDescriptionChange = (e) => {
-    setToggle(true);
+    setDescriptionValue({
+      ...descriptionValue,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDescriptionSubmit = (e) => {
     e.preventDefault();
-    setDescription({ ...description, description: e.target.value })
+    setToggle(true);
   };
 
   return (
     <div>
       <div>
         <div>
-          <h2>{task.title}</h2>
+          <h2>
+            {task.project.title} : {task.title}
+          </h2>
           <p>
             <b>Status:</b> <span>{task.status}</span>
           </p>
@@ -60,23 +73,25 @@ const TaskDetail = () => {
             </p>
           ) : (
             <form onBlur={handleDescriptionSubmit}>
-            <textarea
-              id="description"
-              name="description"
-              rows="5"
-              cols="33"
-              value={description}
-              onChange={handleDescriptionChange}
-            >
-              {task.description}
-            </textarea>
+              <textarea
+                id="description"
+                name="description"
+                rows="5"
+                cols="33"
+                value={descriptionValue}
+                onChange={handleDescriptionChange}
+              >
+                {task.description}
+              </textarea>
             </form>
           )}
         </div>
         <CommentList />
       </div>
       <div>
-        <button>Back To Project</button>
+        <Link to={`/${task.project.projectId}`}>
+          <button>Back To Project</button>
+        </Link>
         <TimeLog />
       </div>
     </div>
