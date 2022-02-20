@@ -15,6 +15,9 @@ import TimeLog from "../components/TimeLog";
 const TaskDetail = () => {
   const { id: taskId } = useParams();
 
+  const [toggle, setToggle] = useState(true);
+  const [description, setDescription] = useState("");
+
   const { loading, data } = useQuery(QUERY_TASK, {
     variables: { id: taskId },
   });
@@ -25,8 +28,10 @@ const TaskDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const [toggle, setToggle] = useState(true);
-  const [description, setDescription] = useState("");
+  const handleDescriptionSubmit = (e) => {
+    setToggle(true);
+    e.preventDefault();
+  };
 
   return (
     <div>
@@ -59,7 +64,7 @@ const TaskDetail = () => {
               rows="5"
               cols="33"
               value={description}
-              onBlur={handleSubmit}
+              onBlur={handleDescriptionSubmit}
             >
               {task.description}
             </textarea>
