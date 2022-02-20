@@ -11,7 +11,7 @@ import TimeLog from "../components/TimeLog";
 // TODO create dropdown for changing task status
 // TODO have span style change for task.status
 // TODO create javascript for status change
-// TODO finish submit handler for description
+// TODO ask if we need all of InputTask for updateTask variables
 
 const TaskDetail = () => {
   const { id: taskId } = useParams();
@@ -34,15 +34,33 @@ const TaskDetail = () => {
   }
 
   const handleDescriptionChange = (e) => {
-    setDescriptionValue({
-      ...descriptionValue,
-      [e.target.name]: e.target.value,
-    });
+    setDescriptionValue(e.target.value);
   };
 
-  const handleDescriptionSubmit = (e) => {
+  const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
     setToggle(true);
+
+    try {
+      // eslint-disable-next-line
+      const { data } = await updateTask({
+        variables: {
+          InputTask: {
+            _id: task.id,
+            title: task.title,
+            status: task.status,
+            description: descriptionValue,
+            estimatedHours: task.estimatedHours,
+            totalHours: task.totalHours,
+            timeLog: task.timeLog,
+            comments: task.comments,
+            createdAt: task.createdAt,
+          },
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -78,7 +96,6 @@ const TaskDetail = () => {
                 name="description"
                 rows="5"
                 cols="33"
-                value={descriptionValue}
                 onChange={handleDescriptionChange}
               >
                 {task.description}
