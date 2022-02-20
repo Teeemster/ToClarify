@@ -9,8 +9,6 @@ import CommentList from "../components/CommentList";
 import TimeLog from "../components/TimeLog";
 
 // TODO double check InputTask variables requirements
-// TODO create dropdown for changing task status
-// TODO have span style change for task.status
 // TODO create javascript for status change
 
 const TaskDetail = () => {
@@ -52,9 +50,20 @@ const TaskDetail = () => {
   };
 
   // when status dropdown is clicked out of set toggle back to original state and update task
-  const handleStatusSubmit = (e) => {
+  const handleStatusSubmit = async (e) => {
     e.preventDefault();
     setStatusToggle(true);
+
+    try {
+      // eslint-disable-next-line
+      const { data } = await updateTask({
+        variables: {
+          taskInputs: { statusValue },
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // when description textarea is changed set the description value
