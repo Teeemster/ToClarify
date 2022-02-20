@@ -5,6 +5,7 @@
   --dark-grey: #393939;
   --orange: #ffbd59;
   --green: #7ed957;
+  --white: #ffffff;
 }
 
 * {
@@ -26,6 +27,22 @@ body {
 }
 .bg-dark-grey {
   background-color: var(--dark-grey);
+}
+
+main a {
+  color: var(--white);
+}
+
+main a:hover {
+  color: var(--bright-purple);
+}
+
+.btn-purple {
+  background-color: var(--bright-purple);
+}
+
+.btn-purple:hover {
+  background-color: var(--purple);
 }
 
 form input, form textarea {

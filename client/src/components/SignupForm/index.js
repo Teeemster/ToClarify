@@ -1,5 +1,6 @@
 // Signup Component
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../../utils/mutations";
 import Auth from "../../utils/auth";
@@ -97,7 +98,9 @@ const SignupForm = () => {
         Auth.login(data.addUser.token);
       } catch (e) {
         if (e.message.includes("11000")) {
-          setSubmitError("Sorry, a user with that email address already exists.");
+          setSubmitError(
+            "Sorry, a user with that email address already exists."
+          );
         } else {
           setSubmitError("Sorry, something went wrong.");
         }
@@ -107,7 +110,7 @@ const SignupForm = () => {
 
   return (
     <div className="col col-sm-8 col-md-6 col-xl-4">
-      <h1 className="text-center mb-4">Create an Account</h1>
+      <h1 className="text-center mb-4 fw-bold">Create an Account</h1>
       <form onSubmit={handleSubmit} className="fs-5">
         <div className="my-3">
           <label for="firstName" className="w-100 fw-bold">
@@ -169,7 +172,7 @@ const SignupForm = () => {
           </label>
           <input
             className="w-100"
-            placeholder="Password"
+            placeholder="Choose a password"
             name="password"
             type="password"
             id="password"
@@ -187,7 +190,7 @@ const SignupForm = () => {
           </label>
           <input
             className="w-100"
-            placeholder="Reenter Password"
+            placeholder="Reenter your password"
             name="passwordCheck"
             type="password"
             id="passwordCheck"
@@ -206,9 +209,15 @@ const SignupForm = () => {
         )}
 
         <div className="my-4">
-          <button className="btn bg-bright-purple text-white fw-bold">Sign Up</button>
+          <button className="btn btn-purple text-white fw-bold">
+            Sign Up
+          </button>
         </div>
       </form>
+
+      <div>
+        <p>Already have an account? <Link to="/login">Login here.</Link></p>
+      </div>
     </div>
   );
 };
