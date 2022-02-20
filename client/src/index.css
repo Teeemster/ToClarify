@@ -1,13 +1,62 @@
-body {
+:root {
+  --purple: #6638b6;
+  --bright-purple: #8c52ff;
+  --grey: #505050;
+  --dark-grey: #393939;
+  --orange: #ffbd59;
+  --green: #7ed957;
+  --white: #ffffff;
+}
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.bg-purple {
+  background-color: var(--purple);
+}
+.bg-bright-purple {
+  background-color: var(--bright-purple);
+}
+.bg-dark-grey {
+  background-color: var(--dark-grey);
+}
+
+main a {
+  color: var(--white);
+}
+
+main a:hover {
+  color: var(--bright-purple);
+}
+
+.btn-purple {
+  background-color: var(--bright-purple);
+}
+
+.btn-purple:hover {
+  background-color: var(--purple);
+}
+
+form input, form textarea {
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+form label {
+  padding: 3px;
+}
+
+.form-error-msg {
+  padding: 4px 0;
+  font-size: .7em;
+  color: var(--orange)
 }

@@ -1,5 +1,6 @@
 // Signup Component
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../../utils/mutations";
 import Auth from "../../utils/auth";
@@ -97,7 +98,9 @@ const SignupForm = () => {
         Auth.login(data.addUser.token);
       } catch (e) {
         if (e.message.includes("11000")) {
-          setSubmitError("A user with that email address already exists.");
+          setSubmitError(
+            "Sorry, a user with that email address already exists."
+          );
         } else {
           setSubmitError("Sorry, something went wrong.");
         }
@@ -106,11 +109,15 @@ const SignupForm = () => {
   };
 
   return (
-    <section>
-      <h1>Sign-Up!</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="col col-sm-8 col-md-6 col-xl-4">
+      <h1 className="text-center mb-4 fw-bold">Create an Account</h1>
+      <form onSubmit={handleSubmit} className="fs-5">
+        <div className="my-3">
+          <label for="firstName" className="w-100 fw-bold">
+            First Name:
+          </label>
           <input
+            className="w-100"
             placeholder="Your first name"
             name="firstName"
             type="text"
@@ -123,8 +130,12 @@ const SignupForm = () => {
           )}
         </div>
 
-        <div>
+        <div className="my-3">
+          <label for="lastName" className="w-100 fw-bold">
+            Last Name:
+          </label>
           <input
+            className="w-100"
             placeholder="Your last name"
             name="lastName"
             type="text"
@@ -137,8 +148,12 @@ const SignupForm = () => {
           )}
         </div>
 
-        <div>
+        <div className="my-3">
+          <label for="email" className="w-100 fw-bold">
+            Email:
+          </label>
           <input
+            className="w-100"
             placeholder="Your email"
             name="email"
             type="email"
@@ -151,9 +166,13 @@ const SignupForm = () => {
           )}
         </div>
 
-        <div>
+        <div className="my-3">
+          <label for="password" className="w-100 fw-bold">
+            Password:
+          </label>
           <input
-            placeholder="Password"
+            className="w-100"
+            placeholder="Choose a password"
             name="password"
             type="password"
             id="password"
@@ -165,9 +184,13 @@ const SignupForm = () => {
           )}
         </div>
 
-        <div>
+        <div className="my-3">
+          <label for="passwordCheck" className="w-100 fw-bold">
+            Reenter Password:
+          </label>
           <input
-            placeholder="Reenter Password"
+            className="w-100"
+            placeholder="Reenter your password"
             name="passwordCheck"
             type="password"
             id="passwordCheck"
@@ -180,14 +203,22 @@ const SignupForm = () => {
         </div>
 
         {submitError && (
-          <div>
-            <p className="error-text">{submitError}</p>
+          <div className="my-4">
+            <p className="form-error-msg fs-6">{submitError}</p>
           </div>
         )}
 
-        <button>Submit</button>
+        <div className="my-4">
+          <button className="btn btn-purple text-white fw-bold">
+            Sign Up
+          </button>
+        </div>
       </form>
-    </section>
+
+      <div>
+        <p>Already have an account? <Link to="/login">Login here.</Link></p>
+      </div>
+    </div>
   );
 };
 
