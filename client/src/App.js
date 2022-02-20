@@ -60,7 +60,7 @@ function App() {
               <Route path="/project/:projectId/task/:taskId" element={<Task />} />
             </Routes>
           </main>
-          <footer className="container-fluid mt-auto">
+          <footer className="container-fluid mt-auto bg-purple">
             <Footer />
           </footer>
         </div>
