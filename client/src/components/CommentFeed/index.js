@@ -60,11 +60,11 @@ const CommentFeed = ({ comments, taskId }) => {
     <>
       <div>
         {comments.length ? (
-          <ul>
+          <ul className="list-group list-group-flush">
             {comments.map((comment) => (
-              <li key={comment._id} className="my-2">
-                <p className="fw-bold fst-italic">{`${comment.user.firstName} ${comment.user.lastName} at ${comment.createdAt}`}</p>
-                <p>{comment.body}</p>
+              <li key={comment._id} className="list-group-item bg-dark-grey text-white px-0 border-0">
+                <p className="fw-bold fst-italic mb-1">{`${comment.user.firstName} ${comment.user.lastName} at ${comment.createdAt}`}</p>
+                <p className="mb-2">{comment.body}</p>
               </li>
             ))}
           </ul>
