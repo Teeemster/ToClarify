@@ -33,6 +33,8 @@ export const QUERY_PROJECT = gql`
       }
       tasks {
         _id
+        title
+        status
       }
       clients {
         _id

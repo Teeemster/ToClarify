@@ -31,24 +31,32 @@ const ProjectArea = () => {
 
   return (
     <div className="m-4">
-      <div>
-        <h2 className="fw-bold">
-          <Link to="/" className="link-white"><Icon className="d-inline d-md-none " path={mdiMenu} size={1.5} /></Link>
-          {" "}{project.title}
-        </h2>
-        <Link to={`/${projectId}/clients`}>
-          <button className="btn ml-auto">View/Add Client</button>
-        </Link>
+      <div className="clearfix">
+        <div className="float-start">
+          <h2 className="fw-bold">
+            <Link to="/" className="link-white">
+              <Icon className="d-inline d-md-none" path={mdiMenu} size={1.5} />
+            </Link>{" "}
+            {project.title}
+          </h2>
+        </div>
+        <div className="float-end">
+          <Link to={`/${projectId}/clients`}>
+            <button className="btn btn-purple text-white fw-bold d-none d-md-inline-block">
+              View/Add Client
+            </button>
+          </Link>
+        </div>
       </div>
-      <div className="project-area-tasks">
-        <div className="project-area-requests">
-          {/* <TaskList></TaskList> */}
+      <div>
+        <div>
+          <TaskList tasks={project.tasks} status="Requested" projectId={projectId}></TaskList>
         </div>
-        <div className="project-area-progress">
-          {/* <TaskList></TaskList> */}
+        <div>
+          <TaskList tasks={project.tasks} status="In Progress" projectId={projectId}></TaskList>
         </div>
-        <div className="project-area-complete">
-          {/* <TaskList></TaskList> */}
+        <div>
+          <TaskList tasks={project.tasks} status="Completed" projectId={projectId}></TaskList>
         </div>
       </div>
     </div>

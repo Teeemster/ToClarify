@@ -32,6 +32,13 @@ body {
   background-color: var(--dark-grey);
 }
 
+.text-orange {
+  color: var(--orange);
+}
+.text-green {
+  color: var(--green);
+}
+
 .link-white-purple {
   color: var(--white);
 }
@@ -81,10 +88,19 @@ form label {
   padding: 3px;
 }
 
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
 .form-error-msg {
   padding: 4px 0;
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: var(--orange);
+  margin-bottom: 0;
 }
 
 .project-list li {

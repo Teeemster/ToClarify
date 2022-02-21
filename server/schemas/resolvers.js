@@ -252,6 +252,9 @@ const resolvers = {
         const projectUsers = await Project.findById(
           taskInputs.projectId
         ).select("owners clients");
+        if (!projectUsers) {
+          throw new Error("Project not found.");
+        }
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
