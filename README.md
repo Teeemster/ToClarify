@@ -7,7 +7,7 @@
 > For me the greatest beauty always lies in the greatest clarity.
 > ✒️ Gotthold Ephraim Lessing
 
-Put description here
+To Clarify is a full stack MERN web application designed to help freelance web developers keep workflow organized and to establish clarity and transparency with clients. We wanted to create a space where web developers could easily create, review and track every step of the development process and have this information readily available to their clients. To make sure projects are exactly how a client and developer wishes, they can communicate with each other in every task. Time logs and estimated hours help keep transparency and a clear picture of the status of the project. We are very excited about the possibilities of To Clarify and the problem it helps solve in the industry.
 
 ## Table of Contents
 
