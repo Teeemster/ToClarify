@@ -216,7 +216,7 @@ const SignupForm = () => {
       </form>
 
       <div>
-        <p>Already have an account? <Link to="/login" className="link-white">Login here.</Link></p>
+        <p>Already have an account? <Link to="/login" className="link-white-purple">Login here.</Link></p>
       </div>
     </div>
   );

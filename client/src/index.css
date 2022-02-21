@@ -32,12 +32,34 @@ body {
   background-color: var(--dark-grey);
 }
 
-.link-white {
+.link-white-purple {
   color: var(--white);
 }
 
-.link-white:hover {
+.link-white-purple:hover {
   color: var(--bright-purple);
+}
+
+.link-white,
+header a,
+footer a {
+  text-decoration: none;
+  color: var(--white);
+  opacity: 0.7;
+}
+
+.link-white:hover,
+header a:hover,
+header a.active,
+footer a:hover,
+footer a.active {
+  cursor: pointer;
+  color: var(--white);
+  opacity: 1;
+}
+
+button.link {
+  border: none;
 }
 
 .btn-purple {
@@ -65,20 +87,11 @@ form label {
   color: var(--orange);
 }
 
-.btn-link-white,
-header a,
-footer a {
-  text-decoration: none;
-  color: var(--white);
-  opacity: 0.7;
+.project-list li {
+  border: none;
 }
 
-.btn-link-white:hover,
-header a:hover,
-header a.active,
-footer a:hover,
-footer a.active {
+.project-list li:hover {
+  background-color: var(--bright-purple);
   cursor: pointer;
-  color: var(--white);
-  opacity: 1;
 }

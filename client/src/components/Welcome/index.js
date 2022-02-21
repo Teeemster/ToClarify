@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "../../utils/queries";
-import logo from "../../../public/logo512.png";
+import logo from "../../assets/logo512.png";
 
 function Welcome() {
   const { loading, data } = useQuery(QUERY_ME);
@@ -12,10 +12,10 @@ function Welcome() {
   }
 
   return (
-    <div>
-      <img src={logo} alt="Magnify glass logo" />
-      <h2>Welcome Back To Clarity {me.firstName}</h2>
-      <p>
+    <div className="text-center m-5">
+      <img src={logo} className="img-fluid" alt="Magnify glass logo" />
+      <h2 className="fw-bold mt-3">Welcome Back To Clarity, {me.firstName}!</h2>
+      <p className="fs-5">
         Select one of your projects or click "Add New Project" to get started!
       </p>
     </div>
