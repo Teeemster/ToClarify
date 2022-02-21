@@ -1,6 +1,11 @@
 import React from "react";
 import "bootstrap";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import {
   ApolloProvider,
   ApolloClient,
@@ -9,7 +14,7 @@ import {
 } from "@apollo/client";
 
 import { setContext } from "@apollo/client/link/context";
-
+import Auth from "./utils/auth";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 // import LoginForm from "./components/LoginForm";
@@ -44,6 +49,8 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const loggedIn = Auth.loggedIn();
+
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -53,14 +60,25 @@ function App() {
           </header>
           <main className="d-flex flex-grow-1 bg-dark-grey">
             <Routes>
-              <Route exact path="/" element={<Home />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
-              <Route exact path="/project/:projectId" element={<Project />} />
-              <Route
-                exact path="/project/:projectId/task/:taskId"
-                element={<Task />}
-              />
+              {loggedIn ? (
+                <>
+                  <Route exact path="/" element={<Home />} />
+                  <Route
+                    exact
+                    path="/project/:projectId"
+                    element={<Project />}
+                  />
+                  <Route
+                    exact
+                    path="/project/:projectId/task/:taskId"
+                    element={<Task />}
+                  />
+                </>
+              ) : (
+                <Route path="*" element={<Login />} />
+              )}
             </Routes>
           </main>
           <footer className="bg-purple">
