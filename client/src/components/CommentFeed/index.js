@@ -2,12 +2,33 @@
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { ADD_COMMENT } from "../../utils/mutations";
+import { QUERY_TASK } from "../../utils/queries";
 
-const CommentFeed = ({comments, taskId}) => {
+const CommentFeed = ({ comments, taskId }) => {
   const [newCommentInput, setNewCommentInput] = useState("");
   const [submitError, setSubmitError] = useState("");
 
-  const [addComment] = useMutation(ADD_COMMENT);
+  const [addComment] = useMutation(ADD_COMMENT, {
+    update(cache, { data: { addComment } }) {
+      try {
+        // read task currently in cache
+        const { task } = cache.readQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+        });
+        // add new comment to task's cache
+        cache.writeQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+          data: {
+            task: { ...task, comments: [...task.comments, addComment] },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  });
 
   const handleChange = (e) => {
     setNewCommentInput(e.target.value);
@@ -23,12 +44,15 @@ const CommentFeed = ({comments, taskId}) => {
         await addComment({
           variables: {
             taskId: taskId,
-            body: newCommentInput
-          }
+            body: newCommentInput,
+          },
         });
         // clear form
         setNewCommentInput("");
-      } catch (e) {}
+      } catch (e) {
+        setSubmitError("Sorry, something went wrong.");
+        console.error(e);
+      }
     }
   };
 
@@ -59,6 +83,13 @@ const CommentFeed = ({comments, taskId}) => {
               onChange={handleChange}
             ></textarea>
           </div>
+
+          {submitError && (
+            <div className="mb-2">
+              <p className="form-error-msg fs-6">{submitError}</p>
+            </div>
+          )}
+
           <div className="my-1">
             <button className="btn btn-purple text-white fw-bold">Post</button>
           </div>
