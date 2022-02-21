@@ -3,16 +3,17 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
-import { QUERY_TASK } from "../utils/queries";
-import CommentFeed from "../components/CommentFeed";
-import { UPDATE_TASK } from "../utils/mutations";
-import TimeLog from "../components/TimeLog";
+import { QUERY_TASK } from "../../utils/queries";
+import CommentFeed from "../CommentFeed";
+import { UPDATE_TASK } from "../../utils/mutations";
+import TimeLog from "../TimeLog";
 
 // TODO double check InputTask variables requirements when updating task on both handle submit functions
 
 const TaskDetail = () => {
   // get task id
-  const { id: taskId } = useParams();
+  const { taskId } = useParams();
+  console.log(taskId)
 
   // set up toggle for description elements
   const [descriptionToggle, setDescriptionToggle] = useState(true);
@@ -92,7 +93,7 @@ const TaskDetail = () => {
       <div>
         <div>
           <h2>
-            {task.project.title} : {task.title}
+            {/* {task.project.title} : {task.title} */}
           </h2>
           <p>
             <b>Status:</b>
@@ -149,10 +150,10 @@ const TaskDetail = () => {
         <CommentFeed />
       </div>
       <div>
-        <Link to={`/${task.project.projectId}`}>
+        {/* <Link to={`/${task.project.projectId}`}>
           <button>Back To Project</button>
         </Link>
-        <TimeLog />
+        <TimeLog /> */}
       </div>
     </div>
   );

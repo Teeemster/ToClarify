@@ -1,4 +1,4 @@
-//ProjectArea Component
+// Project Detail Component
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 
@@ -12,7 +12,7 @@ import { mdiMenu } from "@mdi/js";
 // TODO : "View/Add Client" button *may need to be own page/component
 // TODO : Work on JSX
 
-const ProjectArea = () => {
+const ProjectDetail = () => {
   const { projectId } = useParams();
 
   const { loading, data } = useQuery(QUERY_PROJECT, {
@@ -34,8 +34,8 @@ const ProjectArea = () => {
       <div className="clearfix mb-4">
         <div className="float-start">
           <h2 className="fw-bold">
-            <Link to="/" className="link-white">
-              <Icon className="d-inline d-md-none" path={mdiMenu} size={1.5} />
+            <Link to="/" className="link-white d-inline d-md-none">
+              <Icon path={mdiMenu} size={1.5} />
             </Link>{" "}
             {project.title}
           </h2>
@@ -71,7 +71,7 @@ const ProjectArea = () => {
           <div className="mx-2">
             <TaskList
               tasks={project.tasks}
-              status="Completed"
+              status="Complete"
               projectId={projectId}
             ></TaskList>
           </div>
@@ -81,4 +81,4 @@ const ProjectArea = () => {
   );
 };
 
-export default ProjectArea;
+export default ProjectDetail;

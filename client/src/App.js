@@ -17,15 +17,12 @@ import { setContext } from "@apollo/client/link/context";
 import Auth from "./utils/auth";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import LoginForm from "./components/LoginForm";
-// import ProjectArea from "./components/ProjectArea";
-// import SignupForm from "./components/SignupForm";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Project from "./pages/Project";
-import TaskDetail from "./pages/TaskDetail";
+import Task from "./pages/Task";
 
 // connect to GraphQL and ApolloClient
 const httpLink = createHttpLink({
@@ -73,7 +70,7 @@ function App() {
                   <Route
                     exact
                     path="/project/:projectId/task/:taskId"
-                    element={<TaskDetail />}
+                    element={<Task />}
                   />
                 </>
               ) : (

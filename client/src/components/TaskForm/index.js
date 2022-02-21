@@ -152,6 +152,7 @@ const TaskForm = ({ status, projectId }) => {
             placeholder="1.5"
             name="estimatedHours"
             type="number"
+            step="0.01"
             id="estimatedHours"
             value={inputValues.estimatedHours}
             onChange={handleChange}
