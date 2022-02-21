@@ -11,7 +11,7 @@ const Project = () => {
         <ProjectList />
       </div>
       <div className="col-md-9 p-0">
-        <h1>Project Area</h1>
+        <ProjectArea />
       </div>
     </div>
   );
