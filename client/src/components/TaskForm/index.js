@@ -18,12 +18,12 @@ const TaskForm = ({ status, projectId }) => {
   const [addTask, { error }] = useMutation(ADD_TASK, {
     update(cache, { data: { addTask } }) {
       try {
-        // read what's currently in the cache
+        // read project currently in cache
         const { project } = cache.readQuery({
           query: QUERY_PROJECT,
           variables: { id: projectId },
         });
-        // add new thought to project cache
+        // add new thought to project's cache
         cache.writeQuery({
           query: QUERY_PROJECT,
           variables: { id: projectId },
@@ -31,13 +31,6 @@ const TaskForm = ({ status, projectId }) => {
             project: { ...project, tasks: [...project.tasks, addTask] },
           },
         });
-        // else {
-        //   // else, add project query to cache and include new task
-        //   cache.writeQuery({
-        //     query: QUERY_PROJECT,
-        //     data: { project: { tasks: [addTask] } },
-        //   });
-        // }
       } catch (e) {
         console.error(e);
       }
@@ -62,31 +55,6 @@ const TaskForm = ({ status, projectId }) => {
     const validationMessage = validateInput(e.target.name, e.target.value);
     setInputErrors({ ...inputErrors, [e.target.name]: validationMessage });
   };
-
-  // const [addTask, { error }] = useMutation(ADD_TASK, {
-  //     update(cache, { data: { addTask } }) {
-  //         try {
-  //             // read what's currently in the cache
-  //             const data = cache.readQuery({ query: QUERY_TASK });
-  //             // if cache contains projects, add new project to array
-  //             if (data) {
-  //                 const { myTasks } = data;
-  //                 cache.writeQuery({
-  //                     query: QUERY_TASK,
-  //                     data: { myTasks: [...myTasks, addTask] },
-  //                 });
-  //             } else {
-  //                 // else, add new project
-  //                 cache.writeQuery({
-  //                     query: QUERY_TASK,
-  //                     data: { myTasks: [addTask] },
-  //                 });
-  //             }
-  //         } catch (e) {
-  //             console.error(e);
-  //         }
-  //     },
-  // });
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -136,29 +104,10 @@ const TaskForm = ({ status, projectId }) => {
         console.error(e);
       }
     }
-
-    //   try {
-    //       await addTask({
-    //           variables: { taskInputs: { title: inputValues, de: {description: taskDescription}, estimatedTaskHours: {hours: estimatedHours} }
-    //       });
-    //       //Clear the form value
-    //       setText("");
-    //       setTaskDescription("");
-    //       setTaskEstimatedHours(0);
-    //       setCharacterCount(0);
-    //   } catch (e) {
-    //       console.error(e);
-    //   }
   };
 
   return (
-    <div className="my-4">
-      <p
-      // className={`m-0 ${characterCount === 280 || error ? "text-error" : ""}`}
-      >
-        {/* Character Count: {characterCount}/280 */}
-        {/* {error && <span className="ml-2">Something went wrong...</span>} */}
-      </p>
+    <div className="mt-4 mb-3">
       <form className="" onSubmit={handleFormSubmit}>
         <div className="my-2">
           <label htmlFor="title" className="w-100 fw-bold">

@@ -31,7 +31,7 @@ const ProjectArea = () => {
 
   return (
     <div className="m-4">
-      <div className="clearfix">
+      <div className="clearfix mb-4">
         <div className="float-start">
           <h2 className="fw-bold">
             <Link to="/" className="link-white">
@@ -48,15 +48,33 @@ const ProjectArea = () => {
           </Link>
         </div>
       </div>
-      <div>
-        <div>
-          <TaskList tasks={project.tasks} status="Requested" projectId={projectId}></TaskList>
+      <div className="row">
+        <div className="col-12 col-lg-4">
+          <div className="mx-2">
+            <TaskList
+              tasks={project.tasks}
+              status="Requested"
+              projectId={projectId}
+            ></TaskList>
+          </div>
         </div>
-        <div>
-          <TaskList tasks={project.tasks} status="In Progress" projectId={projectId}></TaskList>
+        <div className="col-12 col-lg-4">
+          <div className="mx-2">
+            <TaskList
+              tasks={project.tasks}
+              status="In Progress"
+              projectId={projectId}
+            ></TaskList>
+          </div>
         </div>
-        <div>
-          <TaskList tasks={project.tasks} status="Completed" projectId={projectId}></TaskList>
+        <div className="col-12 col-lg-4">
+          <div className="mx-2">
+            <TaskList
+              tasks={project.tasks}
+              status="Completed"
+              projectId={projectId}
+            ></TaskList>
+          </div>
         </div>
       </div>
     </div>
