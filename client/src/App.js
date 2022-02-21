@@ -53,12 +53,12 @@ function App() {
           </header>
           <main className="d-flex flex-grow-1 bg-dark-grey">
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/project/:projectId" element={<Project />} />
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/signup" element={<Signup />} />
+              <Route exact path="/project/:projectId" element={<Project />} />
               <Route
-                path="/project/:projectId/task/:taskId"
+                exact path="/project/:projectId/task/:taskId"
                 element={<Task />}
               />
             </Routes>
