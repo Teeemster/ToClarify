@@ -129,7 +129,7 @@ const LoginForm = () => {
       </form>
 
       <div>
-        <p>Need an account? <Link to="/signup" className="link-white">Sign up here.</Link></p>
+        <p>Need an account? <Link to="/signup" className="link-white-purple">Sign up here.</Link></p>
       </div>
     </div>
   );

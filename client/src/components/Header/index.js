@@ -21,7 +21,7 @@ const Header = () => {
 
   return (
     <div className="container-fluid">
-      <div class="row">
+      <div className="row">
         <div className="col">
           <h1 className="fs-5 fw-bold m-3">
             Welcome to Clarify

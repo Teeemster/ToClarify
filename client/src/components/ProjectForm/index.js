@@ -71,14 +71,14 @@ const ProjectForm = () => {
         onSubmit={handleFormSubmit}
       >
         <input
-          placeholder="Project Title"
+          placeholder="New Project Title"
           type="text"
           value={projectText}
-          className="form-input col-12 col-md-9"
+          className="form-input w-100"
           onChange={handleChange}
         />
-        <button className="" type="submit">
-          + Add a project
+        <button className="link link-white bg-grey mt-1 fw-bold" type="submit">
+          + Add project
         </button>
       </form>
     </div>
