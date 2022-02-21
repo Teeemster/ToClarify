@@ -43,10 +43,8 @@ const TaskForm = ({ status, projectId }) => {
 
   // validate single input and return appropriate validation message
   const validateInput = (inputName, inputValue) => {
-    if (inputName === "title") {
-      if (!inputValue.length) {
-        return "Please provide a title for your task.";
-      }
+    if (inputName === "title" && !inputValue.length) {
+      return "Please provide a title for your task.";
     }
   };
 
@@ -64,7 +62,7 @@ const TaskForm = ({ status, projectId }) => {
     // create variable to indicate if there are input errors
     let inputErrorsExists;
 
-    // loop through each input to validate and retrieve error msg
+    // loop through each input to validate and retrieve validation msg
     for (let input in inputValues) {
       const errorMsg = validateInput(input, inputValues[input]);
       if (errorMsg) {

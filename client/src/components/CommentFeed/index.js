@@ -72,7 +72,7 @@ const CommentFeed = ({ comments, taskId }) => {
           <p>No comments, yet.</p>
         )}
       </div>
-      <div>
+      <div className="mt-3">
         <form onSubmit={handleSubmit}>
           <div>
             <textarea

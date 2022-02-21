@@ -87,7 +87,13 @@ const TaskDetail = () => {
           </div>
         </div>
         <div className="col-12 col-lg-4">
-          <div className="mx-2"></div>
+          <div className="mx-2">
+            <TimeLog
+              timeLog={task.timeLog}
+              totalHours={task.totalHours}
+              taskId={task._id}
+            />
+          </div>
         </div>
       </div>
     </div>
