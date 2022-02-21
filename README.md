@@ -1,10 +1,11 @@
 # To Clarify 🔍
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com) [![GitHub branches](https://badgen.net/github/branches/Teeemster/Project3)](https://github.com/Teeemster/Project3/) [![GitHub commits](https://badgen.net/github/commits/Teeemster/Project3/main)](https://GitHub.com/Teeemster/Project3/commit/) [![GitHub stars](https://badgen.net/github/stars/Teeemster/Project3)](https://GitHub.com/Teeemster/Project3/stargazers/)
 
 ## Description
 
-> For me the greatest beauty always lies in the greatest clarity. 
-✒️ Gotthold Ephraim Lessing
+> For me the greatest beauty always lies in the greatest clarity.
+> ✒️ Gotthold Ephraim Lessing
 
 Put description here
 
@@ -17,7 +18,11 @@ Put description here
 
 ## Usage
 
-Put usage instructions here
+- Visit deployed link below to launch web application.
+- If logged out, user is taken to a login page where they can log in or click to go to the sign up page.
+- Once logged in, user will see their Project List where their projects are stored and where they can add a new project.
+- User will also see their Project Area that includes all requested, in progress and completed tasks. They will be able to add clients as well as add Tasks in their Project Area.
+- User can click on a task to bring up the Task Detail page where they can view all information on a task, edit the status or description of the task, log hours and comment.
 
 ### Screenshots
 
@@ -32,11 +37,29 @@ Put usage instructions here
 
 ### Server Wireframe
 
+![Server-Wireframe](./client/src/assets/server-wireframe.png)
+
 ### Front End Wireframe
+
+#### Project Area
+
+![Project-Main](./client/src/assets/project-wireframe.png)
+![ProjectList-Mobile](./client/src/assets/mobile-wireframe.png) ![ProjectArea-Mobile](./client/src/assets/mobile-wireframe2.png)
+
+#### Task Detail
+
+![Task-Main](./client/src/assets/task-wireframe.png)
+![Task-Mobile](./client/src/assets/mobile-wireframe3.png)
 
 ### Future Development
 
+- Timer for tracking time spent on tasks
+- Progress bar to display total estimated hours for project vs total time logged on project so far (sum of all task hours)
+- Ability to create invoices from completed tasks
+- Dark mode and light mode options
+
 ## Credits
+
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) ![ExpressJS](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge) ![ReactJS](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 
 ## License
