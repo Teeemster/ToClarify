@@ -1,4 +1,4 @@
-//Task detail
+// Task Detail Page
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
