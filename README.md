@@ -30,7 +30,7 @@ To Clarify is a full stack MERN web application designed to help freelance web d
 
 ### Links
 
-- [DeployedLink]() - link to deployed website
+- [DeployedLink](http://www.ToClarify.app) - link to deployed website
 - [GitHub](https://github.com/Teeemster/Project3) - link to GitHub project
 
 ## Development
