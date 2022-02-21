@@ -35,6 +35,8 @@ export const QUERY_PROJECT = gql`
         _id
         title
         status
+        estimatedHours
+        totalHours
       }
       clients {
         _id

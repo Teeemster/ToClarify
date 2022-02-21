@@ -111,3 +111,14 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: var(--bright-purple);
   cursor: pointer;
 }
+
+.card.bg-purple a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.card.bg-purple:hover {
+  color: var(--white);
+  background-color: var(--bright-purple);
+  text-decoration: none;
+}
