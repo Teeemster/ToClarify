@@ -81,7 +81,7 @@ const TaskDetail = () => {
             <div className="mt-5">
               <div>
                 <h4 className="fw-bold">Comments</h4>
-                <CommentFeed comments={task.comments} />
+                <CommentFeed comments={task.comments} taskId={task._id} />
               </div>
             </div>
           </div>
