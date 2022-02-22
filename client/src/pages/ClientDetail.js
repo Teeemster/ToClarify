@@ -1,7 +1,7 @@
 //Client detail
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { validateEmail } from "../../utils/helpers";
+import { validateEmail } from "../utils/helpers";
 import { ADD_CLIENT_TO_PROJECT } from "../utils/mutations";
 import { Link, useParams } from "react-router-dom";
 
