@@ -383,6 +383,9 @@ const resolvers = {
         const taskData = await Task.findById(loggedTimeInputs.taskId).select(
           "project"
         );
+        if (!taskData) {
+          throw new Error("Task not found.");
+        }
         // get parent project's owners and clients
         const projectUsers = await Project.findById(taskData.project).select(
           "owners"
@@ -391,17 +394,19 @@ const resolvers = {
         if (projectUsers.owners.includes(context.user._id)) {
           // create logged time
           const loggedTime = await LoggedTime.create({
-            ...loggedTimeInputs,
+            description: loggedTimeInputs.description,
+            hours: loggedTimeInputs.hours,
             user: context.user._id,
             task: loggedTimeInputs.taskId,
           });
           // add logged time to task
-          await Task.findByIdAndUpdate(loggedTimeInputs.taskId, {
-            $push: { timeLog: loggedTime._id },
-          });
+          await Task.findByIdAndUpdate(
+            loggedTimeInputs.taskId,
+            { $push: { timeLog: loggedTime._id } },
+            { new: true, runValidators: true }
+          );
           return await LoggedTime.findById(loggedTime._id)
-            .populate("user")
-            .populate("task");
+            .populate("user");
         }
         throw new AuthenticationError("Not authorized.");
       }

@@ -2,6 +2,7 @@
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { ADD_LOGGED_TIME } from "../../utils/mutations";
+import { QUERY_TASK } from "../../utils/queries";
 
 const TimeLog = ({ timeLog, totalHours, taskId }) => {
   const [inputValues, setInputValues] = useState({
@@ -14,7 +15,27 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
   });
   const [submitError, setSubmitError] = useState("");
 
-  const [addTime] = useMutation(ADD_LOGGED_TIME);
+  const [addLoggedTime] = useMutation(ADD_LOGGED_TIME, {
+    update(cache, { data: { addLoggedTime } }) {
+      try {
+        // read task currently in cache
+        const { task } = cache.readQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+        });
+        // add new time to task's cache
+        cache.writeQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+          data: {
+            task: { ...task, timeLog: [...task.timeLog, addLoggedTime] },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  });
 
   const handleChange = (e) => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
@@ -62,7 +83,7 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
     if (!inputErrorsExists) {
       try {
         // pass form inputs to add time mutation
-        await addTime({
+        await addLoggedTime({
           variables: {
             loggedTimeInputs: {
               description: inputValues.description,
@@ -113,9 +134,12 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
               name="description"
               value={inputValues.description}
               onChange={handleChange}
+              onBlur={updateInputError}
             ></textarea>
             {inputErrors.description && (
-              <p className="form-error-msg mt-0 pt-0">{inputErrors.description}</p>
+              <p className="form-error-msg mt-0 pt-0">
+                {inputErrors.description}
+              </p>
             )}
           </div>
 
@@ -132,6 +156,7 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
               id="hours"
               value={inputValues.hours}
               onChange={handleChange}
+              onBlur={updateInputError}
             ></input>
             {inputErrors.hours && (
               <p className="form-error-msg mt-1">{inputErrors.hours}</p>
