@@ -29,16 +29,13 @@ const TaskDetail = () => {
   const [updateTask] = useMutation(UPDATE_TASK);
 
   // set up toggle for description elements
-  const [descriptionToggle, setDescriptionToggle] = useState(true);
+  const [descriptionToggle, setDescriptionToggle] = useState(false);
   // set up state for description
-  const [descriptionValue, setDescriptionValue] = useState({
-    description: "",
-  });
+  const [descriptionValue, setDescriptionValue] = useState("");
 
   // when status dropdown is clicked out of set toggle back to original state and update task
   const handleStatusSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     try {
       await updateTask({
         variables: {
@@ -61,17 +58,18 @@ const TaskDetail = () => {
   // when description textarea is clicked out of set toggle back to original state and update task
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
-    setDescriptionToggle(true);
-
     try {
-      // eslint-disable-next-line
-      const { data } = await updateTask({
+      await updateTask({
         variables: {
-          taskInputs: { descriptionValue },
+          taskInputs: {
+            taskId: task._id,
+            description: descriptionValue,
+          },
         },
       });
-    } catch (err) {
-      console.log(err);
+      setDescriptionToggle(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -83,6 +81,7 @@ const TaskDetail = () => {
     );
   }
 
+  // setup variables after loading complete
   let statusColor = "white";
   let statusName = "Complete";
   if (task.status === "REQUESTED") {
@@ -158,9 +157,49 @@ const TaskDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="mt-3">
-              <h3 className="fw-bold fs-4">Description</h3>
-              <p>{task.description}</p>
+            <div className="mt-3 clearfix">
+              <h3 className="fw-bold fs-4 float-start me-3">Description</h3>
+              {!descriptionToggle && (
+                <p
+                  className="fst-italic pt-1"
+                  role="button"
+                  onClick={() => {
+                    setDescriptionValue(task.description);
+                    setDescriptionToggle(!descriptionToggle);
+                  }}
+                >
+                  edit
+                </p>
+              )}
+              <div className="clearfix">
+                {!descriptionToggle ? (
+                  <p>{task.description}</p>
+                ) : (
+                  <form onSubmit={handleDescriptionSubmit}>
+                    <textarea
+                      className="w-100"
+                      value={descriptionValue}
+                      name="description"
+                      onChange={handleDescriptionChange}
+                    ></textarea>
+                    {/* TODO: Display any submission errors to user
+                    {submitError && (
+                      <div className="mb-2">
+                        <p className="form-error-msg fs-6">{submitError}</p>
+                      </div>
+                    )} */}
+
+                    <div className="my-1">
+                      <button
+                        className="btn btn-purple text-white fw-bold"
+                        type="submit"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
             </div>
             <div className="my-5">
               <div>

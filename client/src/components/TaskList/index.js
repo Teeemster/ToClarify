@@ -31,7 +31,7 @@ const TaskList = ({ tasks, status, projectId }) => {
           {filteredTasks.map((task) => (
             <div
               key={task._id}
-              className="card card-link bg-purple text-white p-0 my-3"
+              className="card card-link bg-purple text-white p-0 my-3 mx-0"
             >
               <Link
                 to={`/project/${projectId}/task/${task._id}`}

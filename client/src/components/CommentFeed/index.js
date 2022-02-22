@@ -62,7 +62,10 @@ const CommentFeed = ({ comments, taskId }) => {
         {comments.length ? (
           <ul className="list-group list-group-flush">
             {comments.map((comment) => (
-              <li key={comment._id} className="list-group-item bg-dark-grey text-white px-0 border-0">
+              <li
+                key={comment._id}
+                className="list-group-item bg-dark-grey text-white px-0 border-0"
+              >
                 <p className="fw-bold fst-italic mb-1">{`${comment.user.firstName} ${comment.user.lastName} at ${comment.createdAt}`}</p>
                 <p className="mb-2">{comment.body}</p>
               </li>
@@ -91,7 +94,9 @@ const CommentFeed = ({ comments, taskId }) => {
           )}
 
           <div className="my-1">
-            <button className="btn btn-purple text-white fw-bold">Post</button>
+            <button className="btn btn-purple text-white fw-bold" type="submit">
+              Post
+            </button>
           </div>
         </form>
       </div>
