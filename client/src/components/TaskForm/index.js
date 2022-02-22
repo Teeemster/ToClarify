@@ -85,7 +85,7 @@ const TaskForm = ({ status, projectId }) => {
             taskInputs: {
               title: inputValues.title,
               description: inputValues.description,
-              estimatedHours: parseFloat(inputValues.estimatedHours) || 0,
+              estimatedHours: inputValues.estimatedHours ? parseFloat(inputValues.estimatedHours) : 0,
               status: status.replace(/ /g, "").toUpperCase(),
               projectId: projectId,
             },

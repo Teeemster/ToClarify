@@ -31,7 +31,16 @@ body {
 .bg-dark-grey {
   background-color: var(--dark-grey);
 }
+.bg-green {
+  background-color: var(--green);
+}
+.bg-orange {
+  background-color: var(--orange);
+}
 
+.text-dark-grey {
+  color: var(--dark-grey);
+}
 .text-orange {
   color: var(--orange);
 }
@@ -117,7 +126,7 @@ input[type="number"]::-webkit-outer-spin-button {
   text-decoration: none;
 }
 
-.card.bg-purple:hover {
+.card-link.bg-purple:hover {
   color: var(--white);
   background-color: var(--bright-purple);
   text-decoration: none;

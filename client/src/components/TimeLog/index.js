@@ -29,7 +29,11 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
           query: QUERY_TASK,
           variables: { id: taskId },
           data: {
-            task: { ...task, timeLog: [...task.timeLog, addLoggedTime] },
+            task: {
+              ...task,
+              timeLog: [...task.timeLog, addLoggedTime],
+              totalHours: task.totalHours + addLoggedTime.hours,
+            },
           },
         });
       } catch (e) {
@@ -110,18 +114,27 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
       <div className="card bg-purple">
         <div className="card-body">
           <h4 className="fw-bold card-title">Time Log</h4>
-          <p className="fst-italic mb-0">{formatHours(totalHours)} total hours logged</p>
+          <p className="fst-italic mb-0">
+            {formatHours(totalHours)} total hours logged
+          </p>
         </div>
         <ul className="list-group list-group-flush">
           {timeLog.length ? (
             timeLog.map((loggedTime) => (
-              <li key={loggedTime._id} className="list-group-item bg-purple text-white">
+              <li
+                key={loggedTime._id}
+                className="list-group-item bg-purple text-white"
+              >
                 <p className="my-1">{loggedTime.description}</p>
-                <p className="fst-italic mb-1">{`${formatHours(loggedTime.hours)} hours on ${loggedTime.date}`}</p>
+                <p className="fst-italic mb-1">{`${formatHours(
+                  loggedTime.hours
+                )} hours on ${loggedTime.date}`}</p>
               </li>
             ))
           ) : (
-            <li>No time has been logged on this task, yet.</li>
+            <li className="list-group-item bg-purple text-white fst-italic">
+              No time has been logged on this task, yet.
+            </li>
           )}
         </ul>
       </div>

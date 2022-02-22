@@ -25,6 +25,56 @@ const TaskDetail = () => {
 
   const task = data?.task || {};
 
+  // import updateTask mutation
+  const [updateTask] = useMutation(UPDATE_TASK);
+
+  // set up toggle for description elements
+  const [descriptionToggle, setDescriptionToggle] = useState(true);
+  // set up state for description
+  const [descriptionValue, setDescriptionValue] = useState({
+    description: "",
+  });
+
+  // when status dropdown is clicked out of set toggle back to original state and update task
+  const handleStatusSubmit = async (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    try {
+      await updateTask({
+        variables: {
+          taskInputs: {
+            taskId: task._id,
+            status: e.target.value,
+          },
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // when description textarea is changed set the description value
+  const handleDescriptionChange = (e) => {
+    setDescriptionValue(e.target.value);
+  };
+
+  // when description textarea is clicked out of set toggle back to original state and update task
+  const handleDescriptionSubmit = async (e) => {
+    e.preventDefault();
+    setDescriptionToggle(true);
+
+    try {
+      // eslint-disable-next-line
+      const { data } = await updateTask({
+        variables: {
+          taskInputs: { descriptionValue },
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="m-4">
@@ -33,13 +83,13 @@ const TaskDetail = () => {
     );
   }
 
-  let color = "white";
+  let statusColor = "white";
   let statusName = "Complete";
   if (task.status === "REQUESTED") {
-    color = "orange";
+    statusColor = "orange";
     statusName = "Requested";
   } else if (task.status === "INPROGRESS") {
-    color = "green";
+    statusColor = "green";
     statusName = "In Progress";
   }
 
@@ -62,15 +112,49 @@ const TaskDetail = () => {
           <div className="mx-2">
             <div className="row">
               <div className="col-12 col-sm-5">
-                <p className="fw-bold fs-5">
-                  Status: <span className={`text-${color}`}>{statusName}</span>
-                </p>
+                <h5 className="float-start fw-bold fs-5">Status:</h5>
+                <form
+                  className="float-start ms-2"
+                  onChange={handleStatusSubmit}
+                >
+                  <select
+                    className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold`}
+                  >
+                    {task.status === "REQUESTED" && (
+                      <>
+                        <option selected value="REQUESTED">
+                          Requested
+                        </option>
+                        <option value="INPROGRESS">In Progress</option>
+                        <option value="COMPLETE">Complete</option>
+                      </>
+                    )}
+                    {task.status === "INPROGRESS" && (
+                      <>
+                        <option value="REQUESTED">Requested</option>
+                        <option selected value="INPROGRESS">
+                          In Progress
+                        </option>
+                        <option value="COMPLETE">Complete</option>
+                      </>
+                    )}
+                    {task.status === "COMPLETE" && (
+                      <>
+                        <option value="REQUESTED">Requested</option>
+                        <option value="INPROGRESS">In Progress</option>
+                        <option selected value="COMPLETE">
+                          Complete
+                        </option>
+                      </>
+                    )}
+                  </select>
+                </form>
               </div>
               <div className="col-12 col-sm-7">
                 <p className="mt-1">
                   <span className="fw-bold">Hours:</span>{" "}
-                  {formatHours(task.totalHours)} logged /{" "}
-                  {formatHours(task.estimatedHours)} complete
+                  {formatHours(task.totalHours)} complete /{" "}
+                  {formatHours(task.estimatedHours)} estimated
                 </p>
               </div>
             </div>
