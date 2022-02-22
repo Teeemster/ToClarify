@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
-import { QUERY_TASK } from "../../utils/queries";
-import { UPDATE_TASK } from "../../utils/mutations";
+import { QUERY_PROJECT, QUERY_TASK } from "../../utils/queries";
+import { DELETE_TASK, UPDATE_TASK } from "../../utils/mutations";
 import CommentFeed from "../CommentFeed";
 import TimeLog from "../TimeLog";
 
@@ -16,7 +16,7 @@ import { formatHours } from "../../utils/helpers";
 
 const TaskDetail = () => {
   // get task id
-  const { taskId } = useParams();
+  const { projectId, taskId } = useParams();
 
   // query task by id
   const { loading, data } = useQuery(QUERY_TASK, {
@@ -25,8 +25,32 @@ const TaskDetail = () => {
 
   const task = data?.task || {};
 
-  // import updateTask mutation
+  // import task mutations
   const [updateTask] = useMutation(UPDATE_TASK);
+  const [deleteTask] = useMutation(DELETE_TASK, {
+    update(cache, { data: { deleteTask } }) {
+      try {
+        // read project currently in cache
+        const { project } = cache.readQuery({
+          query: QUERY_PROJECT,
+          variables: { id: projectId },
+        });
+        // remove task from project's cache
+        const updatedTasks = project.tasks.filter(
+          (task) => task._id !== deleteTask._id
+        );
+        cache.writeQuery({
+          query: QUERY_PROJECT,
+          variables: { id: projectId },
+          data: {
+            project: { ...project, tasks: [...updatedTasks] },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  });
 
   // set up toggle for description elements
   const [descriptionToggle, setDescriptionToggle] = useState(false);
@@ -37,7 +61,7 @@ const TaskDetail = () => {
   const handleStatusSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await updateTask({
+      await updateTask({
         variables: {
           taskInputs: {
             taskId: task._id,
@@ -68,6 +92,19 @@ const TaskDetail = () => {
         },
       });
       setDescriptionToggle(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeleteTask = async (e) => {
+    try {
+      await deleteTask({
+        variables: {
+          taskId: task._id,
+        },
+      });
+      window.location.replace(`/project/${projectId}`);
     } catch (e) {
       console.error(e);
     }
@@ -192,6 +229,11 @@ const TaskDetail = () => {
             />
           </div>
         </div>
+      </div>
+      <div>
+        <button onClick={handleDeleteTask} className="btn btn-danger">
+          Delete Task
+        </button>
       </div>
     </div>
   );

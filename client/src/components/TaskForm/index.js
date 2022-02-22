@@ -23,7 +23,7 @@ const TaskForm = ({ status, projectId }) => {
           query: QUERY_PROJECT,
           variables: { id: projectId },
         });
-        // add new thought to project's cache
+        // add new task to project's cache
         const { tasks } = project;
         cache.writeQuery({
           query: QUERY_PROJECT,
