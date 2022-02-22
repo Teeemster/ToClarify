@@ -118,7 +118,7 @@ const TaskDetail = () => {
                   onChange={handleStatusSubmit}
                 >
                   <select
-                    className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold`}
+                    className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold remove-default-styles`}
                   >
                     {task.status === "REQUESTED" && (
                       <>
