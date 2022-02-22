@@ -31,6 +31,22 @@ body {
 .bg-dark-grey {
   background-color: var(--dark-grey);
 }
+.bg-green {
+  background-color: var(--green);
+}
+.bg-orange {
+  background-color: var(--orange);
+}
+
+.text-dark-grey {
+  color: var(--dark-grey);
+}
+.text-orange {
+  color: var(--orange);
+}
+.text-green {
+  color: var(--green);
+}
 
 .link-white-purple {
   color: var(--white);
@@ -81,10 +97,19 @@ form label {
   padding: 3px;
 }
 
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
 .form-error-msg {
   padding: 4px 0;
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: var(--orange);
+  margin-bottom: 0;
 }
 
 .project-list li {
@@ -94,4 +119,19 @@ form label {
 .project-list li:hover {
   background-color: var(--bright-purple);
   cursor: pointer;
+}
+
+.card.bg-purple a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.card-link.bg-purple:hover {
+  color: var(--white);
+  background-color: var(--bright-purple);
+  text-decoration: none;
+}
+
+select.remove-default-styles {
+  outline: none;
 }

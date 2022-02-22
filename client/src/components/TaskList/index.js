@@ -1,36 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { QUERY_PROJECT } from "../../utils/queries";
-import { useQuery } from "@apollo/client";
 import TaskForm from "../TaskForm";
+import { formatHours } from "../../utils/helpers";
 
-const TaskList = () => {
-    const { loading, data } = useQuery(QUERY_PROJECT);
-    const tasks = data?.tasks || {};
+const TaskList = ({ tasks, status, projectId }) => {
+  let color = "white";
+  if (status === "Requested") {
+    color = "orange";
+  } else if (status === "In Progress") {
+    color = "green";
+  }
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+  const [addTaskVisible, setAddTaskVisible] = useState(false);
 
-    return (
-        <div className="m-3">
-            <h3 className="fs-4 fw-bold">My Tasks</h3>
-            {!tasks.length ? (
-                <p className="mt-3">You have no tasks, yet.</p>
-            ) : (
-                <ul className="list-group list-group-flush">
-                    {tasks.map((task) => (
-                        <li key={task._id} className="list-group-item bg-grey">
-                            <Link to={`/task/${task._id}`}>{task.title}</Link>
-                        </li>
-                    ))}
-                </ul>
-            )}
-            <div className="mt-3">
-                <TaskForm />
+  const toggleAddTaskVisible = () => {
+    setAddTaskVisible(!addTaskVisible);
+  };
+
+  const filteredTasks = tasks.filter(
+    (task) => task.status === status.replace(/ /g, "").toUpperCase()
+  );
+
+  return (
+    <div>
+      <h3 className={`fs-4 fw-bold text-${color}`}>{status}</h3>
+      {!filteredTasks.length ? (
+        <p className="mt-3 fst-italic">Nothing {status.toLowerCase()}</p>
+      ) : (
+        <div>
+          {filteredTasks.map((task) => (
+            <div
+              key={task._id}
+              className="card card-link bg-purple text-white p-0 my-3 mx-0"
+            >
+              <Link
+                to={`/project/${projectId}/task/${task._id}`}
+                className="d-inline-block p-3"
+              >
+                <h4 className="fs-5 fw-bold">{task.title}</h4>
+                <p className="mt-2 mb-0 fst-italic">
+                  {formatHours(task.totalHours)} of{" "}
+                  {formatHours(task.estimatedHours)} estimated hours complete
+                </p>
+              </Link>
             </div>
+          ))}
         </div>
-    );
+      )}
+
+      <div className={addTaskVisible ? "d-block" : "d-none"}>
+        <TaskForm status={status} projectId={projectId} />
+      </div>
+
+      {/* TODO: Remove "X Close" and set toggle to trigger when form is submitted */}
+      <div className="d-block mb-5">
+        <button
+          className="fs-5 link link-white bg-dark-grey fw-bold"
+          onClick={toggleAddTaskVisible}
+        >
+          {addTaskVisible ? "X Close" : "+ Add task"}
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default TaskList;

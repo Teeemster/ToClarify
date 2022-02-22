@@ -28,6 +28,7 @@ const SignupForm = () => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
   };
 
+  // validate input and return appropriate validation message
   const validateInput = (inputName, inputValue) => {
     if (inputName === "email") {
       const validEmail = validateEmail(inputValue);
@@ -54,6 +55,7 @@ const SignupForm = () => {
     }
   };
 
+  // get validation message for individual input and display to user
   const updateInputError = (e) => {
     const validationMessage = validateInput(e.target.name, e.target.value);
     setInputErrors({ ...inputErrors, [e.target.name]: validationMessage });
@@ -81,6 +83,7 @@ const SignupForm = () => {
     // after running validation on all inputs, update inputErrors state in one function call
     setInputErrors({ ...inputErrors, ...updatedInputErrors });
 
+    // only submit form if there are no input errors
     if (!inputErrorsExists) {
       try {
         // pass form inputs to signup mutation and retrieve token
@@ -113,7 +116,7 @@ const SignupForm = () => {
       <h1 className="text-center mb-4 fw-bold">Create an Account</h1>
       <form onSubmit={handleSubmit} className="fs-5">
         <div className="my-3">
-          <label for="firstName" className="w-100 fw-bold">
+          <label htmlFor="firstName" className="w-100 fw-bold">
             First Name:
           </label>
           <input
@@ -131,7 +134,7 @@ const SignupForm = () => {
         </div>
 
         <div className="my-3">
-          <label for="lastName" className="w-100 fw-bold">
+          <label htmlFor="lastName" className="w-100 fw-bold">
             Last Name:
           </label>
           <input
@@ -149,7 +152,7 @@ const SignupForm = () => {
         </div>
 
         <div className="my-3">
-          <label for="email" className="w-100 fw-bold">
+          <label htmlFor="email" className="w-100 fw-bold">
             Email:
           </label>
           <input
@@ -167,7 +170,7 @@ const SignupForm = () => {
         </div>
 
         <div className="my-3">
-          <label for="password" className="w-100 fw-bold">
+          <label htmlFor="password" className="w-100 fw-bold">
             Password:
           </label>
           <input
@@ -185,7 +188,7 @@ const SignupForm = () => {
         </div>
 
         <div className="my-3">
-          <label for="passwordCheck" className="w-100 fw-bold">
+          <label htmlFor="passwordCheck" className="w-100 fw-bold">
             Reenter Password:
           </label>
           <input
@@ -209,14 +212,17 @@ const SignupForm = () => {
         )}
 
         <div className="my-4">
-          <button className="btn btn-purple text-white fw-bold">
-            Sign Up
-          </button>
+          <button className="btn btn-purple text-white fw-bold">Sign Up</button>
         </div>
       </form>
 
       <div>
-        <p>Already have an account? <Link to="/login" className="link-white-purple">Login here.</Link></p>
+        <p>
+          Already have an account?{" "}
+          <Link to="/login" className="link-white-purple">
+            Login here.
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const ProjectForm = () => {
       setCharacterCount(event.target.value.length);
     }
   };
-  //Form Submission Area
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -50,7 +50,7 @@ const ProjectForm = () => {
       await addProject({
         variables: { projectInputs: { title: projectText } },
       });
-      //Clear the form value
+      // clear form
       setText("");
       setCharacterCount(0);
     } catch (e) {
