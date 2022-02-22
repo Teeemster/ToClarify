@@ -21,8 +21,6 @@ const ProjectDetail = () => {
 
   const project = data?.project || {};
 
-  console.log(project)
-
   if (loading) {
     return (
       <div className="m-4">

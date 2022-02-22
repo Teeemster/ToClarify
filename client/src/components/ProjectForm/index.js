@@ -1,12 +1,14 @@
 //List of all the projects for an individual
 //ProjectForm Component
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { QUERY_MY_PROJECTS } from "../../utils/queries";
 import { useMutation } from "@apollo/client";
 import { ADD_PROJECT } from "../../utils/mutations";
 
 const ProjectForm = () => {
+  const navigate = useNavigate();
+
   const [projectText, setText] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
 
@@ -32,6 +34,9 @@ const ProjectForm = () => {
       } catch (e) {
         console.error(e);
       }
+    },
+    onCompleted: ({ addProject }) => {
+      navigate(`/project/${addProject._id}`);
     },
   });
 
