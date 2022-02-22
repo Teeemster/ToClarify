@@ -33,7 +33,7 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
             task: {
               ...task,
               timeLog: [...timeLog, addLoggedTime],
-              totalHours: task.totalHours + addLoggedTime.hours,
+              // totalHours: task.totalHours + addLoggedTime.hours,
             },
           },
         });
