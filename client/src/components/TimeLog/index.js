@@ -1,6 +1,7 @@
 // Time Log Component
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
+import { formatHours } from "../../utils/helpers";
 import { ADD_LOGGED_TIME } from "../../utils/mutations";
 import { QUERY_TASK } from "../../utils/queries";
 
@@ -106,15 +107,17 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
 
   return (
     <div>
-      <div>
-        <h3>Time Log</h3>
-        <p className="fw-bold">{totalHours} total hours logged</p>
-        <ul>
+      <div className="card bg-purple">
+        <div className="card-body">
+          <h4 className="fw-bold card-title">Time Log</h4>
+          <p className="fst-italic mb-0">{formatHours(totalHours)} total hours logged</p>
+        </div>
+        <ul className="list-group list-group-flush">
           {timeLog.length ? (
             timeLog.map((loggedTime) => (
-              <li key={loggedTime._id}>
-                <p>{loggedTime.description}</p>
-                <p className="fs-italic">{`${loggedTime.hours} on ${loggedTime.date}`}</p>
+              <li key={loggedTime._id} className="list-group-item bg-purple text-white">
+                <p className="my-1">{loggedTime.description}</p>
+                <p className="fst-italic mb-1">{`${formatHours(loggedTime.hours)} hours on ${loggedTime.date}`}</p>
               </li>
             ))
           ) : (
@@ -122,7 +125,8 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
           )}
         </ul>
       </div>
-      <div>
+      <div className="mt-4">
+        <h4 className="fw-bold">Add Time</h4>
         <form onSubmit={handleFormSubmit}>
           <div>
             <label htmlFor="description" className="w-100 fw-bold">

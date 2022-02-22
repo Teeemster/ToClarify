@@ -75,10 +75,10 @@ const TaskDetail = () => {
               </div>
             </div>
             <div className="mt-3">
-              <h4 className="fw-bold">Description</h4>
+              <h3 className="fw-bold fs-4">Description</h3>
               <p>{task.description}</p>
             </div>
-            <div className="mt-5">
+            <div className="my-5">
               <div>
                 <h4 className="fw-bold">Comments</h4>
                 <CommentFeed comments={task.comments} taskId={task._id} />
@@ -87,7 +87,7 @@ const TaskDetail = () => {
           </div>
         </div>
         <div className="col-12 col-lg-4">
-          <div className="mx-2">
+          <div className="mx-2 mb-5">
             <TimeLog
               timeLog={task.timeLog}
               totalHours={task.totalHours}
