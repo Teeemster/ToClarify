@@ -59,6 +59,8 @@ const TaskDetail = () => {
   const [descriptionToggle, setDescriptionToggle] = useState(false);
   // set up state for description
   const [descriptionValue, setDescriptionValue] = useState("");
+  // set up toggle for delete task confirmation
+  const [deleteTaskToggle, setDeleteTaskToggle] = useState(false);
 
   // when status dropdown is clicked out of set toggle back to original state and update task
   const handleStatusSubmit = async (e) => {
@@ -233,9 +235,15 @@ const TaskDetail = () => {
         </div>
       </div>
       <div>
-        <button onClick={handleDeleteTask} className="btn btn-danger">
-          Delete Task
-        </button>
+        {deleteTaskToggle ? (
+          <button onClick={handleDeleteTask} className="btn btn-danger">
+            Are your sure? Click to confirm delete.
+          </button>
+        ) : (
+          <button onClick={() => setDeleteTaskToggle(true)} className="btn bg-orange">
+            Delete Task
+          </button>
+        )}
       </div>
     </div>
   );
