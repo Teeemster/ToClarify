@@ -294,7 +294,7 @@ const resolvers = {
           })
             .populate("project")
             .populate({ path: "comments", populate: { path: "user" } })
-            .populate("timeLog");
+            .populate({ path: "timeLog", populate: { path: "user" } })
         }
         throw new AuthenticationError("Not authorized.");
       }
