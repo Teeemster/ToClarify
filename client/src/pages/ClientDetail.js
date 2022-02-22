@@ -1,13 +1,14 @@
 //Client detail
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { validateEmail } from "../../utils/helpers";
+import { validateEmail } from "../utils/helpers";
 import { ADD_CLIENT_TO_PROJECT } from "../utils/mutations";
+import { Link, useParams } from "react-router-dom";
 
 // TODO : Add functionality to add/view clients of a project
 // TODO : Return to project button
 const ClientDetail = () => {
-  const {id: projectId} = useParams();
+  const {id: projectId} = useParams;
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -20,7 +21,7 @@ const ClientDetail = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await addClient({
+      await addClient({
         variables: { projectId: projectId, clientInputs: { ...formState } },
       });
 

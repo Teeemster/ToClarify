@@ -78,7 +78,7 @@ const LoginForm = () => {
       <h1 className="text-center mb-4 fw-bold">Login</h1>
       <form onSubmit={handleSubmit} className="fs-5">
         <div className="my-3">
-          <label for="email" className="w-100 fw-bold">
+          <label htmlFor="email" className="w-100 fw-bold">
             Email:
           </label>
           <input
@@ -97,7 +97,7 @@ const LoginForm = () => {
         </div>
 
         <div>
-          <label for="password" className="w-100 fw-bold">
+          <label htmlFor="password" className="w-100 fw-bold">
             Password:
           </label>
           <input

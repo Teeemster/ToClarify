@@ -22,9 +22,9 @@ const loggedTimeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    task: {
-      type: Schema.Types.ObjectId,
-      ref: "Task",
+    taskId: {
+      type: String,
+      required: [true, "Task ID is required."],
     },
   },
   {

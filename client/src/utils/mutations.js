@@ -132,8 +132,8 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const ADD_TASK = gql`
-  query Task($id: ID!) {
-    task(_id: $id) {
+  mutation AddTask($taskInputs: InputTask!) {
+    addTask(taskInputs: $taskInputs) {
       _id
       title
       status

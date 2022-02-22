@@ -17,7 +17,7 @@ const ProjectList = () => {
     <div className="my-3">
       <h3 className="fs-4 fw-bold m-3">My Projects</h3>
         {!projects.length ? (
-          <p className="mt-3">You haven't started any projects, yet.</p>
+          <p className="mt-3 mx-3">You haven't started any projects, yet.</p>
         ) : (
           <ul className="project-list list-group list-group-flush">
             {projects.map((project) => (
