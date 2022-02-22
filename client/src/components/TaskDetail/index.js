@@ -45,7 +45,6 @@ const TaskDetail = () => {
           },
         },
       });
-      console.log(data)
     } catch (e) {
       console.error(e);
     }
@@ -70,7 +69,6 @@ const TaskDetail = () => {
       });
       setDescriptionToggle(false);
     } catch (e) {
-      console.log("Error from TaskDetail")
       console.error(e);
     }
   };
