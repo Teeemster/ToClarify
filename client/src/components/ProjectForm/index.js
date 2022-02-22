@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { QUERY_MY_PROJECTS } from "../../utils/queries";
 import { useMutation } from "@apollo/client";
 import { ADD_PROJECT } from "../../utils/mutations";
-import { Navigate } from "react-router-dom";
 
 const ProjectForm = () => {
   const [projectText, setText] = useState("");
@@ -48,7 +47,7 @@ const ProjectForm = () => {
     event.preventDefault();
 
     try {
-      const newProject = await addProject({
+      await addProject({
         variables: { projectInputs: { title: projectText } },
       });
       // clear form

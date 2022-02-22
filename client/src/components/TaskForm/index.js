@@ -15,7 +15,7 @@ const TaskForm = ({ status, projectId }) => {
   });
   const [submitError, setSubmitError] = useState("");
 
-  const [addTask, { error }] = useMutation(ADD_TASK, {
+  const [addTask] = useMutation(ADD_TASK, {
     update(cache, { data: { addTask } }) {
       try {
         // read project currently in cache

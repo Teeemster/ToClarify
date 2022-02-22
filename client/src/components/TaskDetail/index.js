@@ -83,13 +83,10 @@ const TaskDetail = () => {
 
   // setup variables after loading complete
   let statusColor = "white";
-  let statusName = "Complete";
   if (task.status === "REQUESTED") {
     statusColor = "orange";
-    statusName = "Requested";
   } else if (task.status === "INPROGRESS") {
     statusColor = "green";
-    statusName = "In Progress";
   }
 
   return (
