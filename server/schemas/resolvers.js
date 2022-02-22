@@ -291,7 +291,10 @@ const resolvers = {
           return Task.findByIdAndUpdate(taskInputs.taskId, taskInputs, {
             new: true,
             runValidators: true,
-          });
+          })
+            .populate("project")
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate("timeLog");
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -405,8 +408,7 @@ const resolvers = {
             { $push: { timeLog: loggedTime._id } },
             { new: true, runValidators: true }
           );
-          return await LoggedTime.findById(loggedTime._id)
-            .populate("user");
+          return await LoggedTime.findById(loggedTime._id).populate("user");
         }
         throw new AuthenticationError("Not authorized.");
       }

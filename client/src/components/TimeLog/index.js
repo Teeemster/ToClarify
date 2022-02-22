@@ -25,13 +25,14 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
           variables: { id: taskId },
         });
         // add new time to task's cache
+        const { timeLog } = task;
         cache.writeQuery({
           query: QUERY_TASK,
           variables: { id: taskId },
           data: {
             task: {
               ...task,
-              timeLog: [...task.timeLog, addLoggedTime],
+              timeLog: [...timeLog, addLoggedTime],
               totalHours: task.totalHours + addLoggedTime.hours,
             },
           },
@@ -92,7 +93,7 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
           variables: {
             loggedTimeInputs: {
               description: inputValues.description,
-              hours: parseFloat(inputValues.hours) || 0,
+              hours: inputValues.hours ? parseFloat(inputValues.hours) : 0,
               taskId: taskId,
             },
           },

@@ -37,7 +37,7 @@ const TaskDetail = () => {
   const handleStatusSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateTask({
+      const data = await updateTask({
         variables: {
           taskInputs: {
             taskId: task._id,
@@ -45,6 +45,7 @@ const TaskDetail = () => {
           },
         },
       });
+      console.log(data)
     } catch (e) {
       console.error(e);
     }
@@ -69,6 +70,7 @@ const TaskDetail = () => {
       });
       setDescriptionToggle(false);
     } catch (e) {
+      console.log("Error from TaskDetail")
       console.error(e);
     }
   };
@@ -115,34 +117,11 @@ const TaskDetail = () => {
                 >
                   <select
                     className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold remove-default-styles`}
+                    defaultValue={task.status}
                   >
-                    {task.status === "REQUESTED" && (
-                      <>
-                        <option selected value="REQUESTED">
-                          Requested
-                        </option>
-                        <option value="INPROGRESS">In Progress</option>
-                        <option value="COMPLETE">Complete</option>
-                      </>
-                    )}
-                    {task.status === "INPROGRESS" && (
-                      <>
-                        <option value="REQUESTED">Requested</option>
-                        <option selected value="INPROGRESS">
-                          In Progress
-                        </option>
-                        <option value="COMPLETE">Complete</option>
-                      </>
-                    )}
-                    {task.status === "COMPLETE" && (
-                      <>
-                        <option value="REQUESTED">Requested</option>
-                        <option value="INPROGRESS">In Progress</option>
-                        <option selected value="COMPLETE">
-                          Complete
-                        </option>
-                      </>
-                    )}
+                    <option value="REQUESTED"> Requested </option>
+                    <option value="INPROGRESS">In Progress</option>
+                    <option value="COMPLETE">Complete</option>
                   </select>
                 </form>
               </div>
