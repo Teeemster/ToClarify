@@ -26,7 +26,9 @@ To Clarify is a full stack MERN web application designed to help freelance web d
 
 ### Screenshots
 
-![Screenshot](screenshot url here)
+- ![LoginScreenshot](./client/src/assets/loginss.png)
+- ![ProjectScreenshot](./client/src/assets/projectss.png)
+- ![TaskScreenshot](./client/src/assets/taskss.png)
 
 ### Links
 
