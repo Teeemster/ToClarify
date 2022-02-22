@@ -17,30 +17,30 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
   const [submitError, setSubmitError] = useState("");
 
   const [addLoggedTime] = useMutation(ADD_LOGGED_TIME, {
-    // update(cache, { data: { addLoggedTime } }) {
-    //   try {
-    //     // read task currently in caches
-    //     const { task } = cache.readQuery({
-    //       query: QUERY_TASK,
-    //       variables: { id: taskId },
-    //     });
-    //     // add new time to task's cache
-    //     const { timeLog } = task;
-    //     cache.writeQuery({
-    //       query: QUERY_TASK,
-    //       variables: { id: taskId },
-    //       data: {
-    //         task: {
-    //           ...task,
-    //           timeLog: [...timeLog, addLoggedTime],
-    //           // totalHours: task.totalHours + addLoggedTime.hours,
-    //         },
-    //       },
-    //     });
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
+    update(cache, { data: { addLoggedTime } }) {
+      try {
+        // read task currently in caches
+        const { task } = cache.readQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+        });
+        // add new time to task's cache
+        const { timeLog } = task;
+        cache.writeQuery({
+          query: QUERY_TASK,
+          variables: { id: taskId },
+          data: {
+            task: {
+              ...task,
+              timeLog: [...timeLog, addLoggedTime],
+              // totalHours: task.totalHours + addLoggedTime.hours,
+            },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
   });
 
   const handleChange = (e) => {
@@ -89,7 +89,7 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
     if (!inputErrorsExists) {
       try {
         // pass form inputs to add time mutation
-        const data = await addLoggedTime({
+        await addLoggedTime({
           variables: {
             loggedTimeInputs: {
               description: inputValues.description,
@@ -98,7 +98,6 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
             },
           },
         });
-        console.log(data)
         // clear form
         setInputValues({
           description: "",

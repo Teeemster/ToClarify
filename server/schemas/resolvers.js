@@ -399,7 +399,7 @@ const resolvers = {
           const loggedTime = await LoggedTime.create({
             description: loggedTimeInputs.description,
             hours: loggedTimeInputs.hours ? parseFloat(loggedTimeInputs.hours) : 0,
-            user: context.user._id,
+            user: context.user,
             taskId: loggedTimeInputs.taskId,
           });
           // add logged time to task

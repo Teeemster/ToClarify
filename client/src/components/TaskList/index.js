@@ -39,8 +39,8 @@ const TaskList = ({ tasks, status, projectId }) => {
               >
                 <h4 className="fs-5 fw-bold">{task.title}</h4>
                 <p className="mt-2 mb-0 fst-italic">
-                  {formatHours(task.totalHours)} of{" "}
-                  {formatHours(task.estimatedHours)} estimated hours complete
+                  {/* {formatHours(task.totalHours)} of{" "} */}
+                  {formatHours(task.estimatedHours)} estimated hours
                 </p>
               </Link>
             </div>
