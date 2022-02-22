@@ -1,6 +1,6 @@
 // Task Detail Page
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
 import { QUERY_PROJECT, QUERY_TASK } from "../../utils/queries";
@@ -25,9 +25,12 @@ const TaskDetail = () => {
 
   const task = data?.task || {};
 
+  const navigate = useNavigate();
+
   // import task mutations
   const [updateTask] = useMutation(UPDATE_TASK);
   const [deleteTask] = useMutation(DELETE_TASK, {
+    onCompleted: () => navigate(`/project/${projectId}`),
     update(cache, { data: { deleteTask } }) {
       try {
         // read project currently in cache
@@ -104,7 +107,6 @@ const TaskDetail = () => {
           taskId: task._id,
         },
       });
-      window.location.replace(`/project/${projectId}`);
     } catch (e) {
       console.error(e);
     }
