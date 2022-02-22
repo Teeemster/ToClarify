@@ -17,11 +17,12 @@ const CommentFeed = ({ comments, taskId }) => {
           variables: { id: taskId },
         });
         // add new comment to task's cache
+        const { comments } = task;
         cache.writeQuery({
           query: QUERY_TASK,
           variables: { id: taskId },
           data: {
-            task: { ...task, comments: [...task.comments, addComment] },
+            task: { ...task, comments: [...comments, addComment] },
           },
         });
       } catch (e) {

@@ -41,7 +41,7 @@ const ProjectDetail = () => {
           </h2>
         </div>
         <div className="float-end">
-          <Link to={`/${projectId}/clients`}>
+          <Link to={`/project/${projectId}/clients`}>
             <button className="btn btn-purple text-white fw-bold d-none d-md-inline-block">
               View/Add Client
             </button>
