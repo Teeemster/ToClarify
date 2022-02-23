@@ -5,7 +5,7 @@ const { verify, sign } = require ('jsonwebtoken');
 // TODO:
 // store secret somewhere other than in a JavaScript file—like an environment variable.
 const secret = 'mysecretsshhhhh';
-const expiration = '1h';
+const expiration = '24h';
 
 function authMiddleware({ req }) {
     // allows token to be sent via req.body, req.query, or headers

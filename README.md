@@ -1,6 +1,6 @@
 # To Clarify 🔍
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com) [![GitHub branches](https://badgen.net/github/branches/Teeemster/Project3/)](https://github.com/Teeemster/Project3/) [![GitHub commits](https://badgen.net/github/commits/Teeemster/Project3/)](https://GitHub.com/Teeemster/Project3/commit/) [![GitHub stars](https://badgen.net/github/stars/Teeemster/Project3)](https://GitHub.com/Teeemster/Project3/stargazers/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com) [![GitHub branches](https://badgen.net/github/branches/Teeemster/ToClarify/)](https://github.com/Teeemster/ToClarify/) [![GitHub commits](https://img.shields.io/github/commit-activity/y/Teeemster/ToClarify)](https://GitHub.com/Teeemster/ToClarify) [![GitHub stars](https://badgen.net/github/stars/Teeemster/ToClarify)](https://GitHub.com/Teeemster/ToClarify/stargazers/)
 
 ## Description
 
@@ -26,12 +26,14 @@ To Clarify is a full stack MERN web application designed to help freelance web d
 
 ### Screenshots
 
-![Screenshot](screenshot url here)
+- ![LoginScreenshot](./client/src/assets/loginss.png)
+- ![ProjectScreenshot](./client/src/assets/projectss.png)
+- ![TaskScreenshot](./client/src/assets/taskss.png)
 
 ### Links
 
-- [DeployedLink]() - link to deployed website
-- [GitHub](https://github.com/Teeemster/Project3) - link to GitHub project
+- [DeployedLink](http://www.ToClarify.app) - link to deployed website
+- [GitHub](https://github.com/Teeemster/ToClarify) - link to GitHub project
 
 ## Development
 
