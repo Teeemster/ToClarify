@@ -41,8 +41,8 @@ const typeDefs = gql`
         description: String
         date: String!
         hours: Float!
-        user: User
-        task: Task
+        user: User!
+        taskId: String!
     },
     type Comment {
         _id: ID!

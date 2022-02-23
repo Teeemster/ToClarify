@@ -1,6 +1,11 @@
 import React from "react";
 import "bootstrap";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import {
   ApolloProvider,
   ApolloClient,
@@ -9,18 +14,16 @@ import {
 } from "@apollo/client";
 
 import { setContext } from "@apollo/client/link/context";
-
+import Auth from "./utils/auth";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import LoginForm from "./components/LoginForm";
-// import ProjectArea from "./components/ProjectArea";
-// import SignupForm from "./components/SignupForm";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Project from "./pages/Project";
 import Task from "./pages/Task";
+import ClientDetail from "./pages/ClientDetail"
 
 // connect to GraphQL and ApolloClient
 const httpLink = createHttpLink({
@@ -44,23 +47,44 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const loggedIn = Auth.loggedIn();
+
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="d-flex flex-column min-vh-100 bg-dark-grey text-white">
-          <header className="container-fluid bg-purple">
+        <div className="d-flex flex-column min-vh-100 text-white">
+          <header className="bg-purple">
             <Header />
           </header>
-          <main className="container-fluid">
+          <main className="d-flex flex-grow-1 bg-dark-grey">
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/project/:projectId" element={<Project />} />
-              <Route path="/project/:projectId/task/:taskId" element={<Task />} />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/signup" element={<Signup />} />
+              {loggedIn ? (
+                <>
+                  <Route exact path="/" element={<Home />} />
+                  <Route
+                    exact
+                    path="/project/:projectId"
+                    element={<Project />}
+                  />
+                  <Route
+                    exact
+                    path="/project/:projectId/task/:taskId"
+                    element={<Task />}
+                  />
+                  <Route
+                    exact
+                    path="/project/:projectId/clients"
+                    element={<ClientDetail />}
+                  />
+                </>
+              ) : (
+                <Route path="*" element={<Login />} />
+              )}
             </Routes>
           </main>
-          <footer className="container-fluid mt-auto">
+          <footer className="bg-purple">
             <Footer />
           </footer>
         </div>

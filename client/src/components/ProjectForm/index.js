@@ -1,12 +1,14 @@
 //List of all the projects for an individual
 //ProjectForm Component
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { QUERY_MY_PROJECTS } from "../../utils/queries";
 import { useMutation } from "@apollo/client";
 import { ADD_PROJECT } from "../../utils/mutations";
 
 const ProjectForm = () => {
+  const navigate = useNavigate();
+
   const [projectText, setText] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
 
@@ -33,6 +35,9 @@ const ProjectForm = () => {
         console.error(e);
       }
     },
+    onCompleted: ({ addProject }) => {
+      navigate(`/project/${addProject._id}`);
+    },
   });
 
   //Handle state based on input changes from the form
@@ -42,7 +47,7 @@ const ProjectForm = () => {
       setCharacterCount(event.target.value.length);
     }
   };
-  //Form Submission Area
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -50,7 +55,7 @@ const ProjectForm = () => {
       await addProject({
         variables: { projectInputs: { title: projectText } },
       });
-      //Clear the form value
+      // clear form
       setText("");
       setCharacterCount(0);
     } catch (e) {
@@ -63,7 +68,7 @@ const ProjectForm = () => {
       <p
         className={`m-0 ${characterCount === 280 || error ? "text-error" : ""}`}
       >
-        Character Count: {characterCount}/280
+        {/* Character Count: {characterCount}/280 */}
         {error && <span className="ml-2">Something went wrong...</span>}
       </p>
       <form
@@ -71,14 +76,14 @@ const ProjectForm = () => {
         onSubmit={handleFormSubmit}
       >
         <input
-          placeholder="Please add a project."
+          placeholder="New Project Title"
           type="text"
           value={projectText}
-          className="form-input col-12 col-md-9"
+          className="form-input w-100"
           onChange={handleChange}
         />
-        <button className="btn col-12 col-md-3" type="submit">
-          Submit
+        <button className="link link-white bg-grey mt-1 fw-bold" type="submit">
+          + Add project
         </button>
       </form>
     </div>

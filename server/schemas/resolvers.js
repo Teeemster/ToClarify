@@ -63,7 +63,6 @@ const resolvers = {
           throw new Error("Task not found.");
         }
         // get parent project's owners and clients
-        console.log(taskData);
         const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
@@ -253,6 +252,9 @@ const resolvers = {
         const projectUsers = await Project.findById(
           taskInputs.projectId
         ).select("owners clients");
+        if (!projectUsers) {
+          throw new Error("Project not found.");
+        }
         // check if current user has access to queried task's parent project
         if (
           projectUsers.owners.includes(context.user._id) ||
@@ -281,7 +283,7 @@ const resolvers = {
         // get task data
         const taskData = await Task.findById(taskInputs.taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project
@@ -289,7 +291,10 @@ const resolvers = {
           return Task.findByIdAndUpdate(taskInputs.taskId, taskInputs, {
             new: true,
             runValidators: true,
-          });
+          })
+            .populate("project")
+            .populate({ path: "comments", populate: { path: "user" } })
+            .populate({ path: "timeLog", populate: { path: "user" } })
         }
         throw new AuthenticationError("Not authorized.");
       }
@@ -303,7 +308,7 @@ const resolvers = {
         // get task data
         const taskData = await Task.findById(taskId);
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is owner on queried task's parent project
@@ -321,9 +326,12 @@ const resolvers = {
       // check if a user is logged in
       if (context.user) {
         // get task data
-        const taskData = await Task.findById(taskId).select("projectId");
+        const taskData = await Task.findById(taskId).select("project");
+        if (!taskData) {
+          throw new Error("Task not found.");
+        }
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners clients"
         );
         // check if current user has access to queried task's parent project
@@ -376,27 +384,31 @@ const resolvers = {
       if (context.user) {
         // get task data
         const taskData = await Task.findById(loggedTimeInputs.taskId).select(
-          "projectId"
+          "project"
         );
+        if (!taskData) {
+          throw new Error("Task not found.");
+        }
         // get parent project's owners and clients
-        const projectUsers = await Project.findById(taskData.projectId).select(
+        const projectUsers = await Project.findById(taskData.project).select(
           "owners"
         );
         // check if current user is an owner on task's parent project
         if (projectUsers.owners.includes(context.user._id)) {
           // create logged time
           const loggedTime = await LoggedTime.create({
-            ...loggedTimeInputs,
-            user: context.user._id,
-            task: loggedTimeInputs.taskId,
+            description: loggedTimeInputs.description,
+            hours: loggedTimeInputs.hours ? parseFloat(loggedTimeInputs.hours) : 0,
+            user: context.user,
+            taskId: loggedTimeInputs.taskId,
           });
           // add logged time to task
-          await Task.findByIdAndUpdate(loggedTimeInputs.taskId, {
-            $push: { timeLog: loggedTime._id },
-          });
-          return await LoggedTime.findById(loggedTime._id)
-            .populate("user")
-            .populate("task");
+          await Task.findByIdAndUpdate(
+            loggedTimeInputs.taskId,
+            { $push: { timeLog: loggedTime._id } },
+            { new: true, runValidators: true }
+          );
+          return await LoggedTime.findById(loggedTime._id).populate("user");
         }
         throw new AuthenticationError("Not authorized.");
       }

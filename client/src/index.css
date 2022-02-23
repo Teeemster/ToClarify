@@ -31,13 +31,51 @@ body {
 .bg-dark-grey {
   background-color: var(--dark-grey);
 }
+.bg-green {
+  background-color: var(--green);
+}
+.bg-orange {
+  background-color: var(--orange);
+}
 
-p a {
+.text-dark-grey {
+  color: var(--dark-grey);
+}
+.text-orange {
+  color: var(--orange);
+}
+.text-green {
+  color: var(--green);
+}
+
+.link-white-purple {
   color: var(--white);
 }
 
-p a:hover {
+.link-white-purple:hover {
   color: var(--bright-purple);
+}
+
+.link-white,
+header a,
+footer a {
+  text-decoration: none;
+  color: var(--white);
+  opacity: 0.7;
+}
+
+.link-white:hover,
+header a:hover,
+header a.active,
+footer a:hover,
+footer a.active {
+  cursor: pointer;
+  color: var(--white);
+  opacity: 1;
+}
+
+button.link {
+  border: none;
 }
 
 .btn-purple {
@@ -48,7 +86,8 @@ p a:hover {
   background-color: var(--purple);
 }
 
-form input, form textarea {
+form input,
+form textarea {
   border: none;
   padding: 2px 8px;
   border-radius: 4px;
@@ -58,8 +97,41 @@ form label {
   padding: 3px;
 }
 
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
 .form-error-msg {
   padding: 4px 0;
-  font-size: .7em;
-  color: var(--orange)
+  font-size: 0.8em;
+  color: var(--orange);
+  margin-bottom: 0;
+}
+
+.project-list li {
+  border: none;
+}
+
+.project-list li:hover {
+  background-color: var(--bright-purple);
+  cursor: pointer;
+}
+
+.card.bg-purple a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.card-link.bg-purple:hover {
+  color: var(--white);
+  background-color: var(--bright-purple);
+  text-decoration: none;
+}
+
+select.remove-default-styles {
+  outline: none;
 }

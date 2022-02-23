@@ -22,6 +22,7 @@ const taskSchema = new Schema(
     },
     estimatedHours: {
       type: Number,
+      default: 0,
       get: (estHoursVal) => formatHours(estHoursVal),
     },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
@@ -32,12 +33,16 @@ const taskSchema = new Schema(
       getters: true,
       virtuals: true,
     },
+    toObject: { virtuals: true },
   }
 );
 
 // virtual for logging totalHours
 taskSchema.virtual("totalHours").get(function () {
-  let sum = this.timeLog.reduce((total, obj) => total + parseFloat(obj.hours), 0);
+  let sum = this.timeLog.reduce(
+    (total, obj) => total + parseFloat(obj.hours),
+    0
+  );
   return formatHours(sum);
 });
 
