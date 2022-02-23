@@ -1,10 +1,10 @@
 //convert require to ES syntax
 const { verify, sign } = require ('jsonwebtoken');
-
+require("dotenv").config();
 
 // TODO:
 // store secret somewhere other than in a JavaScript file—like an environment variable.
-const secret = 'mysecretsshhhhh';
+const secret = process.env.SECRET;
 const expiration = '24h';
 
 function authMiddleware({ req }) {
