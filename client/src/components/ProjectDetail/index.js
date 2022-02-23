@@ -40,13 +40,13 @@ const ProjectDetail = () => {
             {project.title}
           </h2>
         </div>
-        <div className="float-end">
+        {/* <div className="float-end">
           <Link to={`/project/${projectId}/clients`}>
             <button className="btn btn-purple text-white fw-bold d-none d-md-inline-block">
               View/Add Client
             </button>
           </Link>
-        </div>
+        </div> */}
       </div>
       <div className="row">
         <div className="col-12 col-lg-4">
