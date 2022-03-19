@@ -25,8 +25,8 @@ const Header = () => {
         <div className="col">
           <h1 className="fs-5 fw-bold m-3">
             <Link to="/">
-              Welcome to Clarify
-              {loggedIn && !loading ? `, ${me.firstName}!` : "!"}
+            {loggedIn ? "Welcome to Clarify" : "To Clarify"}
+            {loggedIn && !loading && `, ${me.firstName}!`}
             </Link>
           </h1>
         </div>

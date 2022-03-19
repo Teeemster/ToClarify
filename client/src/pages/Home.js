@@ -20,7 +20,7 @@ const Home = () => {
         </>
       ) : (
         <>
-          <div className="d-none d-md-block p-0">
+          <div className="p-0">
             <Welcome />
           </div>
         </>
