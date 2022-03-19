@@ -24,8 +24,10 @@ const Header = () => {
       <div className="row">
         <div className="col">
           <h1 className="fs-5 fw-bold m-3">
-            Welcome to Clarify
-            {loggedIn && !loading ? `, ${me.firstName}!` : "!"}
+            <Link to="/">
+              Welcome to Clarify
+              {loggedIn && !loading ? `, ${me.firstName}!` : "!"}
+            </Link>
           </h1>
         </div>
         <div className="col d-flex justify-content-end align-items-center">

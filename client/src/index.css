@@ -67,6 +67,7 @@ footer a {
 .link-white:hover,
 header a:hover,
 header a.active,
+header h1 a,
 footer a:hover,
 footer a.active {
   cursor: pointer;
@@ -134,4 +135,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 select.remove-default-styles {
   outline: none;
+}
+
+.hero {
+  background-image: url("assets/to-clarify-bg.png");
 }

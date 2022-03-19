@@ -23,7 +23,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Project from "./pages/Project";
 import Task from "./pages/Task";
-import ClientDetail from "./pages/ClientDetail"
+import ClientDetail from "./pages/ClientDetail";
 
 // connect to GraphQL and ApolloClient
 const httpLink = createHttpLink({
@@ -52,17 +52,29 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="d-flex flex-column min-vh-100 text-white">
-          <header className="bg-purple">
+        <div
+          className={
+            loggedIn
+              ? "d-flex flex-column min-vh-100 text-white"
+              : "hero d-flex flex-column min-vh-100 text-white"
+          }
+        >
+          <header className={loggedIn && "bg-purple"}>
             <Header />
           </header>
-          <main className="d-flex flex-grow-1 bg-dark-grey">
+          <main
+            className={
+              loggedIn
+                ? "d-flex flex-grow-1 bg-dark-grey"
+                : "d-flex flex-grow-1"
+            }
+          >
             <Routes>
               <Route exact path="/login" element={<Login />} />
+              <Route exact path="/" element={<Home />} />
               <Route exact path="/signup" element={<Signup />} />
               {loggedIn ? (
                 <>
-                  <Route exact path="/" element={<Home />} />
                   <Route
                     exact
                     path="/project/:projectId"
@@ -80,11 +92,11 @@ function App() {
                   />
                 </>
               ) : (
-                <Route path="*" element={<Login />} />
+                <Route path="*" element={<Home />} />
               )}
             </Routes>
           </main>
-          <footer className="bg-purple">
+          <footer className={loggedIn && "bg-purple"}>
             <Footer />
           </footer>
         </div>
