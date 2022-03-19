@@ -20,6 +20,7 @@ const AddClientForm = ({ projectId }) => {
     passwordCheck: "",
   });
   const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
   const [addClient] = useMutation(ADD_CLIENT_TO_PROJECT);
 
   const handleInputChange = (e) => {
@@ -96,6 +97,15 @@ const AddClientForm = ({ projectId }) => {
             },
           },
         });
+        // clear form
+        setInputValues({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          passwordCheck: "",
+        });
+        setSubmitSuccess("Client added successfully!");
       } catch (e) {
         setSubmitError("Sorry, something went wrong.");
       }
@@ -201,8 +211,16 @@ const AddClientForm = ({ projectId }) => {
           </div>
         )}
 
+        {submitSuccess && (
+          <div className="my-4">
+            <p className="form-error-msg fs-6">{submitSuccess}</p>
+          </div>
+        )}
+
         <div className="my-4">
-          <button className="btn btn-purple text-white fw-bold">Add Client</button>
+          <button className="btn btn-purple text-white fw-bold">
+            Add Client
+          </button>
         </div>
       </form>
     </div>
