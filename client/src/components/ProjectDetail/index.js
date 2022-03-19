@@ -9,9 +9,6 @@ import { QUERY_PROJECT } from "../../utils/queries";
 import Icon from "@mdi/react";
 import { mdiMenu } from "@mdi/js";
 
-// TODO : "View/Add Client" button *may need to be own page/component
-// TODO : Work on JSX
-
 const ProjectDetail = () => {
   const { projectId } = useParams();
 
@@ -40,13 +37,13 @@ const ProjectDetail = () => {
             {project.title}
           </h2>
         </div>
-        {/* <div className="float-end">
-          <Link to={`/project/${projectId}/clients`}>
-            <button className="btn btn-purple text-white fw-bold d-none d-md-inline-block">
-              View/Add Client
+        <div className="float-end">
+          <Link to={`/project/${projectId}/settings`}>
+            <button className="btn btn-purple text-white fw-bold">
+              Project Settings
             </button>
           </Link>
-        </div> */}
+        </div>
       </div>
       <div className="row">
         <div className="col-12 col-lg-4">
