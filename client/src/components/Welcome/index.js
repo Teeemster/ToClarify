@@ -27,9 +27,10 @@ function Welcome() {
         </div>
       ) : (
         <div className="text-center m-5 fw-b">
-          <h1 className="fw-bold mt-3">Welcome to Clarify!</h1>
-          <img src={logo} className="img-fluid my-5" alt="Magnify glass logo" />
-          <h2>Bringing clarity to freelancers and their clients.</h2>
+          <h1 className="fw-bold my-3">Welcome to Clarify!</h1>
+          {/* <img src={logo} className="img-fluid my-5" alt="Magnify glass logo" /> */}
+          <h2 className="my-3">Bringing clarity to freelancers and their clients.</h2>
+          <p className="fs-5">Get started with the project management solution that facilitates better communication and, as a result, increased client satisfaction.</p>
           <div className="my-4">
             <Link to="/signup" className="btn btn-purple text-white fw-bold mx-2">Sign Up</Link>
             <Link to="/login" className="btn btn-purple text-white fw-bold mx-2">Login</Link>
