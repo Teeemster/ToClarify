@@ -1,4 +1,4 @@
-//Header Component
+// Header Component
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
