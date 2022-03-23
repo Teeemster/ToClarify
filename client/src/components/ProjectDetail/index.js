@@ -5,29 +5,35 @@ import { useParams, Link } from "react-router-dom";
 import TaskList from "../TaskList";
 import { useQuery } from "@apollo/client";
 import { QUERY_PROJECT } from "../../utils/queries";
+import { QUERY_ME } from "../../utils/queries";
 
 import Icon from "@mdi/react";
 import { mdiMenu } from "@mdi/js";
 
-// TODO : "View/Add Client" button *may need to be own page/component
-// TODO : Work on JSX
-
 const ProjectDetail = () => {
   const { projectId } = useParams();
 
-  const { loading, data } = useQuery(QUERY_PROJECT, {
-    variables: { id: projectId },
-  });
+  const { loading: projectLoading, data: projectData } = useQuery(
+    QUERY_PROJECT,
+    {
+      variables: { id: projectId },
+    }
+  );
+  const { loading: userLoading, data: userData } = useQuery(QUERY_ME);
 
-  const project = data?.project || {};
+  const project = projectData?.project || {};
+  const me = userData?.me || {};
 
-  if (loading) {
+  if (projectLoading || userLoading) {
     return (
       <div className="m-4">
         <h2>Loading...</h2>
       </div>
     );
   }
+
+  // After project data finishes loading, check if current user is a project owner
+  let adminPermissions = project.owners.some((owner) => owner._id === me._id);
 
   return (
     <div className="m-4">
@@ -40,13 +46,15 @@ const ProjectDetail = () => {
             {project.title}
           </h2>
         </div>
-        {/* <div className="float-end">
-          <Link to={`/project/${projectId}/clients`}>
-            <button className="btn btn-purple text-white fw-bold d-none d-md-inline-block">
-              View/Add Client
-            </button>
-          </Link>
-        </div> */}
+        {adminPermissions && (
+          <div className="float-end">
+            <Link to={`/project/${projectId}/settings`}>
+              <button className="btn btn-purple text-white fw-bold">
+                Project Settings
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
       <div className="row">
         <div className="col-12 col-lg-4">
@@ -55,6 +63,7 @@ const ProjectDetail = () => {
               tasks={project.tasks}
               status="Requested"
               projectId={projectId}
+              adminPermissions={true}
             ></TaskList>
           </div>
         </div>
@@ -64,6 +73,7 @@ const ProjectDetail = () => {
               tasks={project.tasks}
               status="In Progress"
               projectId={projectId}
+              adminPermissions={adminPermissions}
             ></TaskList>
           </div>
         </div>
@@ -73,6 +83,7 @@ const ProjectDetail = () => {
               tasks={project.tasks}
               status="Complete"
               projectId={projectId}
+              adminPermissions={adminPermissions}
             ></TaskList>
           </div>
         </div>

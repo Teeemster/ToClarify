@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
-import { QUERY_PROJECT, QUERY_TASK } from "../../utils/queries";
+import { QUERY_PROJECT, QUERY_TASK, QUERY_ME } from "../../utils/queries";
 import { DELETE_TASK, UPDATE_TASK } from "../../utils/mutations";
 import CommentFeed from "../CommentFeed";
 import TimeLog from "../TimeLog";
@@ -19,11 +19,22 @@ const TaskDetail = () => {
   const { projectId, taskId } = useParams();
 
   // query task by id
-  const { loading, data } = useQuery(QUERY_TASK, {
+  const { loading: taskLoading, data: taskData } = useQuery(QUERY_TASK, {
     variables: { id: taskId },
   });
+  // query project
+  const { loading: projectLoading, data: projectData } = useQuery(
+    QUERY_PROJECT,
+    {
+      variables: { id: projectId },
+    }
+  );
+  // query current user
+  const { loading: userLoading, data: userData } = useQuery(QUERY_ME);
 
-  const task = data?.task || {};
+  const task = taskData?.task || {};
+  const project = projectData?.project || {};
+  const me = userData?.me || {};
 
   const navigate = useNavigate();
 
@@ -114,13 +125,16 @@ const TaskDetail = () => {
     }
   };
 
-  if (loading) {
+  if (taskLoading || projectLoading || userLoading) {
     return (
       <div className="m-4">
         <h2>Loading...</h2>
       </div>
     );
   }
+
+  // After project data finishes loading, check if current user is a project owner
+  let adminPermissions = project.owners.some((owner) => owner._id === me._id);
 
   // setup variables after loading complete
   let statusColor = "white";
@@ -149,20 +163,31 @@ const TaskDetail = () => {
           <div className="mx-2">
             <div className="row">
               <div className="col-12 col-sm-5">
-                <h5 className="float-start fw-bold fs-5">Status:</h5>
-                <form
-                  className="float-start ms-2"
-                  onChange={handleStatusSubmit}
-                >
-                  <select
-                    className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold remove-default-styles`}
-                    defaultValue={task.status}
+                <h5 className="float-start fw-bold fs-5">
+                  Status:
+                  {!adminPermissions && 
+                    <span className={`text-${statusColor}`}>
+                      {task.status === "REQUESTED" && " Requested"}
+                      {task.status === "INPROGRESS" && " In Progress"}
+                      {task.status === "COMPLETE" && " Complete"}
+                    </span>
+                  }
+                </h5>
+                {adminPermissions && (
+                  <form
+                    className="float-start ms-2"
+                    onChange={handleStatusSubmit}
                   >
-                    <option value="REQUESTED"> Requested </option>
-                    <option value="INPROGRESS">In Progress</option>
-                    <option value="COMPLETE">Complete</option>
-                  </select>
-                </form>
+                    <select
+                      className={`bg-dark-grey text-${statusColor} border-0 fs-5 fw-bold remove-default-styles`}
+                      defaultValue={task.status}
+                    >
+                      <option value="REQUESTED"> Requested </option>
+                      <option value="INPROGRESS">In Progress</option>
+                      <option value="COMPLETE">Complete</option>
+                    </select>
+                  </form>
+                )}
               </div>
               <div className="col-12 col-sm-7">
                 <p className="mt-1">
@@ -174,7 +199,8 @@ const TaskDetail = () => {
             </div>
             <div className="mt-3 clearfix">
               <h3 className="fw-bold fs-4 float-start me-3">Description</h3>
-              {!descriptionToggle && (
+
+              {!descriptionToggle && adminPermissions && (
                 <p
                   className="fst-italic pt-1"
                   role="button"
@@ -230,21 +256,27 @@ const TaskDetail = () => {
               timeLog={task.timeLog}
               totalHours={task.totalHours}
               taskId={task._id}
+              adminPermissions={adminPermissions}
             />
           </div>
         </div>
       </div>
-      <div>
-        {deleteTaskToggle ? (
-          <button onClick={handleDeleteTask} className="btn btn-danger">
-            Are your sure? Click to confirm delete.
-          </button>
-        ) : (
-          <button onClick={() => setDeleteTaskToggle(true)} className="btn bg-orange">
-            Delete Task
-          </button>
-        )}
-      </div>
+      {adminPermissions && (
+        <div>
+          {deleteTaskToggle ? (
+            <button onClick={handleDeleteTask} className="btn btn-danger">
+              Are your sure? Click to confirm delete.
+            </button>
+          ) : (
+            <button
+              onClick={() => setDeleteTaskToggle(true)}
+              className="btn bg-orange"
+            >
+              Delete Task
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { formatHours } from "../../utils/helpers";
 import { ADD_LOGGED_TIME } from "../../utils/mutations";
 import { QUERY_TASK } from "../../utils/queries";
 
-const TimeLog = ({ timeLog, totalHours, taskId }) => {
+const TimeLog = ({ timeLog, totalHours, taskId, adminPermissions }) => {
   const [inputValues, setInputValues] = useState({
     description: "",
     hours: "",
@@ -139,61 +139,67 @@ const TimeLog = ({ timeLog, totalHours, taskId }) => {
           )}
         </ul>
       </div>
-      <div className="mt-4">
-        <h4 className="fw-bold">Add Time</h4>
-        <form onSubmit={handleFormSubmit}>
-          <div>
-            <label htmlFor="description" className="w-100 fw-bold">
-              Description:
-            </label>
-            <textarea
-              className="w-100 mb-0"
-              placeholder="Describe your time entry..."
-              name="description"
-              value={inputValues.description}
-              onChange={handleChange}
-              onBlur={updateInputError}
-            ></textarea>
-            {inputErrors.description && (
-              <p className="form-error-msg mt-0 pt-0">
-                {inputErrors.description}
-              </p>
-            )}
-          </div>
 
-          <div className="mb-3">
-            <label htmlFor="hours" className="w-100 fw-bold">
-              Hours:
-            </label>
-            <input
-              className="w-auto"
-              placeholder="1.5"
-              name="hours"
-              type="number"
-              step="0.01"
-              id="hours"
-              value={inputValues.hours}
-              onChange={handleChange}
-              onBlur={updateInputError}
-            ></input>
-            {inputErrors.hours && (
-              <p className="form-error-msg mt-1">{inputErrors.hours}</p>
-            )}
-          </div>
-
-          {submitError && (
-            <div className="my-4">
-              <p className="form-error-msg fs-6">{submitError}</p>
+      {adminPermissions && (
+        <div className="mt-4">
+          <h4 className="fw-bold">Add Time</h4>
+          <form onSubmit={handleFormSubmit}>
+            <div>
+              <label htmlFor="description" className="w-100 fw-bold">
+                Description:
+              </label>
+              <textarea
+                className="w-100 mb-0"
+                placeholder="Describe your time entry..."
+                name="description"
+                value={inputValues.description}
+                onChange={handleChange}
+                onBlur={updateInputError}
+              ></textarea>
+              {inputErrors.description && (
+                <p className="form-error-msg mt-0 pt-0">
+                  {inputErrors.description}
+                </p>
+              )}
             </div>
-          )}
 
-          <div className="my-1">
-            <button className="btn btn-purple text-white fw-bold" type="submit">
-              + Add Time
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="mb-3">
+              <label htmlFor="hours" className="w-100 fw-bold">
+                Hours:
+              </label>
+              <input
+                className="w-auto"
+                placeholder="1.5"
+                name="hours"
+                type="number"
+                step="0.01"
+                id="hours"
+                value={inputValues.hours}
+                onChange={handleChange}
+                onBlur={updateInputError}
+              ></input>
+              {inputErrors.hours && (
+                <p className="form-error-msg mt-1">{inputErrors.hours}</p>
+              )}
+            </div>
+
+            {submitError && (
+              <div className="my-4">
+                <p className="form-error-msg fs-6">{submitError}</p>
+              </div>
+            )}
+
+            <div className="my-1">
+              <button
+                className="btn btn-purple text-white fw-bold"
+                type="submit"
+              >
+                + Add Time
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
