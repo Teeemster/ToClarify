@@ -19,6 +19,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.hero {
+  background-image: url("assets/to-clarify-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--purple)
+}
+
 .bg-purple {
   background-color: var(--purple);
 }
@@ -67,6 +75,7 @@ footer a {
 .link-white:hover,
 header a:hover,
 header a.active,
+header h1 a,
 footer a:hover,
 footer a.active {
   cursor: pointer;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TaskForm from "../TaskForm";
 import { formatHours } from "../../utils/helpers";
 
-const TaskList = ({ tasks, status, projectId }) => {
+const TaskList = ({ tasks, status, projectId, adminPermissions }) => {
   let color = "white";
   if (status === "Requested") {
     color = "orange";
@@ -48,18 +48,24 @@ const TaskList = ({ tasks, status, projectId }) => {
         </div>
       )}
 
-      <div className={addTaskVisible ? "d-block" : "d-none"}>
-        <TaskForm status={status} projectId={projectId} />
-      </div>
+      <div className="mb-5">
+        {adminPermissions && (
+          <>
+            <div className={addTaskVisible ? "d-block" : "d-none"}>
+              <TaskForm status={status} projectId={projectId} />
+            </div>
 
-      {/* TODO: Remove "X Close" and set toggle to trigger when form is submitted */}
-      <div className="d-block mb-5">
-        <button
-          className="fs-5 link link-white bg-dark-grey fw-bold"
-          onClick={toggleAddTaskVisible}
-        >
-          {addTaskVisible ? "X Close" : "+ Add task"}
-        </button>
+            {/* TODO: Remove "X Close" and set toggle to trigger when form is submitted */}
+            <div className="d-block">
+              <button
+                className="fs-5 link link-white bg-dark-grey fw-bold"
+                onClick={toggleAddTaskVisible}
+              >
+                {addTaskVisible ? "X Close" : "+ Add task"}
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

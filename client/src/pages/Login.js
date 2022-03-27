@@ -4,8 +4,8 @@ import LoginForm from "../components/LoginForm";
 
 const Login = () => {
   return (
-    <div className="container-fluid my-5">
-      <div className="row justify-content-center">
+    <div className="d-flex w-100 m-0 mb-5 row">
+      <div className="d-flex justify-content-center align-items-center my-5">
         <LoginForm></LoginForm>
       </div>
     </div>
