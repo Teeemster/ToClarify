@@ -115,10 +115,10 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .form-error-msg {
-  padding: 4px 0;
+  height: 1em;
+  padding: 1px 0;
   font-size: 0.8em;
   color: var(--orange);
-  margin-bottom: 0;
 }
 
 .project-list li {
