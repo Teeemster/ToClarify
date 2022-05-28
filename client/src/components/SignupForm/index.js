@@ -115,7 +115,7 @@ const SignupForm = () => {
     <div className="col col-sm-8 col-md-6 col-xl-4">
       <h1 className="text-center mb-4 fw-bold">Create an Account</h1>
       <form onSubmit={handleSubmit} className="fs-5">
-        <div className="my-3">
+        <div>
           <label htmlFor="firstName" className="w-100 fw-bold">
             First Name:
           </label>
@@ -128,12 +128,12 @@ const SignupForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.firstName && (
-            <p className="form-error-msg">{inputErrors.firstName}</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {inputErrors.firstName && inputErrors.firstName}
+          </p>
         </div>
 
-        <div className="my-3">
+        <div>
           <label htmlFor="lastName" className="w-100 fw-bold">
             Last Name:
           </label>
@@ -146,12 +146,12 @@ const SignupForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.lastName && (
-            <p className="form-error-msg">{inputErrors.lastName}</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {inputErrors.lastName && inputErrors.lastName}
+          </p>
         </div>
 
-        <div className="my-3">
+        <div>
           <label htmlFor="email" className="w-100 fw-bold">
             Email:
           </label>
@@ -164,12 +164,12 @@ const SignupForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.email && (
-            <p className="form-error-msg">{inputErrors.email}</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {inputErrors.email && inputErrors.email}
+          </p>
         </div>
 
-        <div className="my-3">
+        <div>
           <label htmlFor="password" className="w-100 fw-bold">
             Password:
           </label>
@@ -182,12 +182,12 @@ const SignupForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.password && (
-            <p className="form-error-msg">{inputErrors.password}</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {inputErrors.password && inputErrors.password}
+          </p>
         </div>
 
-        <div className="my-3">
+        <div>
           <label htmlFor="passwordCheck" className="w-100 fw-bold">
             Reenter Password:
           </label>
@@ -200,18 +200,12 @@ const SignupForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.passwordCheck && (
-            <p className="form-error-msg">{inputErrors.passwordCheck}</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {(inputErrors.passwordCheck && inputErrors.passwordCheck) || (submitError && submitError)}
+          </p>
         </div>
 
-        {submitError && (
-          <div className="my-4">
-            <p className="form-error-msg fs-6">{submitError}</p>
-          </div>
-        )}
-
-        <div className="my-4">
+        <div className="mb-4 mt-3">
           <button className="btn btn-purple text-white fw-bold">Sign Up</button>
         </div>
       </form>
