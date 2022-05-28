@@ -77,7 +77,7 @@ const LoginForm = () => {
     <div className="col col-sm-8 col-md-6 col-xl-4">
       <h1 className="text-center mb-4 fw-bold">Login</h1>
       <form onSubmit={handleSubmit} className="fs-5">
-        <div className="my-3">
+        <div className="my-2">
           <label htmlFor="email" className="w-100 fw-bold">
             Email:
           </label>
@@ -91,9 +91,9 @@ const LoginForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.email && (
-            <p className="form-error-msg">Please enter your email address.</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {inputErrors.email && "Please enter your email address."}
+          </p>
         </div>
 
         <div>
@@ -110,26 +110,23 @@ const LoginForm = () => {
             onChange={handleInputChange}
             onBlur={updateInputError}
           ></input>
-          {inputErrors.password && (
-            <p className="form-error-msg">Please enter your password.</p>
-          )}
+          <p className="form-error-msg mb-2">
+            {(inputErrors.password && "Please enter your password.") || (submitError && submitError)}
+          </p>
         </div>
 
-        {submitError && (
-          <div className="my-4">
-            <p className="form-error-msg fs-6">{submitError}</p>
-          </div>
-        )}
-
-        <div className="my-4">
-          <button className="btn btn-purple text-white fw-bold">
-            Login
-          </button>
+        <div className="mb-4 mt-3">
+          <button className="btn btn-purple text-white fw-bold">Login</button>
         </div>
       </form>
 
       <div>
-        <p>Need an account? <Link to="/signup" className="link-white-purple">Sign up here.</Link></p>
+        <p>
+          Need an account?{" "}
+          <Link to="/signup" className="link-white-purple">
+            Sign up here.
+          </Link>
+        </p>
       </div>
     </div>
   );
